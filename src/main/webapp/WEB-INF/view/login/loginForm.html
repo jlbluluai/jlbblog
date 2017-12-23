@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>洛林博客--登录</title>
+<meta charset="UTF-8">
+<script type="text/javascript" src="js/jquery.js"></script>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" href="css/loginForm.css" />
+</head>
+
+<body>
+	<div id="container">
+		<div id="summary">
+			<h3></h3>
+			<p></p>
+		</div>
+		<div id="login">
+			<label>帐号登录</label>
+			<div>
+				<input type="text" class="form-control" id="username"
+					placeholder="请输入用户名或手机号或邮箱"> <input type="password"
+					class="form-control" id="password" placeholder="请输入密码">
+				<div>请输入用户名！</div>
+			</div>
+			<div>
+				<a href="getBack">忘记密码</a>
+			</div>
+			<button id="sub" type="button" class="btn btn-primary">登录</button>
+			<div>
+				<span>还没有博客帐号？</span> <a href="phemRegister">立即注册</a>
+			</div>
+		</div>
+		<div id="footer">
+			<div id="author">©2017 小叶子</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(function() {
+			$getThePubboard();
+		});
+
+		$(function() {
+			$("#login button").click(function() {
+				var username = $.trim($("#username").val());
+				var password = $.trim($("#password").val());
+				if (username == "") {
+					$("#login>div>div").text("请输入用户名！");
+					$("#login>div>div").css("display", "block");
+				} else if (password == "") {
+					$("#login>div>div").text("请输入密码！");
+					$("#login>div>div").css("display", "block");
+				} else {
+					$("#login>div>div").css("display", "none");
+					$login(username, password);
+				}
+			});
+		});
+
+		var $getThePubboard = function() {
+			$.ajax({
+				type : "post",
+				url : "getCurrentPub",
+				dataType : "json",
+				contentType : "application/json",
+				data : JSON.stringify({}),
+				async : true,
+				success : function(data) {
+					var title = data.pubboard.title + ":";
+					var content = data.pubboard.content;
+					$("#summary h3").text(title);
+					$("#summary p").text(content);
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		var $login = function(username, password) {
+			$.ajax({
+				type : "post",
+				url : "loginByPass",
+				dataType : "json",
+				contentType : "application/json",
+				data : JSON.stringify({
+					loginname : username,
+					password : password
+				}),
+				async : true,
+				success : function(data) {
+					if (data.msg == "success") {
+						window.location.href = "userinfo?id="+data.id;
+					} else {
+						$("#login>div>div").text(data.msg);
+						$("#login>div>div").css("display", "block");
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+	</script>
+</body>
+
+</html>

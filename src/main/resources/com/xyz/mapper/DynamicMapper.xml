@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.DynamicMapper">
+  <resultMap id="BaseResultMap" type="com.xyz.domain.Dynamic">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="is_blog" jdbcType="TINYINT" property="isBlog" />
+    <result column="aid" jdbcType="BIGINT" property="aid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.xyz.domain.Dynamic">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, uid, is_blog, aid, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_dynamic
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_dynamic
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xyz.domain.Dynamic">
+    insert into t_dynamic (id, uid, is_blog, 
+      aid, create_time, content
+      )
+    values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT}, #{isBlog,jdbcType=TINYINT}, 
+      #{aid,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xyz.domain.Dynamic">
+    insert into t_dynamic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="isBlog != null">
+        is_blog,
+      </if>
+      <if test="aid != null">
+        aid,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="isBlog != null">
+        #{isBlog,jdbcType=TINYINT},
+      </if>
+      <if test="aid != null">
+        #{aid,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xyz.domain.Dynamic">
+    update t_dynamic
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="isBlog != null">
+        is_blog = #{isBlog,jdbcType=TINYINT},
+      </if>
+      <if test="aid != null">
+        aid = #{aid,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xyz.domain.Dynamic">
+    update t_dynamic
+    set uid = #{uid,jdbcType=BIGINT},
+      is_blog = #{isBlog,jdbcType=TINYINT},
+      aid = #{aid,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xyz.domain.Dynamic">
+    update t_dynamic
+    set uid = #{uid,jdbcType=BIGINT},
+      is_blog = #{isBlog,jdbcType=TINYINT},
+      aid = #{aid,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <resultMap type="com.xyz.domain.Dynamic" id="DynamicPagesResultMap">
+  		<id column="did" jdbcType="BIGINT" property="id" />
+   	    <result column="duid" jdbcType="BIGINT" property="uid" />
+    	<result column="dis_blog" jdbcType="TINYINT" property="isBlog" />
+    	<result column="daid" jdbcType="BIGINT" property="aid" />
+    	<result column="dcreate_time" jdbcType="TIMESTAMP" property="createTime" />
+  		<result column="dcontent" jdbcType="LONGVARCHAR" property="content" />
+  		<association property="user" javaType="com.xyz.domain.User">
+  			<id column="uid" property="id" />
+  			<result column="unickname" property="nickname"/>
+  		</association>
+  		<association property="artical" javaType="com.xyz.domain.User">
+  			<id column="aid" property="id" />
+  			<result column="atitle" property="title"/>
+  		</association>
+  </resultMap>
+  
+  <select id="selectPages" resultMap="DynamicPagesResultMap">
+  		select
+  			d.id did,
+  			d.uid duid,
+  			d.is_blog dis_blog,
+  			d.aid daid,
+  			d.create_time dcreate_time,
+  			d.content dcontent,
+  			u.id uid,
+  			u.nickname unickname,
+  			a.id aid,
+  			a.title atitle
+  		from
+  			t_dynamic d
+  		left join
+  			t_user u
+  		on
+  			d.uid = u.id
+  		left join
+			t_artical a
+		on
+			d.aid = a.id		
+  		where
+  			d.uid = #{uid}
+  		order by
+  			d.create_time desc
+  </select>
+  
+</mapper>

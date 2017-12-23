@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title></title>
+<!--bootstrap、jquery-->
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+<!--第三方-->
+<link rel="stylesheet" href="../css/fileinput/fileinput.css" />
+<script type="text/javascript" src="../js/fileinput/fileinput.js"></script>
+<script type="text/javascript" src="../js/fileinput/zh.js"></script>
+<!--自定义-->
+<link rel="stylesheet" href="../css/userinfo/userChange.css" />
+</head>
+
+<body>
+	<div class="container">
+
+		<!--横向导航栏-->
+		<div class="navigation">
+			<ul class="nav nav-tabs">
+				<li role="presentation" class="active"><a href="#">基本信息</a></li>
+				<li role="presentation"><a href="#">上传头像</a></li>
+			</ul>
+		</div>
+
+		<!--基本信息-->
+		<div class="modifyInfo">
+			<table>
+				<colgroup>
+					<col width="2%" />
+					<col width="20%" />
+				</colgroup>
+				<thead></thead>
+				<tbody>
+					<tr>
+						<td>昵称：</td>
+						<td><input class="form-control" type="text" id="nickname"
+							placeholder="请输入昵称" /></td>
+					</tr>
+					<tr>
+						<td>姓名：</td>
+						<td><input class="form-control" type="text" id="truename"
+							placeholder="请输入姓名" /></td>
+					</tr>
+					<tr>
+						<td>性别：</td>
+						<td><label class="checkbox-inline"> <input
+								type="radio" name="sexradio" id="sexgirl" value="0" checked>女
+						</label> <label class="checkbox-inline"> <input type="radio"
+								name="sexradio" id="sexboy" value="1">男
+						</label></td>
+					</tr>
+					<tr>
+						<td>出生日期：</td>
+						<td><input class="form-control" id="date" type="date" /></td>
+					</tr>
+					<tr>
+						<td>公司/学校：</td>
+						<td><input class="form-control" type="text" id="address"
+							placeholder="请输入公司/学校" /></td>
+					</tr>
+					<tr>
+						<td>QQ：</td>
+						<td><input class="form-control" type="text" id="qq"
+							placeholder="请输入QQ" /></td>
+					</tr>
+					<tr>
+						<td>个人描述：</td>
+						<td><textarea class="form-control" rows="5" id="description"
+								placeholder="请输入个人描述"></textarea></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<button type="button" id="save" class="btn btn-success">保存</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!--上传头像-->
+		<div class="uploadImage">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">请选择头像:</label>
+				<div class="col-sm-4">
+					<input id="file" name="myfile" type="file" data-show-caption="true">
+					<p class="help-block">支持jpg、jpeg、png格式，大小不超过2.0M</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		/*准备工作*/
+		$(window.parent.document).find("iframe").load(function() {
+			var main = $(window.parent.document).find("iframe");
+			var thisheight = $(document).height() + 200;
+			main.height(thisheight);
+		});
+		var $getQueryString = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+
+		var id = $getQueryString("id");
+
+		//转换时间
+		function dateFormat(time) {
+			var date = new Date(time);
+
+			var str = "";
+			str += date.getFullYear() + "-";
+			if (date.getMonth() + 1 < 10) {
+				str += "0" + (date.getMonth() + 1) + "-";
+			} else {
+				str += (date.getMonth() + 1) + "-";
+			}
+			if (date.getDate() < 10) {
+				str += "0" + date.getDate();
+			} else {
+				str += date.getDate();
+			}
+			console.log(str);
+			return str;
+		}
+
+		/*横向导航栏逻辑*/
+		$(function() {
+
+			//$getTheModule();
+
+			$(".navigation li").on("click", function() {
+
+				$(this).siblings("li").removeClass("active");
+				$(this).addClass("active");
+				var sel = $.trim($(this).text());
+				//var module = 0;
+				if (sel == "上传头像") {
+					//module = 1;
+					$(".uploadImage").css("display", "block");
+					$(".modifyInfo").css("display", "none");
+				} else if (sel == "基本信息") {
+					//module = 0;
+					$(".modifyInfo").css("display", "block");
+					$(".uploadImage").css("display", "none");
+				}
+				//window.location.href = "userChange?id=1&module=" + module;
+			});
+
+		});
+
+		/*var $getTheModule = function() {
+			var module = $getQueryString("module");
+			if(module == "0" || module == "null" || module == undefined) {
+				$(".uploadImage").css("display", "none");
+				$(".modifyInfo").css("display", "block");
+
+			} else if(module == "1") {
+				$(".navigation li").removeClass("active");
+				$(".navigation li:eq(1)").addClass("active");
+				$(".modifyInfo").css("display", "none");
+				$(".uploadImage").css("display", "block");
+			}
+		}*/
+
+		/*基本信息逻辑*/
+		$(function() {
+
+			$getInfos();
+
+			$("#save").click(function() {
+				$changeInfos();
+			});
+
+		});
+
+		var $getInfos = function() {
+			$.ajax({
+				type : "get",
+				url : "../getOwnUserInfo",
+				dataType : "json",
+				contentType : "application/json",
+				data : {},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					var userinfo = data.userinfo;
+					$("#nickname").val(data.nickname);
+					$("#truename").val(userinfo.truename);
+					if (userinfo.sex == 0) {
+						$("#sexgirl").attr("checked", "checked");
+						$("#sexboy").attr("checked", "");
+					} else {
+						$("#sexgirl").attr("checked", "");
+						$("#sexboy").attr("checked", "checked");
+					}
+					$("#date").val(dateFormat(userinfo.birthday.time));
+					$("#address").val(userinfo.address);
+					$("#qq").val(userinfo.qq);
+					$("#description").val(userinfo.description);
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		var $changeInfos = function() {
+			var nickname = $("#nickname").val();
+			var truename = $("#truename").val();
+			var sex = $("input[type='radio']:checked").val();
+			var birthday = $("#date").val();
+			var address = $("#address").val();
+			var qq = $("#qq").val();
+			var description = $("#description").val();
+			if (!isNaN(parseInt(qq))) {
+				$.ajax({
+					type : "post",
+					url : "../changeAppointedUserInfo",
+					dataType : "json",
+					contentType : "application/json",
+					data : JSON.stringify({
+						nickname : nickname,
+						truename : truename,
+						sex : sex,
+						birthday : birthday,
+						address : address,
+						qq : qq,
+						description : description
+					}),
+					async : true,
+					success : function(data) {
+						if (data == true) {
+							window.parent.location.reload();
+						} else {
+							alert("修改失败");
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			} else {
+				alert("请确认qq为数字");
+			}
+		}
+
+		/*上传头像逻辑*/
+		$(function() {
+			var path = "${base}/admin/product/upload.htm";
+			$initFileInput("file", path);
+		});
+
+		var $initFileInput = function(ctrlName, uploadUrl) {
+			var control = $('#' + ctrlName);
+			control.fileinput({
+				language : 'zh', //设置语言  
+				uploadUrl : uploadUrl, //上传地址  
+				showUpload : false, //是否显示上传按钮  
+				showRemove : true,
+				dropZoneEnabled : false,
+				showCaption : true, //是否显示标题  
+				allowedPreviewTypes : [ 'image' ],
+				allowedFileTypes : [ 'image' ],
+				allowedFileExtensions : [ 'jpg', 'png' ],
+				maxFileSize : 2000,
+				maxFileCount : 1,
+			//initialPreview: [   
+			//预览图片的设置  
+			//      "<img src='http://127.0.0.1:8080/NewsManageSys/plugin/umeditor1_2_2/jsp/upload/20161030/55061                       477813913474.jpg' class='file-preview-image' alt='肖像图片' title='肖像图片'>",  
+			//],  
+
+			}).on("filebatchselected", function(event, files) {
+				$(this).fileinput("upload");
+			}).on("fileuploaded", function(event, data) {
+				$("#path").attr("value", data.response);
+			});
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+.sidebar{font-size:14px;font-family:"\5B8B\4F53",san-serif;line-height:21px;text-align:left;}
+.sidebar div,.sidebar ul,.sidebar li,.sidebar h1,.sidebar h2,.sidebar h3{padding:0;margin:0;}
+.sidebar ul,.sidebar li{list-style:none;}
+.clear{clear:both;}
+
+.sidebar{background: #69bae2 ;border:1px solid #e6ebf1;width:190px;padding:5px;margin:30px auto;}
+.sidebar h2{color:#fff;font-size:19px;line-height:21px;text-align:center;padding:2px 0 7px;}
+
+#menu{width:178px;background: #dadbdc;padding:8px 0;}
+#menu li{float:left;width:178px;display:block;padding-left:24px;background: #e6ebf1;position:relative;line-height:21px;border-bottom:1px dashed #a79797;}
+#menu li:hover{background: #666;}
+#menu li a{font-family:"\5B8B\4F53",san-serif;font-size:16px;color:#3B4053;display:block;outline:0;text-decoration:none;padding:5px 0;}
+#menu li:hover a{color:#fff;}
+
+
+.erji{	margin:6px auto;float:left;position:absolute;left:-999em;text-align:left;border-left:6px solid #3B4053;border-top:1px solid #3B4053;border-bottom:1px solid #3B4053;border-right:1px solid #3B4053;background: #e6ebf1;padding:5px 0 10px;}
+
+#menu li:hover .erji{left:178px;top:-6px;z-index: 999;}
+.col_1{width:120px;display:inline;float: left;position: relative;margin:0;}
+.col_4{width:510px;display:inline;float: left;position: relative;margin:0;}
+#menu h3{font-size:14px;font-weight:bold;color:#3B4053;margin:4px 0;padding-left:0;font-family:"\5B8B\4F53",san-serif;line-height:21px;font-size:12px;text-align:center;}
+
+
+
+#menu li:hover div a{font-size:14px;color:#003366;}
+#menu li:hover div a:hover{color:#e47911;}
+#menu li ul{list-style:none;padding:0;margin:0;}
+#menu li ul li{font-size:14px;line-height:21px;position:relative;padding:0 0 0 6px;margin:0;text-align:left;width:120px;border-left:#ccc 1px solid;}
+#menu li ul li a{padding:0 0 0 6px;margin:0;}
+#menu li ul li:hover{background:none;padding:0 0 0 6px;margin:0;}

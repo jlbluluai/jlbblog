@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.UserPasschangeMapper">
+  <resultMap id="BaseResultMap" type="com.xyz.domain.UserPasschange">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="opass" jdbcType="VARCHAR" property="opass" />
+    <result column="npass" jdbcType="VARCHAR" property="npass" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, uid, opass, npass, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_passchange
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user_passchange
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xyz.domain.UserPasschange">
+    insert into t_user_passchange (id, uid, opass, 
+      npass, create_time)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=BIGINT}, #{opass,jdbcType=VARCHAR}, 
+      #{npass,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xyz.domain.UserPasschange">
+    insert into t_user_passchange
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="opass != null">
+        opass,
+      </if>
+      <if test="npass != null">
+        npass,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="opass != null">
+        #{opass,jdbcType=VARCHAR},
+      </if>
+      <if test="npass != null">
+        #{npass,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xyz.domain.UserPasschange">
+    update t_user_passchange
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="opass != null">
+        opass = #{opass,jdbcType=VARCHAR},
+      </if>
+      <if test="npass != null">
+        npass = #{npass,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xyz.domain.UserPasschange">
+    update t_user_passchange
+    set uid = #{uid,jdbcType=BIGINT},
+      opass = #{opass,jdbcType=VARCHAR},
+      npass = #{npass,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

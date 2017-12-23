@@ -1,0 +1,104 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #E6E6E6;
+	background: url('../img/beijing2.jpg') no-repeat;
+	background-size: cover;
+}
+
+#container {
+	position: relative;
+	width: 1100px;
+	min-height: 740px;
+	overflow: hidden;
+	margin: auto;
+}
+
+#summary {
+	background: #FFFFFF;
+	width: 650px;
+	height: 450px;
+	margin-top: 10%;
+	padding: 30px 30px;
+	float: left;
+	box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+	font-size: 16px;
+}
+
+#summary p {
+	line-height: 30px;
+	text-indent: 30px;
+}
+
+#login {
+	position: absolute;
+	background: #FFFFFF;
+	width: 350px;
+	height: 450px;
+	margin-top: 10%;
+	margin-left: 730px;
+	padding: 30px 30px;
+	box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+}
+
+#login>label {
+	font-size: 20px;
+	margin-top: 50px;
+}
+
+#username,
+#password {
+	margin: 15px 0px auto;
+}
+
+#login div:nth-child(2) div {
+	margin-top: 10px;
+	width: 250px;
+	background: pink;
+	color: red;
+	text-align: center;
+	display: none;
+}
+
+#login div:nth-child(3) {
+	margin-top: 7px;
+}
+
+#login div:nth-child(3) a {
+	color: #ccc;
+	margin-left: 200px;
+}
+
+#login input {
+	width: 250px;
+	height: 30px;
+}
+
+#login button:nth-child(4) {
+	margin-top: 10px;
+	width: 252px;
+}
+
+#login div:nth-child(5) {
+	font-size: 16px;
+	margin-top: 20px;
+}
+
+#footer {
+	position: absolute;
+	background: #FFFFFF;
+	width: 1082px;
+	height: 50px;
+	margin-top: 650px;
+	margin-bottom: 10px;
+	padding: 5px 5px;
+	box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+	text-align: center;
+}
+
+#author {
+	margin-top: 15px;
+}

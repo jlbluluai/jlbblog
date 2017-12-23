@@ -1,0 +1,91 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#container1 .head {
+	padding: 5px 20px;
+	font-size: 18px;
+}
+
+#container1 .main {
+	margin: 100px auto;
+	width: 500px;
+}
+
+#container1 .main a {
+	margin-left: 150px;
+}
+
+#container1 .looking {
+	margin-top: 20px;
+}
+
+#container1 .footer {
+	width: 120px;
+	margin: 50px auto;
+	font-size: 17px;
+}
+
+#container2 {
+	display: none;
+}
+
+#container2 .head {
+	padding: 5px 20px;
+	font-size: 18px;
+}
+
+#container2 .footer {
+	border-top: 1px solid #429e9b;
+	font-size: 17px;
+	text-align: center;
+}
+
+#container2 .header .logo {
+	width: 180px;
+	float: left;
+}
+
+#container2 .header .looking2 {
+	width: 400px;
+	padding-top: 13px;
+	padding-left: 10px;
+}
+
+#container2 .header .clear {
+	background: #96d3da;
+	height: 25px;
+	margin-top: 20px;
+	margin-left: 1%;
+	margin-right: 1%;
+}
+
+.leftList {
+	width: 700px;
+	min-height: 600px;
+	margin-top: 30px;
+	margin-left: 20px;
+}
+
+.articals li {
+	font-size: 16px;
+	margin-top: 20px;
+	list-style: none;
+}
+
+.artical a {
+	text-decoration: underline;
+}
+
+.second {
+	margin-top: 5px;
+}
+
+.third {
+	margin-top: 5px;
+}
+
+.third span {
+	margin-left: 3px;
+}

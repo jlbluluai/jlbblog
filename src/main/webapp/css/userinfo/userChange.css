@@ -1,0 +1,28 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: 5%;
+}
+
+
+.modifyInfo {
+	margin-top: 20px;
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 10px;
+	margin-left: 20px;
+}
+
+.uploadImage{
+	display: none;
+}
+
+	

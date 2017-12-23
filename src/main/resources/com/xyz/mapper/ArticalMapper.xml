@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.ArticalMapper">
+  <resultMap id="BaseResultMap" type="com.xyz.domain.Artical">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="is_public" jdbcType="TINYINT" property="isPublic" />
+    <result column="is_publish" jdbcType="TINYINT" property="isPublish" />
+    <result column="is_nice" jdbcType="TINYINT" property="isNice" />
+    <result column="is_examine" jdbcType="TINYINT" property="isExamine" />
+    <result column="view_num" jdbcType="INTEGER" property="viewNum" />
+    <result column="comment_num" jdbcType="INTEGER" property="commentNum" />
+    <result column="leave_time" jdbcType="TIMESTAMP" property="leaveTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.xyz.domain.Artical">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, uid, is_public, is_publish, is_nice, is_examine, view_num, comment_num, 
+    leave_time
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_artical
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_artical
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xyz.domain.Artical">
+    insert into t_artical (id, title, uid, 
+      is_public, is_publish, is_nice, 
+      is_examine, view_num, comment_num, 
+      leave_time, content)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{uid,jdbcType=BIGINT}, 
+      #{isPublic,jdbcType=TINYINT}, #{isPublish,jdbcType=TINYINT}, #{isNice,jdbcType=TINYINT}, 
+      #{isExamine,jdbcType=TINYINT}, #{viewNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, 
+      #{leaveTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xyz.domain.Artical">
+    insert into t_artical
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="isPublic != null">
+        is_public,
+      </if>
+      <if test="isPublish != null">
+        is_publish,
+      </if>
+      <if test="isNice != null">
+        is_nice,
+      </if>
+      <if test="isExamine != null">
+        is_examine,
+      </if>
+      <if test="viewNum != null">
+        view_num,
+      </if>
+      <if test="commentNum != null">
+        comment_num,
+      </if>
+      <if test="leaveTime != null">
+        leave_time,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="isPublic != null">
+        #{isPublic,jdbcType=TINYINT},
+      </if>
+      <if test="isPublish != null">
+        #{isPublish,jdbcType=TINYINT},
+      </if>
+      <if test="isNice != null">
+        #{isNice,jdbcType=TINYINT},
+      </if>
+      <if test="isExamine != null">
+        #{isExamine,jdbcType=TINYINT},
+      </if>
+      <if test="viewNum != null">
+        #{viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="commentNum != null">
+        #{commentNum,jdbcType=INTEGER},
+      </if>
+      <if test="leaveTime != null">
+        #{leaveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xyz.domain.Artical">
+    update t_artical
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="isPublic != null">
+        is_public = #{isPublic,jdbcType=TINYINT},
+      </if>
+      <if test="isPublish != null">
+        is_publish = #{isPublish,jdbcType=TINYINT},
+      </if>
+      <if test="isNice != null">
+        is_nice = #{isNice,jdbcType=TINYINT},
+      </if>
+      <if test="isExamine != null">
+        is_examine = #{isExamine,jdbcType=TINYINT},
+      </if>
+      <if test="viewNum != null">
+        view_num = #{viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="commentNum != null">
+        comment_num = #{commentNum,jdbcType=INTEGER},
+      </if>
+      <if test="leaveTime != null">
+        leave_time = #{leaveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xyz.domain.Artical">
+    update t_artical
+    set title = #{title,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=BIGINT},
+      is_public = #{isPublic,jdbcType=TINYINT},
+      is_publish = #{isPublish,jdbcType=TINYINT},
+      is_nice = #{isNice,jdbcType=TINYINT},
+      is_examine = #{isExamine,jdbcType=TINYINT},
+      view_num = #{viewNum,jdbcType=INTEGER},
+      comment_num = #{commentNum,jdbcType=INTEGER},
+      leave_time = #{leaveTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xyz.domain.Artical">
+    update t_artical
+    set title = #{title,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=BIGINT},
+      is_public = #{isPublic,jdbcType=TINYINT},
+      is_publish = #{isPublish,jdbcType=TINYINT},
+      is_nice = #{isNice,jdbcType=TINYINT},
+      is_examine = #{isExamine,jdbcType=TINYINT},
+      view_num = #{viewNum,jdbcType=INTEGER},
+      comment_num = #{commentNum,jdbcType=INTEGER},
+      leave_time = #{leaveTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <resultMap type="com.xyz.domain.Artical" id="selectPagesResultMap">
+  		<id column="aid" jdbcType="BIGINT" property="id" />
+    	<result column="atitle" jdbcType="VARCHAR" property="title" />
+    	<result column="auid" jdbcType="BIGINT" property="uid" />
+    	<result column="aispublic" jdbcType="TINYINT" property="isPublic" />
+    	<result column="aispublish" jdbcType="TINYINT" property="isPublish" />
+    	<result column="aisnice" jdbcType="TINYINT" property="isNice" />
+    	<result column="aisexamine" jdbcType="TINYINT" property="isExamine" />
+    	<result column="aviewnum" jdbcType="INTEGER" property="viewNum" />
+    	<result column="acommentnum" jdbcType="INTEGER" property="commentNum" />
+    	<result column="aleavetime" jdbcType="TIMESTAMP" property="leaveTime" />
+    	<result column="acontent" jdbcType="LONGVARCHAR" property="content" />
+    	<association property="user" javaType="com.xyz.domain.User">
+    		<id column="uid" property="id"/>
+    		<result column="unickname" property="nickname"/>
+   		</association>
+   		<collection property="articalCategorys" ofType="com.xyz.domain.ArticalCategory">
+   			<id column="acid" property="id"/>
+   			<result column="acname" property="name"/>
+   		</collection>
+  </resultMap>
+  
+  <select id="selectPages" resultMap="selectPagesResultMap">
+  		select
+  			a.id aid,
+  			a.title atitle,
+  			a.content acontent,
+  			a.uid auid,
+  			a.is_public aispublic,
+  			a.is_publish aispublish,
+  			a.is_nice aisnice,
+  			a.is_examine aisexamine,
+  			a.view_num aviewnum,
+  			a.comment_num acommentnum,
+  			a.leave_time aleavetime,
+  			u.id uid,
+  			u.nickname unickname,
+  			ac.id acid,
+			ac.name acname  			
+  		from
+  			t_artical a
+  		left join
+  			t_user u
+  		on
+  			a.uid = u.id
+  		left join
+  			t_artical_associate_category aac
+  		on
+  			aac.aid = a.id
+  		left join
+  			t_artical_category ac
+  		on
+  			aac.cid = ac.id
+  		<where>
+  			<if test="isPublic != null">
+  				and a.is_public = #{isPublic}
+  			</if>
+  			<if test="isNice != null">
+  				and a.is_nice = #{isNice}
+  			</if>
+  			<if test="uid != null">
+  				and a.uid = #{uid} 
+  			</if>
+  			<if test="isPublish != null">
+  				and a.is_publish = #{isPublish}
+  			</if>
+  		</where>
+  		order by
+  			a.leave_time desc
+  </select>
+  
+</mapper>

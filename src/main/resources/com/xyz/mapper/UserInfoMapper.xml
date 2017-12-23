@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.xyz.domain.UserInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="truename" jdbcType="VARCHAR" property="truename" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="qq" jdbcType="INTEGER" property="qq" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.xyz.domain.UserInfo">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, truename, birthday, sex, address, qq , headpic
+  </sql>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_user_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_user_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xyz.domain.UserInfo">
+    insert into t_user_info (id, truename, birthday, 
+      sex, address, qq, description , headpic
+      )
+    values (#{id,jdbcType=BIGINT}, #{truename,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
+      #{sex,jdbcType=TINYINT}, #{address,jdbcType=VARCHAR}, #{qq,jdbcType=INTEGER}, #{description,jdbcType=LONGVARCHAR},
+      #{headpic,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xyz.domain.UserInfo">
+    insert into t_user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="truename != null">
+        truename,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="headpic != null">
+        headpic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="truename != null">
+        #{truename,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="headpic != null">
+        #{headpic,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xyz.domain.UserInfo">
+    update t_user_info
+    <set>
+      <if test="truename != null">
+        truename = #{truename,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        qq = #{qq,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="headpic != null">
+        headpic = #{headpic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xyz.domain.UserInfo">
+    update t_user_info
+    set truename = #{truename,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      sex = #{sex,jdbcType=TINYINT},
+      address = #{address,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=INTEGER},
+      description = #{description,jdbcType=LONGVARCHAR},
+      headpic = #{headpic,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xyz.domain.UserInfo">
+    update t_user_info
+    set truename = #{truename,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      sex = #{sex,jdbcType=TINYINT},
+      address = #{address,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=INTEGER},
+      headpic = #{headpic,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

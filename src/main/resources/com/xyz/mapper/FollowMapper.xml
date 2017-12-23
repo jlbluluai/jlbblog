@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.FollowMapper">
+  <resultMap id="BaseResultMap" type="com.xyz.domain.FollowKey">
+    <id column="mid" jdbcType="BIGINT" property="mid" />
+    <id column="fid" jdbcType="BIGINT" property="fid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.xyz.domain.FollowKey">
+    delete from t_follow
+    where mid = #{mid,jdbcType=BIGINT}
+      and fid = #{fid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xyz.domain.FollowKey">
+    insert into t_follow (mid, fid)
+    values (#{mid,jdbcType=BIGINT}, #{fid,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xyz.domain.FollowKey">
+    insert into t_follow
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="fid != null">
+        fid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mid != null">
+        #{mid,jdbcType=BIGINT},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

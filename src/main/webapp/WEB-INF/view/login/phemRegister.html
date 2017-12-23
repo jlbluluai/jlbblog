@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>洛林博客--注册</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" href="css/registerForm.css" />
+<style type="text/css">
+table {
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+</style>
+</head>
+
+<body>
+	<div id="container">
+		<div id="verPhone">
+			<ul>
+				<li class="item">请验证手机号和邮箱</li>
+				<li>→</li>
+				<li>请输入相关信息</li>
+				<li>→</li>
+				<li>注册结果</li>
+			</ul>
+			<table>
+				<tr>
+					<td>手机号：</td>
+					<td><input type="text" class="form-control" id="phone"
+						name="phone" placeholder="请输入手机号" /></td>
+				</tr>
+				<tr>
+					<td>邮箱：</td>
+					<td><input type="email" class="form-control" id="mail"
+						name="mail" placeholder="请输入邮箱" /></td>
+					<td>
+						<button class="btn" id="send">发送验证码</button>
+					</td>
+				</tr>
+				<tr>
+					<td>验证码：</td>
+					<td><input type="text" class="form-control" id="ver"
+						name="ver" placeholder="请输入验证码" /></td>
+				</tr>
+				<tr id="warn">
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<button type="button" class="btn btn-primary" id="ver_phone">开始验证</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="footer">
+			<div id="author">©2017 小叶子</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(function() {
+			$(".item").css("color", "red");
+		});
+
+		$(function() {
+			$("#ver_phone")
+					.click(
+							function() {
+								var phone = $.trim($("#phone").val());
+								var email = $.trim($("#mail").val());
+								var ver = $.trim($("#ver").val());
+								$("#flag").remove();
+								if (phone == "") {
+									var str = '<td id="flag"><span>请输入手机号</span></td>';
+									$("#warn").append(str);
+								} else if (email == "") {
+									var str = '<td id="flag"><span>请输入邮箱</span></td>';
+									$("#warn").append(str);
+								} else if (ver == "") {
+									var str = '<td id="flag"><span>请输入验证码</span></td>';
+									$("#warn").append(str);
+								} else if (!phone
+										.match(/^1[3|4|5|7|8][0-9]{9}$/)) {
+									var str = '<td id="flag"><span>请输入正确的手机号格式</span></td>';
+									$("#warn").append(str);
+								} else if (!email
+										.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)) {
+									var str = '<td id="flag"><span>请输入正确的邮箱格式</span></td>';
+									$("#warn").append(str);
+								} else {
+									$verPhone(phone, email, ver);
+								}
+							});
+		});
+
+		var $verPhone = function(phone, email, ver) {
+			$.ajax({
+				type : "post",
+				url : "TempRegister",
+				dataType : "json",
+				contentType : "application/json",
+				data : JSON.stringify({
+					phone : phone,
+					email : email,
+					code : ver
+				}),
+				async : true,
+				success : function(data) {
+					if(data.msg == "success"){
+						window.location.href = "userRegister?phone=" + phone
+						+ "&email=" + email;
+					}else{
+						var str = '<td id="flag"><span>'+data.msg+'</span></td>';
+						$("#warn").append(str);
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		$(function() {
+
+			$("#send")
+					.click(
+							function() {
+								var email = $.trim($("#mail").val());
+								$("#flag").remove();
+								if (!email
+										.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/)) {
+									var str = '<td id="flag"><span>请输入正确的邮箱格式</span></td>';
+									$("#warn").append(str);
+								} else {
+									$sendVerCode(email);
+								}
+							});
+		});
+
+		var $sendVerCode = function(email) {
+			$.ajax({
+				type : "post",
+				url : "sendVerCode",
+				dataType : "json",
+				contentType : "application/json",
+				data : JSON.stringify({
+					email : email,
+					module : "register"
+				}),
+				async : true,
+				success : function(data) {
+					console.log(data);
+					if (data.msg == "success") {
+						$("#send").attr("disabled", true);
+						var i = 60;
+
+						$("#send").text("等待" + i + "s");
+						var a = setInterval(function() {
+							i--;
+							$("#send").text("等待" + i + "s");
+							if (i == -1) {
+								clearInterval(a);
+								$("#send").attr("disabled", false);
+								$("#send").text("发送验证码");
+							}
+						}, 1000);
+					} else {
+						$("#flag").remove();
+						var str = '<td id="flag"><span>'+data.msg+'</span></td>';
+						$("#warn").append(str);
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+	</script>
+</body>
+
+</html>

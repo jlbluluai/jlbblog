@@ -1,0 +1,43 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: 5%;
+}
+
+
+.inbox{
+	margin-top: 20px;
+}
+
+.inbox label{
+	float: left;
+	margin-top: 6px;
+	font-size: 15px;
+}
+
+.inbox select{
+	width: 200px;
+}
+
+.inbox table{
+	margin-top: 15px;
+}
+
+.remove{
+	margin-top: -20px;
+	margin-left: 7px;
+}
+
+.remove a{
+	color: black;
+}
+
+.remove a:hover{
+	color: red;
+}

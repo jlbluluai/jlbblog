@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>洛林博客--注册</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+<link rel="stylesheet" href="css/registerForm.css" />
+<style type="text/css">
+table {
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+</style>
+</head>
+
+<body>
+	<div id="container">
+		<div id="result">
+			<ul>
+				<li>请验证手机号和邮箱</li>
+				<li>→</li>
+				<li>请输入相关信息</li>
+				<li>→</li>
+				<li class="item">注册结果</li>
+			</ul>
+			<div>
+				<p>恭喜你注册成功，请填写你的昵称</p>
+			</div>
+			<table>
+				<tr>
+					<td><input type="text" class="form-control" id="nickname"
+						name="nickname" placeholder="请输入昵称" /></td>
+				</tr>
+				<tr id="warn">
+				</tr>
+				<tr>
+					<td><button type="button" class="btn btn-primary"
+							id="ver_nick">确认设置</button></td>
+				</tr>
+				<tr>
+					<td><span>如不设置，也可直接前往主页</span> <a>前往主页</a></td>
+				</tr>
+			</table>
+		</div>
+		<div id="footer">
+			<div id="author">©2017 小叶子</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(function() {
+			$(".item").css("color", "red");
+		});
+
+		$(function() {
+			$("#ver_nick").click(function() {
+				var nickname = $.trim($("#nickname").val());
+				$("#flag").remove();
+				if (nickname == "") {
+					var str = '<td id="flag"><span>请输入昵称</span></td>';
+					$("#warn").append(str);
+				} else {
+					var id = $getQueryString("id");
+					$updateNickname(id, nickname)
+				}
+			});
+		});
+
+		var $getQueryString = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+
+		var $updateNickname = function(id, nickname) {
+			$.ajax({
+				dataType : "json",
+				type : "post",
+				url : "firstChangeNick",
+				contentType : "application/json",
+				data : JSON.stringify({
+					id : id,
+					nickname : nickname
+				}),
+				async : true,
+				success : function(data) {
+					if (data.msg == "success") {
+						window.location.href = "loginForm";
+					} else{
+						var str = '<td id="flag"><span>'+data.msg+'</span></td>';
+						$("#warn").append(str);
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+	</script>
+</body>
+
+</html>

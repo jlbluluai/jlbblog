@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.ArticalAssCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.xyz.domain.ArticalAssCategoryKey">
+    <id column="aid" jdbcType="BIGINT" property="aid" />
+    <id column="cid" jdbcType="INTEGER" property="cid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.xyz.domain.ArticalAssCategoryKey">
+    delete from t_artical_associate_category
+    where aid = #{aid,jdbcType=BIGINT}
+      and cid = #{cid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xyz.domain.ArticalAssCategoryKey">
+    insert into t_artical_associate_category (aid, cid)
+    values (#{aid,jdbcType=BIGINT}, #{cid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xyz.domain.ArticalAssCategoryKey">
+    insert into t_artical_associate_category
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aid != null">
+        aid,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="aid != null">
+        #{aid,jdbcType=BIGINT},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

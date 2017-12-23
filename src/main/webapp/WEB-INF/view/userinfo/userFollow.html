@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--bootstrap、jquery-->
+		<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+		<!--自定义-->
+		<link rel="stylesheet" href="../css/userinfo/userFollow.css" />
+	</head>
+
+	<body>
+		<div class="container">
+			
+			<!--横向导航栏-->
+			<div class="navigation">
+				<ul class="nav nav-tabs">
+					<li role="presentation" class="active" value="0">
+						<a href="#">小叶子的关注</a>
+					</li>
+					<li role="presentation" value="1">
+						<a href="#">小叶子的粉丝</a>
+					</li>
+				</ul>
+			</div>
+			
+			<!--主体-->
+			<div id="body_main">
+				<ul id="body_main_ul">
+					<li>
+						<div class="ava_pic">
+							<a href=""><img src="../img/noneAvatar.jpg" title="昵称" height="70" width="70" /></a>
+						</div>
+						<div class="ava_name">
+							<a href="">昵称</a>
+						</div>
+					</li>
+					<li>
+						<div class="ava_pic">
+							<a href=""><img src="../img/noneAvatar.jpg" title="昵称" height="70" width="70" /></a>
+						</div>
+						<div class="ava_name">
+							<a href="">昵称</a>
+						</div>
+					</li>
+					
+				</ul>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			
+			/*横向导航栏逻辑*/
+			$(function() {
+
+				$(".navigation li").on("click", function() {
+
+					$(this).siblings("li").removeClass("active");
+					$(this).addClass("active");
+					var sel = $(this).val();
+					console.log(sel);
+					if(sel == 0) {
+					} else if(sel == 1) {
+					}
+
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

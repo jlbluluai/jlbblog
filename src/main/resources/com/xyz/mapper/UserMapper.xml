@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.xyz.domain.User">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="nickname" jdbcType="VARCHAR" property="nickname" />
+		<result column="iid" jdbcType="INTEGER" property="iid" />
+		<result column="make_day" jdbcType="DATE" property="makeDay" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, username, password, phone, email, nickname, iid, make_day
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from t_user
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.xyz.domain.User">
+		insert into t_user (id, username, password,
+		phone, email, nickname,
+		iid, make_day)
+		values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
+		#{iid,jdbcType=INTEGER}, #{makeDay,jdbcType=DATE})
+	</insert>
+	<insert id="insertSelective" parameterType="com.xyz.domain.User">
+		insert into t_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="nickname != null">
+				nickname,
+			</if>
+			<if test="iid != null">
+				iid,
+			</if>
+			<if test="makeDay != null">
+				make_day,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				#{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="iid != null">
+				#{iid,jdbcType=INTEGER},
+			</if>
+			<if test="makeDay != null">
+				#{makeDay,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.xyz.domain.User">
+		update t_user
+		<set>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				nickname = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="iid != null">
+				iid = #{iid,jdbcType=INTEGER},
+			</if>
+			<if test="makeDay != null">
+				make_day = #{makeDay,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.xyz.domain.User">
+		update t_user
+		set username = #{username,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		phone = #{phone,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		nickname = #{nickname,jdbcType=VARCHAR},
+		iid = #{iid,jdbcType=INTEGER},
+		make_day = #{makeDay,jdbcType=DATE}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<!-- 根据登录名选择登录匹配的方式 -->
+	<select id="selectByLoginname" resultMap="BaseResultMap">
+		select 
+			id,nickname
+		from
+			t_user
+		where
+			<if test="username != null">
+				username = #{username}
+			</if>
+			<if test="phone != null">
+				phone = #{phone}
+			</if>
+			<if test="email != null">
+				email = #{email}
+			</if>
+		and
+			password = #{password}
+	</select>
+	
+	<!-- 根据邮箱查询 -->
+	<select id="selectByEmail" resultMap="BaseResultMap">
+		select
+			id,email,password
+		from
+			t_user
+		where
+			email = #{email}
+	</select>
+	
+	<!-- 根据手机号查询 -->
+	<select id="selectByPhone" resultType="int">
+		select
+			count(*)
+		from
+			t_user
+		where
+			phone = #{phone}
+	</select>
+	
+	<!-- 注册首次修改昵称 -->
+	<update id="updateNickname">
+		update
+			t_user
+		set
+			nickname = #{nickname}
+		where
+			id = #{id}
+	</update>
+	
+	<!-- 修改密码 -->
+	<update id="updatePass">
+		update
+			t_user
+		set
+			password = #{password}
+		where
+			email = #{email}
+	</update>
+</mapper>
