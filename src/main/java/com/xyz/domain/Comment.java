@@ -15,6 +15,10 @@ public class Comment implements Serializable {
     private String content;
 
     private static final long serialVersionUID = 1L;
+    
+    /*视图属性*/
+    private User user;
+    private Artical artical;
 
     public Long getId() {
         return id;
@@ -55,4 +59,22 @@ public class Comment implements Serializable {
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
     }
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Artical getArtical() {
+		return artical;
+	}
+
+	public void setArtical(Artical artical) {
+		this.artical = artical;
+	}
+    
+    
 }

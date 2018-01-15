@@ -6,35 +6,35 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.xyz.domain.Artical;
-import com.xyz.mapper.ArticalMapper;
-import com.xyz.mapper.ArticalMapperP;
-import com.xyz.service.ArticalService;
+import com.xyz.domain.Comment;
+import com.xyz.mapper.CommentMapper;
+import com.xyz.mapper.CommentMapperP;
+import com.xyz.service.CommentService;
 
+@Service("commentService")
 @Transactional
-@Service("articalService")
-public class ArticalServiceImpl implements ArticalService {
+public class CommentServiceImpl implements CommentService {
 
 	@Autowired
-	private ArticalMapper articalMapper;
-	
+	private CommentMapper commentMapper;
+
 	@Autowired
-	private ArticalMapperP articalMapperP;
+	private CommentMapperP commentMapperP;
 
 	@Override
-	public Artical getAppointedItem(Long uid) {
+	public Comment getAppointedItem(Long uid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean changeAppointedItem(Artical item) {
+	public boolean changeAppointedItem(Comment item) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean saveAppointedItem(Artical item) {
+	public boolean saveAppointedItem(Comment item) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -46,11 +46,12 @@ public class ArticalServiceImpl implements ArticalService {
 	}
 
 	/**
-	 * 根据条件获取指定页的文章
+	 * 根据相关条件获取指定页的评论
 	 */
-	public PageInfo<Artical> getAppointedPageItems(Integer current, Integer limit, Artical item) {
+	@Override
+	public PageInfo<Comment> getAppointedPageItems(Integer current, Integer limit, Comment item) {
 		PageHelper.startPage(current, limit);
-		return new PageInfo<Artical>(articalMapperP.selectPages(item));
+		return new PageInfo<Comment>(commentMapperP.selectPages(item));
 	}
 
 }

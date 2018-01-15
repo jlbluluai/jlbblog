@@ -1,75 +1,131 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<!--bootstrap、jquery-->
-		<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
-		<script type="text/javascript" src="../js/jquery.js"></script>
-		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
-		<!--自定义-->
-		<link rel="stylesheet" href="../css/userinfo/userFollow.css" />
-	</head>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<!--bootstrap、jquery-->
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+<!--自定义-->
+<link rel="stylesheet" href="../css/userinfo/userFollow.css" />
+</head>
 
-	<body>
-		<div class="container">
-			
-			<!--横向导航栏-->
-			<div class="navigation">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active" value="0">
-						<a href="#">小叶子的关注</a>
-					</li>
-					<li role="presentation" value="1">
-						<a href="#">小叶子的粉丝</a>
-					</li>
-				</ul>
-			</div>
-			
-			<!--主体-->
-			<div id="body_main">
-				<ul id="body_main_ul">
-					<li>
-						<div class="ava_pic">
-							<a href=""><img src="../img/noneAvatar.jpg" title="昵称" height="70" width="70" /></a>
-						</div>
-						<div class="ava_name">
-							<a href="">昵称</a>
-						</div>
-					</li>
-					<li>
-						<div class="ava_pic">
-							<a href=""><img src="../img/noneAvatar.jpg" title="昵称" height="70" width="70" /></a>
-						</div>
-						<div class="ava_name">
-							<a href="">昵称</a>
-						</div>
-					</li>
-					
-				</ul>
-			</div>
+<body>
+	<div class="container">
+
+		<!--横向导航栏-->
+		<div class="navigation">
+			<ul class="nav nav-tabs">
+				<li role="presentation" class="active" value="0"><a href="#">小叶子的关注</a>
+				</li>
+				<li role="presentation" value="1"><a href="#">小叶子的粉丝</a></li>
+			</ul>
 		</div>
 
-		<script type="text/javascript">
-			
-			/*横向导航栏逻辑*/
-			$(function() {
+		<!--主体-->
+		<div id="body_main">
+			<ul id="body_main_ul">
+				<!-- <li>
+					<div class="ava_pic">
+						<a href=""><img src="../img/noneAvatar.jpg" title="昵称"
+							height="70" width="70" /></a>
+					</div>
+					<div class="ava_name">
+						<a href="">昵称</a>
+					</div>
+				</li>
+				<li>
+					<div class="ava_pic">
+						<a href=""><img src="../img/noneAvatar.jpg" title="昵称"
+							height="70" width="70" /></a>
+					</div>
+					<div class="ava_name">
+						<a href="">昵称</a>
+					</div>
+				</li> -->
 
-				$(".navigation li").on("click", function() {
+			</ul>
+		</div>
+	</div>
 
-					$(this).siblings("li").removeClass("active");
-					$(this).addClass("active");
-					var sel = $(this).val();
-					console.log(sel);
-					if(sel == 0) {
-					} else if(sel == 1) {
-					}
+	<!-- 第三方 -->
+	<!-- tmpl模版 -->
+	<script type="text/javascript" src="../js/jquery.tmpl.js"></script>
 
-				});
+	<script type="text/x-jquery-tmpl" id="t1">
+				<li>
+					<div class="ava_pic">
+						<a href=""><img src="../img/noneAvatar.jpg" title="昵称"
+							height="70" width="70" /></a>
+					</div>
+					<div class="ava_name">
+						<a href="">${user.nickname}</a>
+					</div>
+				</li>
+	</script>
+
+	<script type="text/javascript">
+		/*准备工作*/
+		var $getQueryString = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+		
+		$(window.parent.document).find("iframe").load(function() {
+			var main = $(window.parent.document).find("iframe");
+			console.log(main);
+			var thisheight = $(document).height() + 700;
+			main.height(thisheight);
+		});
+
+		var id = $getQueryString("id");
+
+		/*横向导航栏逻辑*/
+		$(function() {
+			$getFollows(id, 1);
+			$(".navigation li").on("click", function() {
+
+				$(this).siblings("li").removeClass("active");
+				$(this).addClass("active");
+				var sel = $(this).val();
+				console.log(sel);
+				if (sel == 0) {
+					$getFollows(id, 1);
+				} else if (sel == 1) {
+					$getFollows(id, 2);
+				}
 
 			});
-		</script>
-	</body>
+
+		});
+
+		var $getFollows = function(id, module) {
+			$.ajax({
+				type : "get",
+				url : "../getUserFollows",
+				dataType : "json",
+				contentType : "application/json",
+				data : {
+					uid : id,
+					module : module
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					$("#body_main_ul").empty();
+					$("#t1").tmpl(data).appendTo("#body_main_ul");
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+	</script>
+</body>
 
 </html>

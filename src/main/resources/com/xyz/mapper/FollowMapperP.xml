@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.FollowMapperP">
+
+	<resultMap type="com.xyz.domain.FollowKey" id="selectPagesResultMap">
+		<id column="mid" property="mid" />
+		<id column="fid" property="fid" />
+		<association property="user" javaType="com.xyz.domain.User">
+			<id column="uid" property="id"/>
+   			<result column="nickname" property="nickname"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectPages" resultMap="selectPagesResultMap">
+		select 
+			f.mid mid,
+			f.fid fid,
+			u.id uid,
+			u.nickname nickname
+		from
+			t_follow f
+		left join
+		<if test="mid != null">
+			t_user u
+		on
+			f.fid = u.id
+		where 
+			f.mid = #{mid}
+		</if>
+		<if test="fid !=null">
+			t_user u
+		on
+			f.mid = u.id
+		where
+			f.fid = #{fid}
+		</if>
+	</select>
+</mapper>

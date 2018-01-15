@@ -1,11 +1,16 @@
 package com.xyz.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.junit.runner.Request;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +25,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
+import com.xyz.domain.Comment;
 import com.xyz.domain.Dynamic;
+import com.xyz.domain.FollowKey;
 import com.xyz.domain.User;
 import com.xyz.domain.UserInfo;
+import com.xyz.dto.PagesFeedback;
 import com.xyz.dto.UserHome;
 import com.xyz.service.ArticalService;
+import com.xyz.service.CommentService;
 import com.xyz.service.DynamicService;
+import com.xyz.service.FollowService;
 import com.xyz.service.UserInfoService;
 import com.xyz.service.UserService;
 import com.xyz.util.Utils;
@@ -51,8 +61,23 @@ public class UserHomeController {
 	@Qualifier("articalService")
 	private ArticalService articalService;
 
-	/* 用户主页逻辑 */
+	@Autowired
+	@Qualifier("commentService")
+	private CommentService commentService;
 
+	@Autowired
+	@Qualifier("followService")
+	private FollowService followService;
+
+	// 统一设定数据
+	private String contentType = "text/html;charset=UTF-8";
+	private String f1 = "--------------";
+	private String f2 = "--------------";
+
+	// 日志
+	private Logger log = Logger.getLogger(UserHomeController.class);
+
+	/* 用户主页逻辑 */
 	/**
 	 * 获取用户主页共用部分相关信息
 	 * 
@@ -123,8 +148,7 @@ public class UserHomeController {
 		return dynamicService.saveAppointedItem(dynamic);
 	}
 
-	/* 我的文章逻辑 */
-
+	/* 文章逻辑 */
 	/**
 	 * 用户信息模块获取对应文章
 	 * 
@@ -153,8 +177,60 @@ public class UserHomeController {
 		response.getWriter().write(json.toString());
 	}
 
-	/* 修改信息逻辑 */
+	/* 关注与粉丝逻辑 */
+	/**
+	 * 获取关注与粉丝
+	 * 
+	 * @param uid
+	 * @param module
+	 * @return
+	 */
+	@RequestMapping(value = "/getUserFollows", method = RequestMethod.GET)
+	@ResponseBody
+	public List<FollowKey> getUserFollows(@RequestParam("uid") Long uid, @RequestParam("module") Integer module) {
+		log.info(f1 + "获取用户关注与粉丝开始" + f2);
+		FollowKey follow = new FollowKey();
+		if (module == 1) {
+			follow.setMid(uid);
+		} else if (module == 2) {
+			follow.setFid(uid);
+		}
+		List<FollowKey> list = followService.getFollows(follow);
+		log.info(f1 + "获取用户关注与粉丝结束" + f2);
+		return list;
+	}
 
+	/* 评论逻辑 */
+	/**
+	 * 获取用户自己指定页的评论
+	 * 
+	 * @param harvest
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getUserComments", method = RequestMethod.GET)
+	@ResponseBody
+	public PagesFeedback getUserComments(@RequestParam("current") Integer current, HttpSession session)
+			throws Exception {
+		log.info(f1 + "获取用户评论开始" + f2);
+		Long uid = ((User) session.getAttribute("user")).getId();
+		Comment comment = new Comment();
+		comment.setUid(uid);
+
+		PageInfo<Comment> pageInfo = commentService.getAppointedPageItems(current, 8, comment);
+
+		List<Object> list = new ArrayList<Object>();
+		for (Comment comm : pageInfo.getList()) {
+			list.add(comm);
+		}
+		PagesFeedback feedback = new PagesFeedback();
+		feedback.setoList(list);
+		feedback.setTotalPages(pageInfo.getPages());
+		log.info(f1 + "获取用户评论结束" + f2);
+		return feedback;
+	}
+
+	/* 修改信息逻辑 */
 	/**
 	 * 获取指定id的用户信息
 	 * 

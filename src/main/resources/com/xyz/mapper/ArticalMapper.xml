@@ -183,7 +183,7 @@
   </update>
   
   
-  <resultMap type="com.xyz.domain.Artical" id="selectPagesResultMap">
+  <!-- <resultMap type="com.xyz.domain.Artical" id="selectPagesResultMap">
   		<id column="aid" jdbcType="BIGINT" property="id" />
     	<result column="atitle" jdbcType="VARCHAR" property="title" />
     	<result column="auid" jdbcType="BIGINT" property="uid" />
@@ -252,6 +252,6 @@
   		</where>
   		order by
   			a.leave_time desc
-  </select>
+  </select> -->
   
 </mapper>

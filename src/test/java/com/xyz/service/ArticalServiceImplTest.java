@@ -56,6 +56,7 @@ public class ArticalServiceImplTest {
 		//artical.setIsNice((byte)1);
 		PageInfo<Artical> pageInfo = articalService.getAppointedPageItems(1, 10, artical);
 		List<Artical> list = pageInfo.getList();
+		System.out.println(list.size());
 		for (Artical artical2 : list) {
 			Set<ArticalCategory> set = artical2.getArticalCategorys();
 			for (ArticalCategory articalCategory : set) {

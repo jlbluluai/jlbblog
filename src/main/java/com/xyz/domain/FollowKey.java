@@ -3,25 +3,37 @@ package com.xyz.domain;
 import java.io.Serializable;
 
 public class FollowKey implements Serializable {
-    private Long mid;
+	private Long mid;
 
-    private Long fid;
+	private Long fid;
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public Long getMid() {
-        return mid;
-    }
+	/* 视图属性 */
+	private User user;
 
-    public void setMid(Long mid) {
-        this.mid = mid;
-    }
+	public Long getMid() {
+		return mid;
+	}
 
-    public Long getFid() {
-        return fid;
-    }
+	public void setMid(Long mid) {
+		this.mid = mid;
+	}
 
-    public void setFid(Long fid) {
-        this.fid = fid;
-    }
+	public Long getFid() {
+		return fid;
+	}
+
+	public void setFid(Long fid) {
+		this.fid = fid;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }

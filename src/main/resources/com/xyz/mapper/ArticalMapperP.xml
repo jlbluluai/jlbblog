@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.ArticalMapperP">
+
+  <resultMap type="com.xyz.domain.Artical" id="selectPagesResultMap">
+  		<id column="aid" jdbcType="BIGINT" property="id" />
+    	<result column="atitle" jdbcType="VARCHAR" property="title" />
+    	<result column="auid" jdbcType="BIGINT" property="uid" />
+    	<result column="aispublic" jdbcType="TINYINT" property="isPublic" />
+    	<result column="aispublish" jdbcType="TINYINT" property="isPublish" />
+    	<result column="aisnice" jdbcType="TINYINT" property="isNice" />
+    	<result column="aisexamine" jdbcType="TINYINT" property="isExamine" />
+    	<result column="aviewnum" jdbcType="INTEGER" property="viewNum" />
+    	<result column="acommentnum" jdbcType="INTEGER" property="commentNum" />
+    	<result column="aleavetime" jdbcType="TIMESTAMP" property="leaveTime" />
+    	<result column="acontent" jdbcType="LONGVARCHAR" property="content" />
+    	<association property="user" javaType="com.xyz.domain.User">
+    		<id column="uid" property="id"/>
+    		<result column="unickname" property="nickname"/>
+   		</association>
+   		<collection property="articalCategorys" ofType="com.xyz.domain.ArticalCategory">
+   			<id column="acid" property="id"/>
+   			<result column="acname" property="name"/>
+   		</collection>
+  </resultMap>
+  
+  <select id="selectPages" resultMap="selectPagesResultMap">
+  		select
+  			a.id aid,
+  			a.title atitle,
+  			a.content acontent,
+  			a.uid auid,
+  			a.is_public aispublic,
+  			a.is_publish aispublish,
+  			a.is_nice aisnice,
+  			a.is_examine aisexamine,
+  			a.view_num aviewnum,
+  			a.comment_num acommentnum,
+  			a.leave_time aleavetime,
+  			u.id uid,
+  			u.nickname unickname,
+  			ac.id acid,
+			ac.name acname  			
+  		from
+  			t_artical a
+  		left join
+  			t_user u
+  		on
+  			a.uid = u.id
+  		left join
+  			t_artical_associate_category aac
+  		on
+  			aac.aid = a.id
+  		left join
+  			t_artical_category ac
+  		on
+  			aac.cid = ac.id
+  		<where>
+  			<if test="isPublic != null">
+  				and a.is_public = #{isPublic}
+  			</if>
+  			<if test="isNice != null">
+  				and a.is_nice = #{isNice}
+  			</if>
+  			<if test="uid != null">
+  				and a.uid = #{uid} 
+  			</if>
+  			<if test="isPublish != null">
+  				and a.is_publish = #{isPublish}
+  			</if>
+  		</where>
+  		order by
+  			a.leave_time desc
+  </select>
+
+</mapper>
