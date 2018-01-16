@@ -29,6 +29,7 @@
 		<jedis.version>2.9.0</jedis.version>
 		<redis.spring.version>1.7.2.RELEASE</redis.spring.version>
 		<jackson.version>2.9.0</jackson.version>
+		<ftp.version>3.4</ftp.version>
 		<junit.version>4.12</junit.version>
 	</properties>
 
@@ -222,6 +223,20 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+
+		<!-- ftp -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>${ftp.version}</version>
+		</dependency>
+
+		<!-- 图片压缩 -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
 		</dependency>
 
 		<!-- junit -->

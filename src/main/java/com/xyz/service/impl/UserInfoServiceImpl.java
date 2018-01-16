@@ -50,7 +50,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 */
 	public boolean changeAppointedItem(UserInfo item) {
 		redisDao.delete("userInfo_" + item.getId());
-		userService.changeAppointedItem(item.getUser());
+		if (item.getUser() != null) {
+			userService.changeAppointedItem(item.getUser());
+		}
 		return userInfoMapper.updateByPrimaryKeySelective(item) > 0;
 	}
 

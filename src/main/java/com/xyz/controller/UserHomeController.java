@@ -1,27 +1,27 @@
 package com.xyz.controller;
 
+import java.io.File;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
-import javax.mail.Session;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.junit.runner.Request;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
@@ -38,6 +38,7 @@ import com.xyz.service.DynamicService;
 import com.xyz.service.FollowService;
 import com.xyz.service.UserInfoService;
 import com.xyz.service.UserService;
+import com.xyz.util.FtpConnect;
 import com.xyz.util.Utils;
 
 import net.sf.json.JSONObject;
@@ -98,6 +99,36 @@ public class UserHomeController {
 			userHome.setAccess(u.getNickname());
 		}
 		return userHome;
+	}
+
+	/**
+	 * 获取指定id的用户信息
+	 * 
+	 * @param userInfo
+	 * @return
+	 */
+	@RequestMapping(value = "/getAppointedUserInfo", method = RequestMethod.GET)
+	public void getAppointedUserInfo(UserInfo userInfo, HttpSession session, HttpServletResponse response)
+			throws Exception {
+		JSONObject json = new JSONObject();
+		User u = (User) session.getAttribute("user");
+		if (!u.getId().equals(userInfo.getId())) {
+			json.put("isMaster", "no");
+		}
+		UserInfo info = userInfoService.getAppointedItem(userInfo.getId());
+
+		String prop = FtpConnect.class.getClassLoader().getResource("/").getPath()
+				+ "properties/ftp-connect.properties";
+		prop = URLDecoder.decode(prop);
+		Properties properties = Utils.getProperties(prop);
+		String headpic = "http://" + properties.getProperty("url") + ":" + properties.getProperty("nginxPort") + "/"
+				+ info.getHeadpic();
+		info.setHeadpic(headpic);
+		json.put("userinfo", info);
+		json.put("nickname", userService.getAppointedItem(userInfo.getId()).getNickname());
+
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().append(json.toString());
 	}
 
 	/**
@@ -232,27 +263,6 @@ public class UserHomeController {
 
 	/* 修改信息逻辑 */
 	/**
-	 * 获取指定id的用户信息
-	 * 
-	 * @param userInfo
-	 * @return
-	 */
-	@RequestMapping(value = "/getAppointedUserInfo", method = RequestMethod.GET)
-	public void getAppointedUserInfo(UserInfo userInfo, HttpSession session, HttpServletResponse response)
-			throws Exception {
-		JSONObject json = new JSONObject();
-		User u = (User) session.getAttribute("user");
-		if (!u.getId().equals(userInfo.getId())) {
-			json.put("isMaster", "no");
-		}
-		json.put("userinfo", userInfoService.getAppointedItem(userInfo.getId()));
-		json.put("nickname", userService.getAppointedItem(userInfo.getId()).getNickname());
-
-		response.setContentType("text/html;charset=UTF-8");
-		response.getWriter().append(json.toString());
-	}
-
-	/**
 	 * 获取自己的用户信息
 	 * 
 	 * @param id
@@ -312,6 +322,46 @@ public class UserHomeController {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 上传头像
+	 * 
+	 * @param request
+	 * @param file
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/uploadHeadpic")
+	public void uploadHeadpic(HttpServletRequest request, @RequestParam("myfile") MultipartFile file,
+			HttpServletResponse response) throws Exception {
+		log.info("头像上传开始");
+		User user = (User) request.getSession().getAttribute("user");
+		String headname = user.getId() + "head." + Utils.getTheFileStyle(file.getOriginalFilename());
+		if (!file.isEmpty()) {
+			// 创建一个临时文件
+			File tempFile = new File(headname);
+			// 将文件写入临时文件
+			file.transferTo(tempFile);
+			// 将文件上传到ftp服务器
+			FtpConnect.uploadOneFile(tempFile, "headpic");
+			// 修改用户信息
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(user.getId());
+			userInfo.setHeadpic(headname);
+			userInfoService.changeAppointedItem(userInfo);
+			log.info("头像上传完成");
+			JSONObject json = new JSONObject();
+			json.put("msg", "上传完成");
+			response.setContentType(contentType);
+			response.getWriter().write(json.toString());
+		} else {
+			log.error("文件接收失败");
+			JSONObject json = new JSONObject();
+			json.put("msg", "文件接收失败");
+			response.setContentType(contentType);
+			response.getWriter().write(json.toString());
+		}
 	}
 
 }

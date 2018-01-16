@@ -20,7 +20,7 @@
 
 		<!--头像-->
 		<div id="headpic_local">
-			<img id="headpic" src="../img/noneAvatar.jpg" />
+			<img id="headpic" src="../img/noneAvatar.jpg" width="50" height="50" />
 		</div>
 
 		<!--个人资料-->
@@ -205,8 +205,8 @@
 					}
 					$("#t1").tmpl(data.userinfo).appendTo("#body_user");
 					$("#nickname").text(data.nickname);
-					if (data.headpic != "") {
-						$("#headpic").attr("src", data.headpic);
+					if (data.userinfo.headpic != "") {
+						$("#headpic").attr("src", data.userinfo.headpic);
 					}
 				},
 				error : function() {

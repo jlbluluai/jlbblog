@@ -88,8 +88,9 @@
 			<div class="form-group">
 				<label class="col-sm-2 control-label">请选择头像:</label>
 				<div class="col-sm-4">
-					<input id="file" name="myfile" type="file" data-show-caption="true">
-					<p class="help-block">支持jpg、jpeg、png格式，大小不超过2.0M</p>
+					<input id="myfile" name="myfile" type="file" multiple="multiple"
+						data-show-caption="true">
+					<p class="help-block">支持jpg、gif、png格式，大小不超过2.0M</p>
 				</div>
 			</div>
 		</div>
@@ -254,36 +255,43 @@
 		}
 
 		/*上传头像逻辑*/
-		$(function() {
-			var path = "${base}/admin/product/upload.htm";
-			$initFileInput("file", path);
+		//上传
+		$("#myfile").fileinput({
+			language : 'zh', //设置语言
+			uploadUrl : "../uploadHeadpic", //上传的地址
+			allowedFileExtensions : [ 'jpg', 'gif', 'png' ],//接收的文件后缀
+			//uploadExtraData:{"id": 1, "fileName":'123.mp3'},
+			uploadAsync : true, //默认异步上传
+			showUpload : false, //是否显示上传按钮
+			showRemove : false, //显示移除按钮
+			showPreview : true, //是否显示预览
+			showCaption : false,//是否显示标题
+			browseClass : "btn btn-primary", //按钮样式     
+			dropZoneEnabled : false,//是否显示拖拽区域
+			//minImageWidth: 50, //图片的最小宽度
+			//minImageHeight: 50,//图片的最小高度
+			//maxImageWidth: 1000,//图片的最大宽度
+			//maxImageHeight: 1000,//图片的最大高度
+			maxFileSize : 2048,//单位为kb，如果为0表示不限制文件大小
+			//minFileCount: 0,
+			maxFileCount : 1, //表示允许同时上传的最大文件个数
+			enctype : 'multipart/form-data',
+			validateInitialCount : true,
+			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+			msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
 		});
 
-		var $initFileInput = function(ctrlName, uploadUrl) {
-			var control = $('#' + ctrlName);
-			control.fileinput({
-				language : 'zh', //设置语言  
-				uploadUrl : uploadUrl, //上传地址  
-				showUpload : false, //是否显示上传按钮  
-				showRemove : true,
-				dropZoneEnabled : false,
-				showCaption : true, //是否显示标题  
-				allowedPreviewTypes : [ 'image' ],
-				allowedFileTypes : [ 'image' ],
-				allowedFileExtensions : [ 'jpg', 'png' ],
-				maxFileSize : 2000,
-				maxFileCount : 1,
-			//initialPreview: [   
-			//预览图片的设置  
-			//      "<img src='http://127.0.0.1:8080/NewsManageSys/plugin/umeditor1_2_2/jsp/upload/20161030/55061                       477813913474.jpg' class='file-preview-image' alt='肖像图片' title='肖像图片'>",  
-			//],  
-
-			}).on("filebatchselected", function(event, files) {
-				$(this).fileinput("upload");
-			}).on("fileuploaded", function(event, data) {
-				$("#path").attr("value", data.response);
-			});
-		}
+		//上传出错反馈
+		$('#myfile').on('fileerror', function(event, data, msg) {
+			alert("上传出错");
+		});
+		
+		//上传成功结果反馈
+		$("#myfile").on("fileuploaded",
+				function(event, data, previewId, index) {
+					console.log(data.response);
+					alert(data.response.msg);
+				});
 	</script>
 </body>
 

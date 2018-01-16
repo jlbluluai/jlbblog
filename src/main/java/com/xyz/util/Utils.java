@@ -1,5 +1,8 @@
 package com.xyz.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -170,6 +173,38 @@ public final class Utils {
 	 */
 	public static Long createComplexId() {
 		return Long.parseLong(new SimpleDateFormat("yyyyMMdd").format(new Date()) + "" + new Random().nextInt(1000000));
+	}
+
+	/**
+	 * 获取一个文件的类型
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	public static String getTheFileStyle(String filename) {
+		String[] temp = filename.split("\\.");
+		return temp[temp.length - 1];
+	}
+	
+	
+	/**
+	 * show 方法简介 读取.properties文件
+	 * 
+	 * @author 叶灬黎
+	 * @param file
+	 *            要读取的.properties文件的路径
+	 * @return Properties类对象
+	 */
+	public static Properties getProperties(String file) {
+		Properties properties = new Properties();
+		try {
+			FileInputStream fis = new FileInputStream(new File(file));
+			properties.load(fis);
+			fis.close();
+		} catch (IOException e) {
+			logger.error("加载属性文件出错");
+		}
+		return properties;
 	}
 
 }
