@@ -29,6 +29,7 @@ import com.xyz.domain.Collection;
 import com.xyz.domain.Comment;
 import com.xyz.domain.Dynamic;
 import com.xyz.domain.FollowKey;
+import com.xyz.domain.Message;
 import com.xyz.domain.User;
 import com.xyz.domain.UserInfo;
 import com.xyz.dto.PagesFeedback;
@@ -38,6 +39,7 @@ import com.xyz.service.CollectionService;
 import com.xyz.service.CommentService;
 import com.xyz.service.DynamicService;
 import com.xyz.service.FollowService;
+import com.xyz.service.MessageService;
 import com.xyz.service.UserInfoService;
 import com.xyz.service.UserService;
 import com.xyz.util.FtpConnect;
@@ -75,6 +77,10 @@ public class UserHomeController {
 	@Autowired
 	@Qualifier("collectionService")
 	private CollectionService collectionService;
+
+	@Autowired
+	@Qualifier("messageService")
+	private MessageService messageService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -309,6 +315,74 @@ public class UserHomeController {
 		log.info(f1 + "删除指定文章收藏开始" + f2);
 		flag = collectionService.cutAppointedItem(id);
 		log.info(f1 + "删除指定文章收藏结束" + f2);
+		return flag;
+	}
+
+	/* 消息逻辑 */
+	/**
+	 * 获取用户指定页的相关消息
+	 * 
+	 * @param current
+	 * @param module
+	 * @param status
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/getUserMessages", method = RequestMethod.GET)
+	@ResponseBody
+	public PagesFeedback getUserMessages(@RequestParam("current") Integer current,
+			@RequestParam("module") Integer module, @RequestParam("status") String status, HttpSession session) {
+		PagesFeedback feedback = new PagesFeedback();
+		log.info(f1 + "获取用户消息开始" + f2);
+		Long uid = ((User) session.getAttribute("user")).getId();
+		Message message = new Message();
+		if (module == 1) { // 收件箱消息
+			message.setRid(uid);
+			if ("01".equals(status)) { // 全部消息
+
+			} else if ("02".equals(status)) { // 未读消息
+				message.setStatus((byte) 0);
+			}
+		} else if (module == 2) { // 发件箱消息
+			message.setPid(uid);
+		}
+		PageInfo<Message> pageInfo = messageService.getAppointedPageItems(current, 8, message);
+		List<Object> list = new ArrayList<Object>();
+		for (Message mess : pageInfo.getList()) {
+			list.add(mess);
+		}
+		feedback.setoList(list);
+		feedback.setTotalPages(pageInfo.getPages());
+		log.info(f1 + "获取用户消息结束" + f2);
+		return feedback;
+	}
+
+	/**
+	 * 阅读一条新消息修改消息状态
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/readOneNewMessage", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean readOneNewMessage(@RequestParam("id") Long id) {
+		boolean flag = false;
+		log.info(f1 + "阅读一条新消息修改状态开始" + f2);
+		Message message = new Message();
+		message.setId(id);
+		message.setStatus((byte) 1);
+		flag = messageService.changeAppointedItem(message);
+		log.info(f1 + "阅读一条新消息修改状态结束" + f2);
+		return flag;
+	}
+
+	@RequestMapping(value = "/cutBatchMessages", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean cutBatchMessages(@RequestParam("id") Long[] id) {
+		boolean flag = false;
+		log.info(f1 + "批量删除消息开始" + f2);
+		flag = messageService.cutBatchItems(id);
+		log.info(f1 + "批量删除消息结束" + f2);
 		return flag;
 	}
 

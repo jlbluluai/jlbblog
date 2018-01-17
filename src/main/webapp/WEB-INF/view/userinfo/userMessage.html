@@ -1,248 +1,483 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<!--bootstrap、jquery-->
-		<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
-		<script type="text/javascript" src="../js/jquery.js"></script>
-		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
-		<!--自定义-->
-		<link rel="stylesheet" href="../css/userinfo/userMessage.css" />
-		<script type="text/javascript" src="../js/pages.js"></script>
-	</head>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<!--bootstrap、jquery-->
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+<!--自定义-->
+<link rel="stylesheet" href="../css/userinfo/userMessage.css" />
+<script type="text/javascript" src="../js/pages.js"></script>
+</head>
 
-	<body>
-		<div class="container">
-			<!--横向导航栏-->
-			<div class="navigation">
-				<ul class="nav nav-tabs">
-					<li role="presentation" class="active" value="0">
-						<a href="#">收件箱</a>
-					</li>
-					<li role="presentation" value="1">
-						<a href="#">发件箱</a>
-					</li>
-				</ul>
+<body>
+	<div class="container">
+		<!--横向导航栏-->
+		<div class="navigation">
+			<ul class="nav nav-tabs">
+				<li role="presentation" class="active" value="0"><a href="#">收件箱</a>
+				</li>
+				<li role="presentation" value="1"><a href="#">发件箱</a></li>
+			</ul>
+		</div>
+
+		<!--收件箱-->
+		<div class="inbox">
+
+			<div class="col-lg-6">
+				<label>排序方式：</label> <select class="form-control">
+					<option value="01">全部</option>
+					<option value="02">未读</option>
+				</select>
 			</div>
 
-			<!--收件箱-->
-			<div class="inbox">
+			<table class="table">
+				<colgroup>
+					<col width="2%" />
+					<col width="15%" />
+					<col width="45%" />
+					<col width="20%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th><input type="checkbox" /></th>
+						<th>发件人</th>
+						<th>标题</th>
+						<th>发送时间</th>
+						<th>处理</th>
+					</tr>
+				</thead>
+				<tbody id="receiveBox">
+					<!-- <tr>
+						<td><input type="checkbox" value="1" /></td>
+						<td>系统通知</td>
+						<td><a href="javascript:void(0)" data-toggle="modal"
+							data-target="#readModal"><strong>您的博客申请已批准</strong></a></td>
+						<td>2017-12-04 12:00:00</td>
+						<td><a href="#">删除</a></td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" value="2" /></td>
+						<td>系统通知</td>
+						<td><a href="javascript:void(0)" data-toggle="modal"
+							data-target="#readModal">博客园博客申请通知</a></td>
+						<td>2017-12-04 12:00:00</td>
+						<td><a href="#">删除</a></td>
+					</tr> -->
+				</tbody>
+			</table>
 
-				<div class="col-lg-6">
-					<label>排序方式：</label>
-					<select class="form-control">
-						<option value="01">全部</option>
-						<option value="02">未读</option>
-					</select>
+			<div class="remove">
+				<a href="#"> <span class="glyphicon glyphicon-remove"
+					aria-hidden="true"></span>
+				</a>
+			</div>
+
+		</div>
+
+		<!--发件箱-->
+		<div></div>
+
+		<!-- 阅读版面 -->
+		<div class="modal fade" id="readModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<!--主体-->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">消息阅读</h4>
+					</div>
+					<!-- 主体-->
+					<div class="modal-body">
+						<table>
+							<thead></thead>
+							<tbody>
+								<tr>
+									<td class="right"><label>发件人：</label></td>
+									<td id="sender"></td>
+								</tr>
+								<tr>
+									<td class="right"><label>发件时间：</label></td>
+									<td id="time"></td>
+								</tr>
+								<tr>
+									<td class="right"><label>标题：</label></td>
+									<td id="title"></td>
+								</tr>
+								<tr>
+									<td class="right"><label>消息内容：</label></td>
+									<td id="content"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!--脚注 -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
 				</div>
-
-				<table class="table">
-					<colgroup>
-						<col width="2%" />
-						<col width="15%" />
-						<col width="45%" />
-						<col width="20%" />
-					</colgroup>
-					<thead>
-						<tr>
-							<th><input type="checkbox" /></th>
-							<th>发件人</th>
-							<th>标题</th>
-							<th>发送时间</th>
-							<th>处理</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox" value="1" /></td>
-							<td>系统通知</td>
-							<td>
-								<a href="#"><strong>您的博客申请已批准</strong></a>
-							</td>
-							<td>2017-12-04 12:00:00</td>
-							<td>
-								<a href="#">删除</a>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" value="2" /></td>
-							<td>系统通知</td>
-							<td>
-								<a href="#">博客园博客申请通知</a>
-							</td>
-							<td>2017-12-04 12:00:00</td>
-							<td>
-								<a href="#">删除</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-
-				<div class="remove">
-					<a href="#">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-					</a>
-				</div>
-
-			</div>
-
-			<!--收件箱-->
-			<div>
-
-			</div>
-
-			<!--分页-->
-			<div id="pager_bottom">
-				<nav aria-label="Page navigation">
-					<ul class="pagination">
-						<li id="firstli">
-							<a href="javascript:void(0);" onclick="">&laquo;</a>
-						</li>
-						<li id="lastli">
-							<a href="javascript:void(0);" onclick="">&raquo;</a>
-						</li>
-					</ul>
-				</nav>
 			</div>
 		</div>
 
-		<script type="text/javascript">
-			/*自定义分页的必备参数*/
-			var currentPage = 1;
-			var totalPage = 30;
+		<!--分页-->
+		<div id="pager_bottom">
+			<nav aria-label="Page navigation">
+				<ul class="pagination">
+					<li id="firstli"><a href="javascript:void(0);" onclick="">&laquo;</a>
+					</li>
+					<li id="lastli"><a href="javascript:void(0);" onclick="">&raquo;</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
 
-			/*横向导航栏的逻辑*/
-			$(function() {
+	<!-- 第三方 -->
+	<!-- tmpl模版 -->
+	<script type="text/javascript" src="../js/jquery.tmpl.js"></script>
 
-				$(".navigation li").on("click", function() {
+	<script type="text/x-jquery-tmpl" id="t1">
+					<tr>
+						<td><input type="checkbox" value="${id}" /></td>
+						<td>${puser.nickname}</td>
+						<td><a href="javascript:void(0)" class="mtitle">
+							{{if status == 0}}
+								<strong>${title}</strong>
+							{{/if}}
+							{{if status == 1}}
+								${title}
+							{{/if}}
+							</a><div style="display: none;">${content}</div><div style="display: none;">${status}</div><div style="display: none;">${id}</div></td>
+						<td>${dateFormat(createTime)}</td>
+						<td><a href="#" onclick="$deleteOneMessage(${id})">删除</a></td>
+					</tr>
+	</script>
 
-					if($.trim($(this).text()) == "发件箱") {
-						alert("功能暂未实现");
-					} else {
-						$(this).siblings("li").removeClass("active");
-						$(this).addClass("active");
-						var sel = $.trim($(this).text());
-						if(sel == "收件箱") {
-							console.log(1);
-							currentPage = 1;
-							totalPage = 30;
-							$getPages();
-						} else if(sel == "发件箱") {
-							console.log(2);
-							currentPage = 1;
-							totalPage = 30;
-							$getPages();
-						}
-					}
-				});
+	<script type="text/javascript">
+		/*自定义分页的必备参数*/
+		var currentPage = 1;
+		var totalPage = 1;
 
-			});
+		/*初始参数*/
+		var module = 1;
+		var status = "01";
 
-			/*收件箱的逻辑*/
-			$(function() {
+		/*横向导航栏的逻辑*/
+		$(function() {
 
-				$(".inbox select").change(function() {
+			$(".navigation li").on("click", function() {
 
-					var style = $(".inbox select").val();
-					if(style == "01") {
-						console.log("01");
-					} else if(style == "02") {
-						console.log("02");
-					}
-
-				});
-
-				$(".inbox .remove a").click(function() {
-
-					var a = [];
-					$(".inbox td input").each(function() {
-						if($(this).prop("checked") == true) {
-							a.push($(this).val());
-						}
-					});
-					console.log(a);
-					if(a.length == 0) {
-						alert("请确认有选项删除")
-					} else if(confirm("是否确认删除所选")) {
-
-					}
-
-				});
-
-				var flag = true;
-
-				$(".inbox th input").click(function() {
-					if(flag) {
-						$(".inbox input[type='checkbox']").prop("checked", true);
-						flag = false;
-					} else {
-						$(".inbox input[type='checkbox']").prop("checked", false);
-						flag = true;
-					}
-				});
-
-				$(".inbox td input").click(function() {
-					var isCheck = true;
-					$(".inbox td input").each(function() {
-						if($(this).prop("checked") != true) {
-							isCheck = false;
-						}
-					});
-					if(isCheck) {
-						$(".inbox th input").prop("checked", true);
-						flag = false;
-					} else {
-						$(".inbox th input").prop("checked", false);
-						flag = true;
-					}
-				});
-
-			});
-
-			/*自定义分页的逻辑*/
-			$(function() {
-
-				$getPages();
-				$(document).on("click", ".pagination li", function() {
-					var current = $.trim($(this).text());
-					if(current == "«") {
-						var temp = $.trim($(".pagination li.active").prev().text());
-						if(temp != "«") {
-							var $a = $(".pagination li.active");
-							$(".pagination li.active").removeClass("active");
-							$a.prev().addClass("active");
-							currentPage = parseInt($.trim($(".pagination li.active").text()));
-							console.log(currentPage);
-							$(".page_item").remove();
-							$getPages();
-						}
-					} else if(current == "»") {
-						var temp = $.trim($(".pagination li.active").next().text());
-						if(temp != "»") {
-							var $a = $(".pagination li.active");
-							$(".pagination li.active").removeClass("active");
-							$a.next().addClass("active");
-							currentPage = parseInt($.trim($(".pagination li.active").text()));
-							console.log(currentPage);
-							$(".page_item").remove();
-							$getPages();
-						}
-					} else if(current == "...") {
-
-					} else {
-						$(this).siblings("li").removeClass("active");
-						$(this).addClass("active");
-						currentPage = parseInt($.trim($(".pagination li.active").text()));
-						console.log(currentPage);
+				if ($.trim($(this).text()) == "发件箱") {
+					alert("功能暂未实现");
+				} else {
+					$(this).siblings("li").removeClass("active");
+					$(this).addClass("active");
+					var sel = $.trim($(this).text());
+					if (sel == "收件箱") {
+						currentPage = 1;
+						totalPage = 1;
+						module = 1;
+						status = "01";
 						$(".page_item").remove();
-						$getPages();
+						$("#receiveBox").empty();
+						$getPageItems(currentPage, module, status);
+					} else if (sel == "发件箱") {
+						currentPage = 1;
+						totalPage = 1;
+						module = 2;
+						status = "";
+						$(".page_item").remove();
+						$("#receiveBox").empty();
+						$getPageItems(currentPage, module, status);
 					}
-				});
+				}
+			});
+
+		});
+
+		/*准备工作*/
+		$(window.parent.document).find("iframe").load(function() {
+			var main = $(window.parent.document).find("iframe");
+			console.log(main);
+			var thisheight = $(document).height() + 700;
+			main.height(thisheight);
+		});
+
+		//转换时间
+		function dateFormat(time) {
+			var date = new Date(time);
+
+			var str = "";
+			str += date.getFullYear() + "-";
+			if (date.getMonth() + 1 < 10) {
+				str += "0" + (date.getMonth() + 1) + "-";
+			} else {
+				str += (date.getMonth() + 1) + "-";
+			}
+			if (date.getDate() < 10) {
+				str += "0" + date.getDate() + " ";
+			} else {
+				str += date.getDate() + " ";
+			}
+
+			if (date.getHours() < 10) {
+				str += "0" + date.getHours() + ":";
+			} else {
+				str += date.getHours() + ":";
+			}
+			if (date.getMinutes() < 10) {
+				str += "0" + date.getMinutes();
+			} else {
+				str += date.getMinutes();
+			}
+
+			return str;
+		}
+
+		/*收件箱的逻辑*/
+		$(function() {
+
+			$(".inbox select").change(function() {
+
+				var style = $(".inbox select").val();
+				if (style == "01") {
+					currentPage = 1;
+					totalPage = 1;
+					status = "01";
+					$(".page_item").remove();
+					$("#receiveBox").empty();
+					$getPageItems(currentPage, module, status);
+				} else if (style == "02") {
+					currentPage = 1;
+					totalPage = 1;
+					status = "02";
+					$(".page_item").remove();
+					$("#receiveBox").empty();
+					$getPageItems(currentPage, module, status);
+				}
 
 			});
-		</script>
-	</body>
+
+			$(".inbox .remove a").click(function() {
+
+				var a = [];
+				$(".inbox td input").each(function() {
+					if ($(this).prop("checked") == true) {
+						a.push(parseInt($(this).val()));
+					}
+				});
+				console.log(a);
+				if (a.length == 0) {
+					alert("请确认有选项删除")
+				} else if (confirm("是否确认删除所选")) {
+					$.ajax({
+						type : "post",
+						url : "../cutBatchMessages",
+						dataType : "json",
+						traditional : true,
+						data : {
+							id : a
+						},
+						async : true,
+						success : function(data) {
+							if(data ==true){
+								window.location.reload();
+							}
+						},
+						error : function() {
+							alert("数据获取失败");
+						}
+					});
+				}
+
+			});
+
+			var flag = true;
+
+			$(".inbox th input").click(function() {
+				if (flag) {
+					$(".inbox input[type='checkbox']").prop("checked", true);
+					flag = false;
+				} else {
+					$(".inbox input[type='checkbox']").prop("checked", false);
+					flag = true;
+				}
+			});
+
+			$(".inbox td input").click(function() {
+				var isCheck = true;
+				$(".inbox td input").each(function() {
+					if ($(this).prop("checked") != true) {
+						isCheck = false;
+					}
+				});
+				if (isCheck) {
+					$(".inbox th input").prop("checked", true);
+					flag = false;
+				} else {
+					$(".inbox th input").prop("checked", false);
+					flag = true;
+				}
+			});
+
+		});
+
+		/*获取消息逻辑*/
+		$(function() {
+			$getPageItems(currentPage, module, status);
+		});
+
+		var $getPageItems = function(current, module, status) {
+			$.ajax({
+				type : "get",
+				url : "../getUserMessages",
+				dataType : "json",
+				contentType : "application/json",
+				data : {
+					current : current,
+					module : module,
+					status : status
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					$("#t1").tmpl(data.oList).appendTo("#receiveBox");
+					totalPage = data.totalPages;
+					$getPages();
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		/*自定义分页的逻辑*/
+		$(function() {
+
+			$(document).on(
+					"click",
+					".pagination li",
+					function() {
+						var current = $.trim($(this).text());
+						if (current == "«") {
+							var temp = $.trim($(".pagination li.active").prev()
+									.text());
+							if (temp != "«") {
+								var $a = $(".pagination li.active");
+								$(".pagination li.active")
+										.removeClass("active");
+								$a.prev().addClass("active");
+								currentPage = parseInt($.trim($(
+										".pagination li.active").text()));
+								$(".page_item").remove();
+								$("#receiveBox").empty();
+								$getPageItems(currentPage, module, status);
+							}
+						} else if (current == "»") {
+							var temp = $.trim($(".pagination li.active").next()
+									.text());
+							if (temp != "»") {
+								var $a = $(".pagination li.active");
+								$(".pagination li.active")
+										.removeClass("active");
+								$a.next().addClass("active");
+								currentPage = parseInt($.trim($(
+										".pagination li.active").text()));
+								$(".page_item").remove();
+								$("#receiveBox").empty();
+								$getPageItems(currentPage, module, status);
+							}
+						} else if (current == "...") {
+
+						} else {
+							$(this).siblings("li").removeClass("active");
+							$(this).addClass("active");
+							currentPage = parseInt($.trim($(
+									".pagination li.active").text()));
+							$(".page_item").remove();
+							$("#receiveBox").empty();
+							$getPageItems(currentPage, module, status);
+						}
+					});
+
+		});
+
+		/*阅读消息逻辑*/
+		$("#receiveBox").on("click", ".mtitle", function() {
+			var status = $.trim($(this).next().next().text());
+			var id = $.trim($(this).next().next().next().text());
+
+			var sender = $.trim($(this).parent().prev().text());
+			var time = $.trim($(this).parent().next().text());
+			var title = $.trim($(this).text());
+			var content = $.trim($(this).next().text());
+
+			if (status == 0) {
+				$(this).text(title);
+				$readOneNewMessage(id);
+			}
+
+			$("#sender").text(sender);
+			$("#time").text(time);
+			$("#title").text(title);
+			$("#content").text(content);
+			
+			$("#readModal").modal({
+				/*显示模态框*/
+				show:true,
+				/*键盘失效;Esc*/
+				keyboard: false
+			});
+		});
+
+		var $readOneNewMessage = function(id) {
+			$.ajax({
+				type : "post",
+				url : "../readOneNewMessage",
+				dataType : "json",
+				data : {
+					id : id
+				},
+				async : true,
+				success : function(data) {
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		$('#readModal').on('hide.bs.modal', function(e) {
+
+		});
+		
+		/*删除消息逻辑*/
+		var $deleteOneMessage = function(id){
+			$.ajax({
+				type : "post",
+				url : "../cutBatchMessages",
+				dataType : "json",
+				data : {
+					id : id
+				},
+				async : true,
+				success : function(data) {
+					if(data ==true){
+						window.location.reload();
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+	</script>
+</body>
 
 </html>

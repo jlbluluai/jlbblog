@@ -41,3 +41,25 @@
 .remove a:hover{
 	color: red;
 }
+
+.modal-body{
+	position: relative;
+	padding: 15px 50px;
+}
+
+#readModal tr{
+	line-height: 30px;
+}
+
+#readModal label{
+	margin-top: 5px;
+}
+
+.right{
+	text-align: right;
+}
+
+.modal-backdrop {
+  opacity: 0 !important;
+  filter: alpha(opacity=0) !important;
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.MessageMapperP">
+
+	<resultMap type="com.xyz.domain.Message" id="selectPagesResultMap">
+		<id column="mid" property="id"/>
+		<result column="mtitle" property="title"/>
+		<result column="mpid" property="pid"/>
+		<result column="mrid" property="rid"/>
+		<result column="mstatus" property="status"/>
+		<result column="mcreatetime" property="createTime"/>
+		<result column="mcontent" property="content"/>
+		<association property="puser" javaType="com.xyz.domain.User">
+			<id column="pid" property="id"/>
+    		<result column="pnickname" property="nickname"/>
+		</association>
+		<association property="ruser" javaType="com.xyz.domain.User">
+			<id column="rid" property="id"/>
+    		<result column="rnickname" property="nickname"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectPages" resultMap="selectPagesResultMap">
+		select
+			m.id mid,
+			m.title mtitle,
+			m.pid mpid,
+			m.rid mrid,
+			m.status mstatus,
+			m.create_time mcreatetime,
+			m.content mcontent,
+			pu.id pid,
+			pu.nickname pnickname,
+			ru.id rid,
+			ru.nickname rnickname
+		from
+			t_message m
+		left join
+			t_user pu
+		on
+			m.pid = pu.id
+		left join
+			t_user ru
+		on
+			m.rid = ru.id
+		<where>
+			<if test="pid != null">
+				and m.pid = #{pid}
+			</if>
+			<if test="rid != null">
+				and m.rid = #{rid}
+			</if>
+			<if test="status != null">
+				and m.status = #{status}
+			</if>
+		</where>
+		order by m.create_time desc		
+	</select>
+	
+	<delete id="deleteBatch">
+		delete from
+			t_message
+		where
+			id
+		in
+			<foreach collection="array" item="id" open="(" close=")" separator=",">
+				#{id}
+			</foreach>		
+	</delete>
+</mapper>

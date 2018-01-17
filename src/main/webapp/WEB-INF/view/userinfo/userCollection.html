@@ -197,10 +197,9 @@
 		//取消收藏
 		var $cutOneItem = function(id) {
 			$.ajax({
-				type : "get",
+				type : "post",
 				url : "../cutOneCollection",
 				dataType : "json",
-				contentType : "application/json",
 				data : {
 					id : id
 				},
