@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
+import com.xyz.domain.Collection;
 import com.xyz.domain.Comment;
 import com.xyz.domain.Dynamic;
 import com.xyz.domain.FollowKey;
@@ -33,6 +34,7 @@ import com.xyz.domain.UserInfo;
 import com.xyz.dto.PagesFeedback;
 import com.xyz.dto.UserHome;
 import com.xyz.service.ArticalService;
+import com.xyz.service.CollectionService;
 import com.xyz.service.CommentService;
 import com.xyz.service.DynamicService;
 import com.xyz.service.FollowService;
@@ -69,6 +71,10 @@ public class UserHomeController {
 	@Autowired
 	@Qualifier("followService")
 	private FollowService followService;
+
+	@Autowired
+	@Qualifier("collectionService")
+	private CollectionService collectionService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -241,8 +247,7 @@ public class UserHomeController {
 	 */
 	@RequestMapping(value = "/getUserComments", method = RequestMethod.GET)
 	@ResponseBody
-	public PagesFeedback getUserComments(@RequestParam("current") Integer current, HttpSession session)
-			throws Exception {
+	public PagesFeedback getUserComments(@RequestParam("current") Integer current, HttpSession session) {
 		log.info(f1 + "获取用户评论开始" + f2);
 		Long uid = ((User) session.getAttribute("user")).getId();
 		Comment comment = new Comment();
@@ -259,6 +264,52 @@ public class UserHomeController {
 		feedback.setTotalPages(pageInfo.getPages());
 		log.info(f1 + "获取用户评论结束" + f2);
 		return feedback;
+	}
+
+	/* 收藏逻辑 */
+	/**
+	 * 获取用户自己指定页的收藏
+	 * 
+	 * @param current
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/getUserCollections", method = RequestMethod.GET)
+	@ResponseBody
+	public PagesFeedback getUserCollections(@RequestParam("current") Integer current, HttpSession session) {
+		PagesFeedback feedback = new PagesFeedback();
+		log.info(f1 + "获取用户收藏开始" + f2);
+		Long uid = ((User) session.getAttribute("user")).getId();
+		Collection collection = new Collection();
+		collection.setUid(uid);
+
+		PageInfo<Collection> pageInfo = collectionService.getAppointedPageItems(current, 8, collection);
+
+		List<Object> list = new ArrayList<Object>();
+		for (Collection coll : pageInfo.getList()) {
+			list.add(coll);
+		}
+
+		feedback.setoList(list);
+		feedback.setTotalPages(pageInfo.getPages());
+		log.info(f1 + "获取用户收藏结束" + f2);
+		return feedback;
+	}
+
+	/**
+	 * 取消收藏指定文章
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/cutOneCollection")
+	@ResponseBody
+	public boolean cutOneCollection(@RequestParam("id") Long id) {
+		boolean flag = false;
+		log.info(f1 + "删除指定文章收藏开始" + f2);
+		flag = collectionService.cutAppointedItem(id);
+		log.info(f1 + "删除指定文章收藏结束" + f2);
+		return flag;
 	}
 
 	/* 修改信息逻辑 */

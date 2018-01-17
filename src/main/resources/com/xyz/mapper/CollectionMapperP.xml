@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.CollectionMapperP">
+
+	<resultMap type="com.xyz.domain.Collection" id="selectPagesResultMap">
+		<id column="cid" property="id"/>
+		<result column="caid" property="aid"/>
+		<result column="cuid" property="uid"/>
+		<result column="ccreatetime" property="createTime"/>
+		<association property="user" javaType="com.xyz.domain.User">
+			<id column="uid" property="id"/>
+    		<result column="unickname" property="nickname"/>
+		</association>
+		<association property="artical" javaType="com.xyz.domain.Artical">
+			<id column="aid" property="id"/>
+			<result column="atitle" property="title"/>
+			<association property="user" javaType="com.xyz.domain.User">
+				<id column="auid" property="id"/>
+    			<result column="aunickname" property="nickname"/>
+			</association>
+		</association>
+	</resultMap>
+	
+	<select id="selectPages" resultMap="selectPagesResultMap">
+		select
+			c.id cid,
+			c.aid caid,
+			c.uid cuid,
+			c.create_time ccreatetime,
+			a.id aid,
+			a.title atitle,
+			au.id auid,
+			au.nickname aunickname
+		from 
+			t_collection c
+		left join
+			t_artical a
+		on
+			c.aid = a.id
+		left join
+			t_user au
+		on
+			a.uid = au.id
+		<where>
+			<if test="uid != null">
+				and c.uid = #{uid}
+			</if>
+		</where>
+		order by c.create_time desc
+	</select>
+</mapper>

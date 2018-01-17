@@ -1,65 +1,225 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<!--bootstrap、jquery-->
-		<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
-		<script type="text/javascript" src="../js/jquery.js"></script>
-		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
-		<!--自定义-->
-		<script type="text/javascript" src="../js/pages.js"></script>
-		<link rel="stylesheet" href="../css/userinfo/userCollection.css" />
-	</head>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<!--bootstrap、jquery-->
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+<!--自定义-->
+<script type="text/javascript" src="../js/pages.js"></script>
+<link rel="stylesheet" href="../css/userinfo/userCollection.css" />
+</head>
 
-	<body>
+<body>
 
-		<div class="container">
-			
-			<!--收藏主体-->
-			<div id="collection_list">
-				<div class="onecollection">
-					<div class="firstground">
-						[
-						<a href="javascript:void(0)">小叶子</a>
-						]&nbsp;
-						<a href="javascript:void(0)">一篇好文</a>
-					</div>
-					<div class="secondground">
-						<span>收藏时间：</span>
-						<span>2017-12-03 12:00:00</span>
-					</div>
-					<div class="thirdground">
-						<a href="javascript:void(0)">取消收藏</a>
-					</div>
-					<div class="xuxian"></div>
+	<div class="container">
+
+		<!--收藏主体-->
+		<div id="collection_list">
+			<!-- <div class="onecollection">
+				<div class="firstground">
+					[ <a href="javascript:void(0)">小叶子</a> ]&nbsp; <a
+						href="javascript:void(0)">一篇好文</a>
 				</div>
+				<div class="secondground">
+					<span>收藏时间：</span> <span>2017-12-03 12:00:00</span>
+				</div>
+				<div class="thirdground">
+					<a href="javascript:void(0)">取消收藏</a>
+				</div>
+				<div class="xuxian"></div>
+			</div> -->
 
-			</div>
-			
-			<!--分页-->
-			<div id="pager_bottom">
-				<nav aria-label="Page navigation">
-					<ul class="pagination">
-						<li id="firstli">
-							<a href="#" onclick="">&laquo;
-							</a>
-						</li>
-						<li>
-							<a href="#" onclick="">&raquo; </a>
-						</li>
-					</ul>
-				</nav>
-			</div>
 		</div>
 
-		<script type="text/javascript">
-			/*自定义分页的必备参数*/
-			var currentPage = 1;
-			var totalPage = 30;
-		</script>
+		<!--分页-->
+		<div id="pager_bottom">
+			<nav aria-label="Page navigation">
+				<ul class="pagination">
+					<li id="firstli"><a href="#" onclick="">&laquo; </a></li>
+					<li><a href="#" onclick="">&raquo; </a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
 
-	</body>
+	<!-- 第三方 -->
+	<!-- tmpl模版 -->
+	<script type="text/javascript" src="../js/jquery.tmpl.js"></script>
+
+	<script type="text/x-jquery-tmpl" id="t1">
+			<div class="onecollection"">
+				<div class="firstground">
+					[ <a href="javascript:void(0)">${artical.user.nickname}</a> ]&nbsp; <a
+						href="javascript:void(0)">${artical.title}</a>
+				</div>
+				<div class="secondground">
+					<span>收藏时间：</span> <span>${dateFormat(createTime)}</span>
+				</div>
+				<div class="thirdground">
+					<a href="javascript:void(0)" onclick="$deleteOneCollection(${id},'${artical.title}')">取消收藏</a>
+				</div>
+				<div class="xuxian"></div>
+			</div>
+	</script>
+
+	<script type="text/javascript">
+		/*自定义分页的必备参数*/
+		var currentPage = 1;
+		var totalPage = 1;
+
+		/*准备工作*/
+		$(window.parent.document).find("iframe").load(function() {
+			var main = $(window.parent.document).find("iframe");
+			console.log(main);
+			var thisheight = $(document).height() + 700;
+			main.height(thisheight);
+		});
+
+		//转换时间
+		function dateFormat(time) {
+			var date = new Date(time);
+
+			var str = "";
+			str += date.getFullYear() + "-";
+			if (date.getMonth() + 1 < 10) {
+				str += "0" + (date.getMonth() + 1) + "-";
+			} else {
+				str += (date.getMonth() + 1) + "-";
+			}
+			if (date.getDate() < 10) {
+				str += "0" + date.getDate() + " ";
+			} else {
+				str += date.getDate() + " ";
+			}
+
+			if (date.getHours() < 10) {
+				str += "0" + date.getHours() + ":";
+			} else {
+				str += date.getHours() + ":";
+			}
+			if (date.getMinutes() < 10) {
+				str += "0" + date.getMinutes();
+			} else {
+				str += date.getMinutes();
+			}
+
+			return str;
+		}
+
+		/*主体逻辑*/
+		$(function() {
+			$getPageItems(currentPage);
+		});
+
+		var $getPageItems = function(current) {
+			$.ajax({
+				type : "get",
+				url : "../getUserCollections",
+				dataType : "json",
+				contentType : "application/json",
+				data : {
+					current : current
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					$("#t1").tmpl(data.oList).appendTo("#collection_list");
+					totalPage = data.totalPages;
+					$getPages();
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		/*自定义分页的逻辑*/
+		$(function() {
+
+			$(document).on(
+					"click",
+					".pagination li",
+					function() {
+						var current = $.trim($(this).text());
+						if (current == "«") {
+							var temp = $.trim($(".pagination li.active").prev()
+									.text());
+							if (temp != "«") {
+								var $a = $(".pagination li.active");
+								$(".pagination li.active")
+										.removeClass("active");
+								$a.prev().addClass("active");
+								currentPage = parseInt($.trim($(
+										".pagination li.active").text()));
+								$(".page_item").remove();
+								$("#collection_list").empty();
+								$getPageItems(currentPage);
+							}
+						} else if (current == "»") {
+							var temp = $.trim($(".pagination li.active").next()
+									.text());
+							if (temp != "»") {
+								var $a = $(".pagination li.active");
+								$(".pagination li.active")
+										.removeClass("active");
+								$a.next().addClass("active");
+								currentPage = parseInt($.trim($(
+										".pagination li.active").text()));
+								$(".page_item").remove();
+								$("#collection_list").empty();
+								$getPageItems(currentPage);
+							}
+						} else if (current == "...") {
+
+						} else {
+							$(this).siblings("li").removeClass("active");
+							$(this).addClass("active");
+							currentPage = parseInt($.trim($(
+									".pagination li.active").text()));
+							$(".page_item").remove();
+							$("#collection_list").empty();
+							$getPageItems(currentPage);
+						}
+					});
+
+		});
+
+		var $deleteOneCollection = function(id, title) {
+			if (confirm("是否确认删除收藏：标题为" + title)) {
+				$cutOneItem(id);
+			}
+		}
+
+		//取消收藏
+		var $cutOneItem = function(id) {
+			$.ajax({
+				type : "get",
+				url : "../cutOneCollection",
+				dataType : "json",
+				contentType : "application/json",
+				data : {
+					id : id
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					if (data == true) {
+						window.location.reload();
+					} else {
+						alert("取消失败")
+					}
+				},
+				error : function() {
+					alert("失败");
+				}
+			});
+		}
+	</script>
+
+</body>
 
 </html>
