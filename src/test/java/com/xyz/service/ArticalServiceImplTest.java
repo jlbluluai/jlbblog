@@ -49,7 +49,7 @@ public class ArticalServiceImplTest {
 
 	@Test
 	public void testGetAppointedPageItems() {
-		Artical artical = new Artical();
+		/*Artical artical = new Artical();
 		artical.setUid(7L);
 		artical.setIsPublish((byte)1);
 		artical.setIsPublic((byte)1);
@@ -63,7 +63,7 @@ public class ArticalServiceImplTest {
 				System.out.println(articalCategory.getName());
 			}
 			System.out.println("------------");
-		}
+		}*/
 	}
 
 }

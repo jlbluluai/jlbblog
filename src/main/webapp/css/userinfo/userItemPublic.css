@@ -1,4 +1,10 @@
 @CHARSET "UTF-8";
+
+html,body {
+	width: 100%;
+	height: 100%
+}
+
 #top a {
 	color: #AAAAAA;
 	font-size: 10px;
@@ -45,7 +51,6 @@
 #body #body_item .col-md-3 a:hover {
 	color: #FF3333;
 }
-
 
 #footer {
 	text-align: center;

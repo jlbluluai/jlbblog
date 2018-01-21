@@ -70,7 +70,16 @@
   			</if>
   		</where>
   		order by
-  			a.leave_time desc
+  			<if test="sort == 1">
+  				a.leave_time 
+  			</if>
+  			<if test="sort == 2">
+  				a.view_num
+  			</if>
+  			<if test="sort == 3">
+  				a.comment_num
+  			</if>
+  		desc	
   </select>
 
 </mapper>

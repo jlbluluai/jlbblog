@@ -2,7 +2,7 @@ package com.xyz.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 public class Artical implements Serializable {
 	private Long id;
@@ -31,7 +31,9 @@ public class Artical implements Serializable {
 
 	/* 视图属性 */
 	private User user;
-	private Set<ArticalCategory> articalCategorys;
+	private List<ArticalCategory> articalCategorys;
+
+	private Integer sort; // 排序方式
 
 	public Long getId() {
 		return id;
@@ -129,14 +131,20 @@ public class Artical implements Serializable {
 		this.user = user;
 	}
 
-
-	public Set<ArticalCategory> getArticalCategorys() {
+	public List<ArticalCategory> getArticalCategorys() {
 		return articalCategorys;
 	}
 
-	public void setArticalCategorys(Set<ArticalCategory> articalCategorys) {
+	public void setArticalCategorys(List<ArticalCategory> articalCategorys) {
 		this.articalCategorys = articalCategorys;
 	}
 
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 
 }

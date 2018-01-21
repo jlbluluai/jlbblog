@@ -98,11 +98,11 @@
 
 	<script type="text/javascript">
 		/*准备工作*/
-		$(window.parent.document).find("iframe").load(function() {
+		/* $(window.parent.document).find("iframe").load(function() {
 			var main = $(window.parent.document).find("iframe");
 			var thisheight = $(document).height() + 200;
 			main.height(thisheight);
-		});
+		}); */
 		var $getQueryString = function(name) {
 			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
 			var r = window.location.search.substr(1).match(reg);

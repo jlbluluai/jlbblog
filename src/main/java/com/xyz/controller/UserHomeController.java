@@ -202,22 +202,27 @@ public class UserHomeController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/getUserInfoArticals", method = RequestMethod.GET)
-	public void getUserInfoArticals(@RequestParam("id") Long uid, @RequestParam("current") Integer current,
-			HttpServletResponse response, HttpSession session) throws Exception {
+	@ResponseBody
+	public PagesFeedback getUserInfoArticals(@RequestParam("id") Long uid, @RequestParam("current") Integer current,
+			@RequestParam("sort") Integer sort, HttpSession session) throws Exception {
+		PagesFeedback feedback = new PagesFeedback();
+		log.info(f1 + "获取用户相关页文章开始" + f2);
 		Artical artical = new Artical();
 		artical.setUid(uid);
 		artical.setIsPublish((byte) 1);
-		if (uid != ((User) session.getAttribute("user")).getId()) {
+		artical.setSort(sort);
+		if (!((User) session.getAttribute("user")).getId().equals(uid)) {
 			artical.setIsPublic((byte) 1);
 		}
-
 		PageInfo<Artical> pageInfo = articalService.getAppointedPageItems(current, 10, artical);
-
-		JSONObject json = new JSONObject();
-		json.put("articals", pageInfo.getList());
-		json.put("total", pageInfo.getPages());
-		response.setContentType("text/html;charset=utf-8");
-		response.getWriter().write(json.toString());
+		List<Object> list = new ArrayList<Object>();
+		for (Artical art : pageInfo.getList()) {
+			list.add(art);
+		}
+		feedback.setoList(list);
+		feedback.setTotalPages(pageInfo.getPages());
+		log.info(f1 + "获取用户相关页文章结束" + f2);
+		return feedback;
 	}
 
 	/* 关注与粉丝逻辑 */

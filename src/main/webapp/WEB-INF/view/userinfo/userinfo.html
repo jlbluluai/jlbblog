@@ -11,14 +11,12 @@
 <!-- 第三方 -->
 <script type="text/javascript" src="js/jquery.tmpl.js"></script>
 <!--自定义-->
-<link href="css/userinfo/userItemPublic.css" type="text/css"
-	rel="stylesheet" />
+<link href="css/userinfo/userItemPublic.css" type="text/css" rel="stylesheet" />
 <!--标签页图标-->
-<link rel="icon" href="img/luo.ico" mce_href="/favicon.ico"
-	type="image/x-icon">
+<link rel="icon" href="img/luo.ico" mce_href="/favicon.ico" type="image/x-icon">
 </head>
 
-<body>
+<body style="overflow: -Scroll; overflow-y: hidden">
 
 	<!--顶部-->
 	<div id="top" class="container-fluid">
@@ -47,15 +45,14 @@
 					<li><a id="userArtical" href="javascript:void(0)">我的文章</a></li>
 					<li><a id="userFollow" href="javascript:void(0)">关注与粉丝</a></li>
 					<li><a id="userComment" href="javascript:void(0)">我的评论</a></li>
-					<li><a id="userCollection" href="javascript:void(0)">我的收藏</a>
-					</li>
+					<li><a id="userCollection" href="javascript:void(0)">我的收藏</a></li>
 					<li><a id="userMessage" href="javascript:void(0)">我的消息</a></li>
 					<li><a id="userChange" href="javascript:void(0)">修改信息</a></li>
 				</ul>
 			</div>
 
 			<div id="body_item" class="col-xs-12 col-sm-9 col-md-10">
-				<iframe scrolling="no" frameborder="0" width="100%"></iframe>
+				<iframe frameborder="0" width="100%" height="100%"></iframe>
 			</div>
 		</div>
 	</div>
@@ -81,11 +78,20 @@
 		var id = $getQueryString("id");
 
 		$(function() {
+			changeIframeSize();
+		});
+
+		window.onresize = function() {
+			var mainheight = window.innerHeight - 165;
+			$("iframe").height(mainheight);
+		}
+
+		function changeIframeSize() {
 			$("iframe").load(function() {
-				var mainheight = $(this).contents().find("body").height() + 30;
+				var mainheight = window.innerHeight - 165;
 				$(this).height(mainheight);
 			});
-		});
+		}
 
 		/*头部逻辑*/
 		$(document).ready(function() {

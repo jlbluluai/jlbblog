@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title></title>
-		<!--bootstrap、jquery-->
-		<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
-		<script type="text/javascript" src="../js/jquery.js"></script>
-		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
-		<!-- 第三方 -->
-		<script type="text/javascript" src="../js/jquery.tmpl.js"></script>
-		<!--自定义-->
-		<script type="text/javascript" src="../js/pages.js"></script>
-		<link rel="stylesheet" href="../css/userinfo/userArtical.css" />
-	</head>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<!--bootstrap、jquery-->
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+<!-- 第三方 -->
+<script type="text/javascript" src="../js/jquery.tmpl.js"></script>
+<!--自定义-->
+<script type="text/javascript" src="../js/pages.js"></script>
+<link rel="stylesheet" href="../css/userinfo/userArtical.css" />
+</head>
 
-	<body>
+<body>
 
-		<div class="container">
+	<div class="container">
 
-			<!--头部-->
-			<div id="head">
-				<button type="button" class="btn btn-warning btn-block">进入博客</button>
-				<div>
-					<label>排序方式：</label>
-					<select class="form-control">
-						<option value="01">按时间</option>
-						<option value="02">按浏览量</option>
-						<option value="03">按评论量</option>
-					</select>
-				</div>
+		<!--头部-->
+		<div id="head">
+			<button type="button" class="btn btn-warning btn-block">进入博客</button>
+			<div>
+				<label>排序方式：</label> <select class="form-control">
+					<option value="01">按时间</option>
+					<option value="02">按浏览量</option>
+					<option value="03">按评论量</option>
+				</select>
 			</div>
-			<div class='xuxian'></div>
+		</div>
+		<div class='xuxian'></div>
 
-			<!--主体-->
-			<div id="body_list">
+		<!--主体-->
+		<div id="body_list">
 
-				<div class='post_item'>
-					<!-- <div class='post_item_body'>
+			<div class='post_item'>
+				<!-- <div class='post_item_body'>
 						<h4><a href='javascript:void(0)'>文章一</a></h4>
 						<span>&nbsp; 欢迎各位来使用小叶子开发的博客系统，这个博客系统应该诸位见过的最烂的博客系统了吧，汗···。这款系统也算是小叶子独立开发的第一款小型系统，基本算是从无到有吧，技术研究也是在开发中同步进行，所以说呢，能力有限，诸位多多包</span>
 						<div class='post_item_foot'>
@@ -50,198 +49,227 @@
 						</div>
 					</div>
 					<div class='xuxian'></div> -->
-				</div>
-
 			</div>
 
-			<!--分页-->
-			<div id="pager_bottom">
-				<nav aria-label="Page navigation">
-					<ul class="pagination">
-						<li id="firstli">
-							<a href="javascript:void(0);" onclick="">&laquo;</a>
-						</li>
-						<li id="lastli">
-							<a href="javascript:void(0);" onclick="">&raquo;</a>
-						</li>
-					</ul>
-				</nav>
-			</div>
 		</div>
-		
-		<script type="text/x-jquery-tmpl" id="t1">
+
+		<!--分页-->
+		<div id="pager_bottom">
+			<nav aria-label="Page navigation">
+				<ul class="pagination">
+					<li id="firstli"><a href="javascript:void(0);" onclick="">&laquo;</a></li>
+					<li id="lastli"><a href="javascript:void(0);" onclick="">&raquo;</a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+	<script type="text/x-jquery-tmpl" id="t1">
 					<div class='post_item_body'>
 						<h4><a href='javascript:void(0)'>${title}</a></h4>
 						<span>&nbsp; ${content}</span>
 						<div class='post_item_foot'>
 							<a href='javascript:void(0)'>${user.nickname}</a>
 							<span>发布于</span>
-							<span>${dateFormat(leaveTime.time)}</span>
+							<span>${dateFormat(leaveTime)}</span>
 							<span class="glyphicon glyphicon-copyright-mark">评论量(${commentNum})</span>
 							<span class="glyphicon glyphicon-share">浏览量(${viewNum})</span>
-							<span>类型：生活</span>
+							<span>类型：
+								{{each(i,e) articalCategorys}}
+									{{if i == articalCategorys.length-1 }}
+										${e.name}
+									{{/if}}
+									{{if i != articalCategorys.length-1 }}
+										${e.name}/
+									{{/if}}
+								{{/each}}
+							</span>
 						</div>
 					</div>
 					<div class='xuxian'></div>
 		</script>
 
-		<script type="text/javascript">
-			/*自定义分页的必备参数*/
-			var currentPage = 1;
-			var totalPage = 1;
-			
-			/*准备工作*/
-			var $getQueryString = function(name) {
-				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-				var r = window.location.search.substr(1).match(reg);
-				if(r != null)
-					return unescape(r[2]);
-				return null;
+	<script type="text/javascript">
+		/*自定义分页的必备参数*/
+		var currentPage = 1;
+		var totalPage = 1;
+
+		/*初始化参数*/
+		var sort = 1;
+
+		/*准备工作*/
+		var $getQueryString = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+
+	/* 	$(window.parent.document).find("iframe").load(function() {
+			var main = $(window.parent.document).find("iframe");
+			console.log(main);
+			var thisheight = $(document).height() + 700;
+			main.height(thisheight);
+		}); */
+
+		//转换时间
+		function dateFormat(time) {
+			var date = new Date(time);
+
+			var str = "";
+			str += date.getFullYear() + "-";
+			if (date.getMonth() + 1 < 10) {
+				str += "0" + (date.getMonth() + 1) + "-";
+			} else {
+				str += (date.getMonth() + 1) + "-";
 			}
-			
-			$(window.parent.document).find("iframe").load(function() {
-				var main = $(window.parent.document).find("iframe");
-				console.log(main);
-				var thisheight = $(document).height() + 700;
-				main.height(thisheight);
-			});
-			
-			//转换时间
-			function dateFormat(time) {
-				var date = new Date(time);
-
-				var str = "";
-				str += date.getFullYear() + "-";
-				if (date.getMonth() + 1 < 10) {
-					str += "0" + (date.getMonth() + 1) + "-";
-				} else {
-					str += (date.getMonth() + 1) + "-";
-				}
-				if (date.getDate() < 10) {
-					str += "0" + date.getDate() + " ";
-				} else {
-					str += date.getDate() + " ";
-				}
-
-				if (date.getHours() < 10) {
-					str += "0" + date.getHours() + ":";
-				} else {
-					str += date.getHours() + ":";
-				}
-				if (date.getMinutes() < 10) {
-					str += "0" + date.getMinutes();
-				} else {
-					str += date.getMinutes();
-				}
-				
-				return str;
+			if (date.getDate() < 10) {
+				str += "0" + date.getDate() + " ";
+			} else {
+				str += date.getDate() + " ";
 			}
-			
-			var id = $getQueryString("id");
-			
-			/*头部逻辑*/
-			$(function() {
 
-				$("#head select").change(function() {
-
-					var style = $("select").val();
-					console.log(style);
-					
-				});
-
-				$("#head button").click(function() {
-
-				});
-
-			});
-			
-			/*主体逻辑*/
-			
-			$(function(){
-				$getPageItems(id,currentPage);
-			});
-			
-			var $getPageItems = function(id, current) {
-				console.log(1);
-				$.ajax({
-					type : "get",
-					url : "../getUserInfoArticals",
-					dataType : "json",
-					contentType : "application/json",
-					data : {
-						id : id,
-						current : current
-					},
-					async : true,
-					success : function(data) {
-						console.log(data);
-						$("#t1").tmpl(data.articals).appendTo(".post_item");
-						totalPage = data.total;
-						$getPages();
-					},
-					error : function() {
-						alert("数据获取失败");
-					}
-				});
+			if (date.getHours() < 10) {
+				str += "0" + date.getHours() + ":";
+			} else {
+				str += date.getHours() + ":";
 			}
-			
-			
-			/*自定义分页的逻辑*/
-			$(function() {
+			if (date.getMinutes() < 10) {
+				str += "0" + date.getMinutes();
+			} else {
+				str += date.getMinutes();
+			}
 
-				$(document).on(
-						"click",
-						".pagination li",
-						function() {
-							var current = $.trim($(this).text());
-							if (current == "«") {
-								var temp = $.trim($(".pagination li.active").prev()
-										.text());
-								if (temp != "«") {
-									var $a = $(".pagination li.active");
-									$(".pagination li.active")
-											.removeClass("active");
-									$a.prev().addClass("active");
-									currentPage = parseInt($.trim($(
-											".pagination li.active").text()));
-									$(".page_item").remove();
-									//$getPages();
-									$(".post_item").empty();
-									$getPageItems(id, currentPage);
-								}
-							} else if (current == "»") {
-								var temp = $.trim($(".pagination li.active").next()
-										.text());
-								if (temp != "»") {
-									var $a = $(".pagination li.active");
-									$(".pagination li.active")
-											.removeClass("active");
-									$a.next().addClass("active");
-									currentPage = parseInt($.trim($(
-											".pagination li.active").text()));
-									$(".page_item").remove();
-									//$getPages();
-									$(".post_item").empty();
-									$getPageItems(id, currentPage);
-								}
-							} else if (current == "...") {
+			return str;
+		}
 
-							} else {
-								$(this).siblings("li").removeClass("active");
-								$(this).addClass("active");
+		var id = $getQueryString("id");
+
+		/*头部逻辑*/
+		$(function() {
+
+			$("#head select").change(function() {
+
+				var style = $.trim($("select").val());
+				console.log(style);
+				if (style == "01") {
+					currentPage = 1;
+					totalPage = 1;
+					sort = 1;
+					$(".page_item").remove();
+					$(".post_item").empty();
+					$getPageItems(id, currentPage, sort);
+				} else if (style == "02") {
+					currentPage = 1;
+					totalPage = 1;
+					sort = 2;
+					$(".page_item").remove();
+					$(".post_item").empty();
+					$getPageItems(id, currentPage, sort);
+				} else if (style == "03") {
+					currentPage = 1;
+					totalPage = 1;
+					sort = 3;
+					$(".page_item").remove();
+					$(".post_item").empty();
+					$getPageItems(id, currentPage, sort);
+				}
+
+			});
+
+			$("#head button").click(function() {
+
+			});
+
+		});
+
+		/*主体逻辑*/
+
+		$(function() {
+			$getPageItems(id, currentPage, sort);
+		});
+
+		var $getPageItems = function(id, current, sort) {
+			console.log(1);
+			$.ajax({
+				type : "get",
+				url : "../getUserInfoArticals",
+				dataType : "json",
+				contentType : "application/json",
+				data : {
+					id : id,
+					current : current,
+					sort : sort
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					$("#t1").tmpl(data.oList).appendTo(".post_item");
+					totalPage = data.totalPages;
+					$getPages();
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		/*自定义分页的逻辑*/
+		$(function() {
+
+			$(document).on(
+					"click",
+					".pagination li",
+					function() {
+						var current = $.trim($(this).text());
+						if (current == "«") {
+							var temp = $.trim($(".pagination li.active").prev()
+									.text());
+							if (temp != "«") {
+								var $a = $(".pagination li.active");
+								$(".pagination li.active")
+										.removeClass("active");
+								$a.prev().addClass("active");
 								currentPage = parseInt($.trim($(
 										".pagination li.active").text()));
 								$(".page_item").remove();
 								//$getPages();
 								$(".post_item").empty();
-								$getPageItems(id, currentPage);
+								$getPageItems(id, currentPage, sort);
 							}
-						});
+						} else if (current == "»") {
+							var temp = $.trim($(".pagination li.active").next()
+									.text());
+							if (temp != "»") {
+								var $a = $(".pagination li.active");
+								$(".pagination li.active")
+										.removeClass("active");
+								$a.next().addClass("active");
+								currentPage = parseInt($.trim($(
+										".pagination li.active").text()));
+								$(".page_item").remove();
+								//$getPages();
+								$(".post_item").empty();
+								$getPageItems(id, currentPage, sort);
+							}
+						} else if (current == "...") {
 
-			});
+						} else {
+							$(this).siblings("li").removeClass("active");
+							$(this).addClass("active");
+							currentPage = parseInt($.trim($(
+									".pagination li.active").text()));
+							$(".page_item").remove();
+							//$getPages();
+							$(".post_item").empty();
+							$getPageItems(id, currentPage, sort);
+						}
+					});
 
-		</script>
+		});
+	</script>
 
-	</body>
+</body>
 
 </html>
