@@ -8,4 +8,6 @@ import com.xyz.domain.Comment;
 public interface CommentMapperP{
 	
 	List<Comment> selectPages(Comment comment);
+	
+	int selectCount();
 }

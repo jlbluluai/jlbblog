@@ -2,47 +2,60 @@ package com.xyz.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ArticalCategory implements Serializable {
-    private Integer id;
+	private Integer id;
 
-    private String name;
+	private String name;
 
-    private Integer pid;
+	private Integer pid;
 
-    private Date createTime;
+	private Date createTime;
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
-        return id;
-    }
+	/* 视图属性 */
+	private List<ArticalCategory> categorys;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Integer getPid() {
-        return pid;
-    }
+	public void setName(String name) {
+		this.name = name == null ? null : name.trim();
+	}
 
-    public void setPid(Integer pid) {
-        this.pid = pid;
-    }
+	public Integer getPid() {
+		return pid;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setPid(Integer pid) {
+		this.pid = pid;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public List<ArticalCategory> getCategorys() {
+		return categorys;
+	}
+
+	public void setCategorys(List<ArticalCategory> categorys) {
+		this.categorys = categorys;
+	}
+
 }

@@ -18,4 +18,6 @@ public interface UserService extends BaseService<User,Long>{
 	boolean verUser(Long id);
 
 	boolean getBack(String email, String password);
+	
+	int getUserCount(User user);
 }

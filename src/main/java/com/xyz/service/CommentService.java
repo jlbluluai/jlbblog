@@ -5,6 +5,6 @@ import com.xyz.domain.Comment;
 
 public interface CommentService extends BaseService<Comment, Long>{
 
-	
+	int getCount();
 	
 }

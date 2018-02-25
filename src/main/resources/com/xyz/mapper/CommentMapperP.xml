@@ -49,4 +49,11 @@
 		</where>
 		order by c.create_time desc
 	</select>
+	
+	<select id="selectCount" resultType="int">
+		select
+			count(id)
+		from
+			t_comment
+	</select>
 </mapper>

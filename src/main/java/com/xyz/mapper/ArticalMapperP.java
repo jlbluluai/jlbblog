@@ -8,4 +8,6 @@ import com.xyz.domain.Artical;
 public interface ArticalMapperP{
 	
 	List<Artical> selectPages(Artical artical);
+	
+	int selectCount();
 }

@@ -63,5 +63,13 @@ public class UserServiceImplTest {
 		boolean flag = userService.getBack("15850682759@qq.com", "23456");
 		System.out.println(flag);
 	}
+	
+	@Test
+	public void testGetUserCount(){
+		User user = new User();
+		user.setIid(3);
+		int count = userService.getUserCount(user);
+		System.out.println("数量"+count);
+	}
 
 }

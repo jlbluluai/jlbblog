@@ -16,15 +16,14 @@ import com.xyz.domain.ArticalCategory;
 import com.xyz.util.TestUtils;
 
 public class ArticalServiceImplTest {
-	
-	
+
 	private ApplicationContext ctx;
 	private ArticalService articalService;
 
 	@Before
 	public void setCtx() throws Exception {
 		ctx = TestUtils.getCtx();
-		articalService = (ArticalService)ctx.getBean("articalService");
+		articalService = (ArticalService) ctx.getBean("articalService");
 	}
 
 	@Test
@@ -49,21 +48,23 @@ public class ArticalServiceImplTest {
 
 	@Test
 	public void testGetAppointedPageItems() {
-		/*Artical artical = new Artical();
-		artical.setUid(7L);
-		artical.setIsPublish((byte)1);
-		artical.setIsPublic((byte)1);
-		//artical.setIsNice((byte)1);
-		PageInfo<Artical> pageInfo = articalService.getAppointedPageItems(1, 10, artical);
-		List<Artical> list = pageInfo.getList();
-		System.out.println(list.size());
-		for (Artical artical2 : list) {
-			Set<ArticalCategory> set = artical2.getArticalCategorys();
-			for (ArticalCategory articalCategory : set) {
-				System.out.println(articalCategory.getName());
-			}
-			System.out.println("------------");
-		}*/
+		/*
+		 * Artical artical = new Artical(); artical.setUid(7L);
+		 * artical.setIsPublish((byte)1); artical.setIsPublic((byte)1);
+		 * //artical.setIsNice((byte)1); PageInfo<Artical> pageInfo =
+		 * articalService.getAppointedPageItems(1, 10, artical); List<Artical>
+		 * list = pageInfo.getList(); System.out.println(list.size()); for
+		 * (Artical artical2 : list) { Set<ArticalCategory> set =
+		 * artical2.getArticalCategorys(); for (ArticalCategory articalCategory
+		 * : set) { System.out.println(articalCategory.getName()); }
+		 * System.out.println("------------"); }
+		 */
+	}
+
+	@Test
+	public void testGetCount() {
+		int count = articalService.getCount();
+		System.out.println("数量：" + count);
 	}
 
 }

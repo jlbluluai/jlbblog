@@ -2,23 +2,24 @@ package com.xyz.service;
 
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
-import com.github.pagehelper.PageInfo;
-import com.xyz.domain.Comment;
+import com.xyz.domain.ArticalCategory;
 import com.xyz.util.TestUtils;
 
-public class CommentServiceImplTest {
+public class ArticalCategoryServiceImplTest {
 
 	private ApplicationContext ctx;
-	private CommentService commentService;
+	private ArticalCategoryService articalCategoryService;
 
 	@Before
 	public void setCtx() throws Exception {
 		ctx = TestUtils.getCtx();
-		commentService = (CommentService) ctx.getBean("commentService");
+		articalCategoryService = (ArticalCategoryService) ctx.getBean("articalCategoryService");
 	}
 
 	@Test
@@ -43,18 +44,18 @@ public class CommentServiceImplTest {
 
 	@Test
 	public void testGetAppointedPageItems() {
-		Comment comment = new Comment();
-		comment.setUid(7L);
-		PageInfo<Comment> pageInfo = commentService.getAppointedPageItems(1, 10, comment);
-		for (Comment item : pageInfo.getList()) {
-			System.out.println(item.getId() + " " + item.getContent());
-		}
+		fail("Not yet implemented");
 	}
 
 	@Test
-	public void testGetCount() {
-		int count = commentService.getCount();
-		System.out.println("数量：" + count);
+	public void testGetAllCategorys() {
+		List<ArticalCategory> list = articalCategoryService.getAllCategorys();
+		for (ArticalCategory articalCategory : list) {
+			System.out.println(articalCategory.getName());
+			for (ArticalCategory childCategory : articalCategory.getCategorys()) {
+				System.out.println("--" + childCategory.getName());
+			}
+		}
 	}
 
 }

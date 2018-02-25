@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.ArticalCategoryMapperP">
+
+	<resultMap id="selectResultMap" type="com.xyz.domain.ArticalCategory">
+		<id column="pid" jdbcType="INTEGER" property="id" />
+		<result column="pname" jdbcType="VARCHAR" property="name" />
+		<result column="ppid" jdbcType="INTEGER" property="pid" />
+		<result column="pcreate_time" jdbcType="TIMESTAMP" property="createTime" />
+		<collection property="categorys" ofType="com.xyz.domain.ArticalCategory">
+			<id column="cid" jdbcType="INTEGER" property="id" />
+			<result column="cname" jdbcType="VARCHAR" property="name" />
+			<result column="cpid" jdbcType="INTEGER" property="pid" />
+			<result column="ccreate_time" jdbcType="TIMESTAMP" property="createTime" />
+		</collection>
+	</resultMap>
+
+	<select id="selectAll" resultMap="selectResultMap">
+		select
+			p.id pid,
+			p.name pname,
+			p.pid ppid,
+			p.create_time pcreate_time,
+			c.id cid,
+			c.name cname,
+			c.pid cpid,
+			c.create_time ccreate_time
+		from
+			t_artical_category p
+		left join
+			t_artical_category c
+		on
+			p.id = c.pid
+		where
+			p.pid is null
+	</select>
+</mapper>

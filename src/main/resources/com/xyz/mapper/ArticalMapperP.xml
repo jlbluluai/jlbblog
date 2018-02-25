@@ -81,5 +81,14 @@
   			</if>
   		desc	
   </select>
+  
+  <select id="selectCount" resultType="int">
+  	select
+  		count(id)
+  	from 
+  		t_artical
+  	where
+  		is_publish = 1
+  </select>
 
 </mapper>

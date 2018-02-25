@@ -5,4 +5,5 @@ import com.xyz.domain.Artical;
 
 public interface ArticalService extends BaseService<Artical, Long>{
 
+	int getCount();
 }

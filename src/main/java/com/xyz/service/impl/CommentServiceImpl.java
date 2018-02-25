@@ -54,4 +54,12 @@ public class CommentServiceImpl implements CommentService {
 		return new PageInfo<Comment>(commentMapperP.selectPages(item));
 	}
 
+	/**
+	 * 获取评论数量
+	 */
+	@Override
+	public int getCount() {
+		return commentMapperP.selectCount();
+	}
+
 }

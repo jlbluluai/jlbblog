@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
+import com.xyz.domain.ArticalCategory;
 import com.xyz.domain.Collection;
 import com.xyz.domain.Comment;
 import com.xyz.domain.Dynamic;
@@ -493,5 +494,6 @@ public class UserHomeController {
 			response.getWriter().write(json.toString());
 		}
 	}
-
+	
+	
 }

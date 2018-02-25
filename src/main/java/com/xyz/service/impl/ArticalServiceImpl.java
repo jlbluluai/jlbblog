@@ -17,7 +17,7 @@ public class ArticalServiceImpl implements ArticalService {
 
 	@Autowired
 	private ArticalMapper articalMapper;
-	
+
 	@Autowired
 	private ArticalMapperP articalMapperP;
 
@@ -51,6 +51,14 @@ public class ArticalServiceImpl implements ArticalService {
 	public PageInfo<Artical> getAppointedPageItems(Integer current, Integer limit, Artical item) {
 		PageHelper.startPage(current, limit);
 		return new PageInfo<Artical>(articalMapperP.selectPages(item));
+	}
+
+	/**
+	 * 获取文章统计信息
+	 */
+	@Override
+	public int getCount() {
+		return articalMapperP.selectCount();
 	}
 
 }

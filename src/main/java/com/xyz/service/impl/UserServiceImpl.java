@@ -14,6 +14,7 @@ import com.xyz.domain.UserInfo;
 import com.xyz.domain.UserPasschange;
 import com.xyz.mapper.UserInfoMapper;
 import com.xyz.mapper.UserMapper;
+import com.xyz.mapper.UserMapperP;
 import com.xyz.mapper.UserPasschangeMapper;
 import com.xyz.service.UserService;
 import com.xyz.util.Utils;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private UserMapperP userMapperP;
 
 	@Autowired
 	private UserInfoMapper userInfoMapper;
@@ -147,6 +151,14 @@ public class UserServiceImpl implements UserService {
 	public boolean cutAppointedItem(Long id) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	/**
+	 * 获取用户数量
+	 */
+	@Override
+	public int getUserCount(User user) {
+		return userMapperP.selectCountByCondition(user);
 	}
 
 }
