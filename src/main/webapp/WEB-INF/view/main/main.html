@@ -327,10 +327,10 @@
 		/*自定义分页的必备参数*/
 		var currentPage = 1;
 		var totalPage = 30;
-		
+
 		var style = 0;
 		var category = 0;
-		
+
 		//转换时间
 		function dateFormat(time) {
 			var date = new Date(time);
@@ -381,7 +381,7 @@
 			});
 
 			$("#user_item a:eq(3)").click(function() {
-				if(confirm("logout?")){
+				if (confirm("logout?")) {
 					$logOut();
 				}
 			});
@@ -394,20 +394,26 @@
 					});
 
 			$("#main_menu a:eq(0)").click(function() {
-				alert("我的园子");
+				$jumpOthers("userinfo", "");
 			});
 
 			$("#main_menu a:eq(1)").click(function() {
 				alert("我的博客");
 			});
 
-			$("#main_menu a:eq(2)").click(function() {
-				alert("我的收藏");
-			});
+			$("#main_menu a:eq(2)")
+					.click(
+							function() {
+								$jumpOthers("userinfo",
+										"&consule=%25E6%2588%2591%25E7%259A%2584%25E6%2594%25B6%25E8%2597%258F")
+							});
 
-			$("#main_menu a:eq(3)").click(function() {
-				alert("我的消息");
-			});
+			$("#main_menu a:eq(3)")
+					.click(
+							function() {
+								$jumpOthers("userinfo",
+										"&consule=%25E6%2588%2591%25E7%259A%2584%25E6%25B6%2588%25E6%2581%25AF")
+							});
 
 			$("#main_menu a:eq(4)").click(function() {
 				alert("找找看暂未实现");
@@ -568,7 +574,7 @@
 								$(".page_item").remove();
 								//$getPages();
 								$("#post_list").empty();
-								$getPageItems(currentPage, style , category);
+								$getPageItems(currentPage, style, category);
 							}
 						} else if (current == "»") {
 							var temp = $.trim($(".pagination li.active").next()
@@ -583,7 +589,7 @@
 								$(".page_item").remove();
 								//$getPages();
 								$("#post_list").empty();
-								$getPageItems(currentPage, style , category);
+								$getPageItems(currentPage, style, category);
 							}
 						} else if (current == "...") {
 
@@ -595,7 +601,7 @@
 							$(".page_item").remove();
 							//$getPages();
 							$("#post_list").empty();
-							$getPageItems(currentPage, style , category);
+							$getPageItems(currentPage, style, category);
 						}
 					});
 
@@ -621,12 +627,12 @@
 				}
 			});
 		}
-		
+
 		/*登录逻辑*/
-		$(function(){
+		$(function() {
 			$getTheLoginStatus();
 		});
-		
+
 		//获取登录状态
 		var $getTheLoginStatus = function() {
 			$.ajax({
@@ -635,10 +641,10 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					if(data!=""){
-						$(".notLogin").css("display","none");
+					if (data != "") {
+						$(".notLogin").css("display", "none");
 						$("#inLoginNick").text(data.nickname);
-						$(".inLogin").css("display","");
+						$(".inLogin").css("display", "");
 					}
 				},
 				error : function() {
@@ -646,7 +652,7 @@
 				}
 			});
 		}
-		
+
 		//登出
 		var $logOut = function() {
 			$.ajax({
@@ -655,8 +661,32 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					$(".notLogin").css("display","");
-					$(".inLogin").css("display","none");
+					$(".notLogin").css("display", "");
+					$(".inLogin").css("display", "none");
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		/*相关跳转逻辑*/
+		var $jumpOthers = function(address, consule) {
+			$.ajax({
+				type : "get",
+				url : "jumpOthers",
+				data : {
+					address : address
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					if (data == 0) {
+						alert("请先登录")
+					} else {
+						window.location.href = address + "?id=" + data
+								+ consule;
+					}
 				},
 				error : function() {
 					alert("数据获取失败");

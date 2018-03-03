@@ -215,4 +215,24 @@ public class PortalController {
 		return flag;
 	}
 
+	/**
+	 * 相关需要获取用户id的跳转
+	 * 
+	 * @param session
+	 * @param address
+	 * @return
+	 */
+	@RequestMapping(value = "/jumpOthers", method = RequestMethod.GET)
+	@ResponseBody
+	public Long jumpOthers(HttpSession session) {
+		Long uid = 0L;
+		log.info(f1 + "相关需要获取用户id的跳转开始" + f2);
+		User user = (User)session.getAttribute("user");
+		if(user != null){
+			uid = user.getId();
+		}
+		log.info(f1 + "相关需要获取用户id的跳转结束" + f2);
+		return uid;
+	}
+
 }
