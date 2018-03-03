@@ -2,6 +2,7 @@ package com.xyz.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class RecommendCategory implements Serializable {
     private Integer id;
@@ -11,6 +12,9 @@ public class RecommendCategory implements Serializable {
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
+    
+    /*视图属性*/
+    private List<Recommend> recommends;
 
     public Integer getId() {
         return id;
@@ -35,4 +39,14 @@ public class RecommendCategory implements Serializable {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+	public List<Recommend> getRecommends() {
+		return recommends;
+	}
+
+	public void setRecommends(List<Recommend> recommends) {
+		this.recommends = recommends;
+	}
+    
+    
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.RecommendCategoryMapperP">
+  <resultMap id="RecommendsResult" type="com.xyz.domain.RecommendCategory">
+    <id column="rcid" jdbcType="INTEGER" property="id" />
+    <result column="rcname" jdbcType="VARCHAR" property="name" />
+  	<collection property="recommends" ofType="com.xyz.domain.Recommend">
+  		<id column="rid" jdbcType="INTEGER" property="id" />
+    	<result column="rname" jdbcType="VARCHAR" property="name" />
+    	<result column="url" jdbcType="VARCHAR" property="url" />
+    	<result column="tag" jdbcType="VARCHAR" property="tag" />
+    	<result column="status" jdbcType="TINYINT" property="status" />
+  	</collection>
+  </resultMap>
+  
+  <select id="selectRecommends" resultMap="RecommendsResult">
+	select
+		rc.id rcid,
+		rc.name rcname,
+		r.id rid,
+		r.name rname,
+		r.url url,
+		r.tag tag,
+		r.status status
+	from
+		t_recommend_category rc
+	left join
+		t_recommend r
+	on
+		rc.id = r.cid
+	where
+		status = 1
+  </select>
+</mapper>

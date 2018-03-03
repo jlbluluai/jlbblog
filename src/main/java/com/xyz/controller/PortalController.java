@@ -1,7 +1,11 @@
 package com.xyz.controller;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +13,24 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
+import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
+import com.xyz.domain.RecommendCategory;
 import com.xyz.domain.User;
+import com.xyz.domain.UserInfo;
+import com.xyz.dto.PagesFeedback;
 import com.xyz.dto.PortalStatistic;
 import com.xyz.service.ArticalCategoryService;
 import com.xyz.service.ArticalService;
 import com.xyz.service.CommentService;
+import com.xyz.service.RecommendCategoryService;
 import com.xyz.service.UserService;
+import com.xyz.util.FtpConnect;
+import com.xyz.util.Utils;
 
 @Controller
 public class PortalController {
@@ -37,6 +50,10 @@ public class PortalController {
 	@Autowired
 	@Qualifier("commentService")
 	private CommentService commentService;
+
+	@Autowired
+	@Qualifier("recommendCategoryService")
+	private RecommendCategoryService recommendCategoryService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -85,6 +102,117 @@ public class PortalController {
 		portalStatistic.setCommentCount(new Long((long) commentCount));
 		log.info(f1 + "获取门户统计信息结束" + f2);
 		return portalStatistic;
+	}
+
+	/**
+	 * 获取推荐信息
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getRecommends", method = RequestMethod.GET)
+	@ResponseBody
+	public List<RecommendCategory> getRecommends() {
+		List<RecommendCategory> list = new ArrayList<>();
+		log.info(f1 + "获取推荐开始" + f2);
+		list = recommendCategoryService.getAllRecommends();
+		log.info(f1 + "获取推荐结束" + f2);
+		return list;
+	}
+
+	/**
+	 * 根据相关条件获取主页相关文章 style：0首页，1精选，2关注
+	 * 
+	 * @param current
+	 * @param category
+	 * @param style
+	 * @return
+	 */
+	@RequestMapping(value = "/getMainArticals", method = RequestMethod.GET)
+	@ResponseBody
+	public PagesFeedback getMainArticals(@RequestParam("current") Integer current,
+			@RequestParam("category") Integer category, @RequestParam("style") Integer style, HttpSession session) {
+		PagesFeedback feedback = new PagesFeedback();
+		log.info(f1 + "获取主页文章开始" + f2);
+		System.out.println(current);
+		System.out.println(category);
+		System.out.println(style);
+		Artical artical = new Artical();
+		artical.setIsPublish((byte) 1);
+		if (category != 0) {
+			artical.setCategory(category);
+		}
+		if (style == 0) {
+
+		} else if (style == 1) {
+			artical.setIsNice((byte) 1);
+		} else if (style == 2) {
+
+		} else {
+
+		}
+		artical.setSort(1);
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			user = new User();
+			user.setId(0L);
+		}
+		artical.setUser(user);
+
+		String prop = FtpConnect.class.getClassLoader().getResource("/").getPath()
+				+ "properties/ftp-connect.properties";
+		prop = URLDecoder.decode(prop);
+		Properties properties = Utils.getProperties(prop);
+		PageInfo<Artical> pageInfo = new PageInfo<>();
+		if (category != 0) {
+			pageInfo = articalService.getAppointedPageItems(current, 8, artical);
+		} else {
+			pageInfo = articalService.getAppointedPageItems(current, 16, artical);
+		}
+		List<Object> list = new ArrayList<Object>();
+		for (Artical art : pageInfo.getList()) {
+			UserInfo info = art.getUserInfo();
+			String headpic = "http://" + properties.getProperty("url") + ":" + properties.getProperty("nginxPort") + "/"
+					+ info.getHeadpic();
+			info.setHeadpic(headpic);
+			art.setUserInfo(info);
+			list.add(art);
+		}
+		feedback.setoList(list);
+		feedback.setTotalPages(pageInfo.getPages());
+		log.info(f1 + "获取主页文章结束" + f2);
+		return feedback;
+	}
+
+	/**
+	 * 获取主页的登录状态
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/getTheLoginStatus", method = RequestMethod.GET)
+	@ResponseBody
+	public User getTheLoginStatus(HttpSession session) {
+		User user = new User();
+		log.info(f1 + "获取主页登录状态开始" + f2);
+		user = (User) session.getAttribute("user");
+		log.info(f1 + "获取主页登录状态结束" + f2);
+		return user;
+	}
+
+	/**
+	 * 登出
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/logOut", method = RequestMethod.GET)
+	@ResponseBody
+	public boolean logOut(HttpSession session) {
+		boolean flag = true;
+		log.info(f1 + "登出开始" + f2);
+		session.invalidate();
+		log.info(f1 + "登出技结束" + f2);
+		return flag;
 	}
 
 }

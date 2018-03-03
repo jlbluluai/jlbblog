@@ -18,6 +18,10 @@
     		<id column="uid" property="id"/>
     		<result column="unickname" property="nickname"/>
    		</association>
+   		<association property="userInfo" javaType="com.xyz.domain.UserInfo">
+    		<id column="uiid" property="id"/>
+    		<result column="headpic" property="headpic"/>
+   		</association>
    		<collection property="articalCategorys" ofType="com.xyz.domain.ArticalCategory">
    			<id column="acid" property="id"/>
    			<result column="acname" property="name"/>
@@ -39,6 +43,8 @@
   			a.leave_time aleavetime,
   			u.id uid,
   			u.nickname unickname,
+  			ui.id uiid,
+  			ui.headpic headpic,
   			ac.id acid,
 			ac.name acname  			
   		from
@@ -47,6 +53,10 @@
   			t_user u
   		on
   			a.uid = u.id
+  		left join
+  			t_user_info ui
+  		on
+  			a.uid = ui.id
   		left join
   			t_artical_associate_category aac
   		on
@@ -67,6 +77,19 @@
   			</if>
   			<if test="isPublish != null">
   				and a.is_publish = #{isPublish}
+  			</if>
+  			<if test="category != null">
+  				and ac.id = #{category}
+  			</if>
+  			<if test="user !=null">
+  				and a.id not in(select 
+									id 
+								from 
+									t_artical 
+								where 
+									is_public = 0 
+								and 
+									uid != #{user.id})
   			</if>
   		</where>
   		order by

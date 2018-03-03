@@ -31,9 +31,12 @@ public class Artical implements Serializable {
 
 	/* 视图属性 */
 	private User user;
+	private UserInfo userInfo;
 	private List<ArticalCategory> articalCategorys;
 
 	private Integer sort; // 排序方式
+
+	private Integer category; // 分类
 
 	public Long getId() {
 		return id;
@@ -145,6 +148,22 @@ public class Artical implements Serializable {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public Integer getCategory() {
+		return category;
+	}
+
+	public void setCategory(Integer category) {
+		this.category = category;
+	}
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
 	}
 
 }

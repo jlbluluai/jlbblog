@@ -92,7 +92,7 @@
 				async : true,
 				success : function(data) {
 					if (data.msg == "success") {
-						window.location.href = "userinfo?id="+data.id;
+						window.location.href = "main";
 					} else {
 						$("#login>div>div").text(data.msg);
 						$("#login>div>div").css("display", "block");
