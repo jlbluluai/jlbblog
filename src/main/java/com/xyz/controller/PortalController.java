@@ -2,6 +2,7 @@ package com.xyz.controller;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -20,15 +21,19 @@ import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
 import com.xyz.domain.RecommendCategory;
+import com.xyz.domain.Suggestion;
 import com.xyz.domain.User;
 import com.xyz.domain.UserInfo;
+import com.xyz.domain.Version;
 import com.xyz.dto.PagesFeedback;
 import com.xyz.dto.PortalStatistic;
 import com.xyz.service.ArticalCategoryService;
 import com.xyz.service.ArticalService;
 import com.xyz.service.CommentService;
 import com.xyz.service.RecommendCategoryService;
+import com.xyz.service.SuggestionService;
 import com.xyz.service.UserService;
+import com.xyz.service.VersionService;
 import com.xyz.util.FtpConnect;
 import com.xyz.util.Utils;
 
@@ -54,6 +59,14 @@ public class PortalController {
 	@Autowired
 	@Qualifier("recommendCategoryService")
 	private RecommendCategoryService recommendCategoryService;
+
+	@Autowired
+	@Qualifier("suggestionService")
+	private SuggestionService suggestionService;
+	
+	@Autowired
+	@Qualifier("versionService")
+	private VersionService versionService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -227,12 +240,57 @@ public class PortalController {
 	public Long jumpOthers(HttpSession session) {
 		Long uid = 0L;
 		log.info(f1 + "相关需要获取用户id的跳转开始" + f2);
-		User user = (User)session.getAttribute("user");
-		if(user != null){
+		User user = (User) session.getAttribute("user");
+		if (user != null) {
 			uid = user.getId();
 		}
 		log.info(f1 + "相关需要获取用户id的跳转结束" + f2);
 		return uid;
 	}
 
+	/* 意见箱逻辑 */
+
+	/**
+	 * 写入一条建议
+	 * 
+	 * @param content
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/writeOneSuggestion", method = RequestMethod.POST)
+	@ResponseBody
+	public Boolean writeOneSuggestion(@RequestParam("content") String content, HttpSession session) {
+		Boolean flag = false;
+		log.info(f1 + "提交建议开始" + f2);
+		System.out.println(content);
+		Suggestion suggestion = new Suggestion();
+		User user = (User) session.getAttribute("user");
+		if (user != null) {
+			suggestion.setUid(user.getId());
+		} else {
+			return false;
+		}
+		suggestion.setContent(content);
+		suggestion.setStatus((byte) 0);
+		suggestion.setLeaveTime(new Date());
+
+		flag = suggestionService.saveAppointedItem(suggestion);
+		log.info(f1 + "提交建议结束" + f2);
+		return flag;
+	}
+
+	/**
+	 * 获取所有的版本信息
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getAllVersions", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Version> getAllVersions() {
+		List<Version> list = new ArrayList<>();
+		log.info(f1 + "获取版本信息开始" + f2);
+		list = versionService.getAllVersions();
+		log.info(f1 + "获取版本信息结束" + f2);
+		return list;
+	}
 }
