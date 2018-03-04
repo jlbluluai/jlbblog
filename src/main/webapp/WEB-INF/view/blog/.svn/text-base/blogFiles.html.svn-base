@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>我的文件 - 博客后台 - 洛林博客</title>
+
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="../../bootstrap/css/bootstrap.css" />
+
+		<!-- 第三方 -->
+
+		<!-- 博客后管通用 -->
+		<link href="../../css/blog/blogPublic.css" rel="stylesheet" />
+
+		<!-- 本页面所属 -->
+		<link rel="stylesheet" href="../../css/blog/blogFiles.css" />
+
+	</head>
+
+	<body>
+		<!-- 头部 -->
+		<div id="top_nav">
+			<div id="left">
+				«
+				<a href="#" id="goPortal">网站首页</a>
+				<a href="#" id="goUserInfo">我的园子</a>
+				<a href="#" id="goLooking">找一找</a>
+			</div>
+			<div id="right">
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<!-- 主体 -->
+		<div id="main">
+			<!-- 主体头部 -->
+			<div id="main_head">
+				<div id="blog_title">
+					<a href="#" id="headNick">测试</a>
+				</div>
+				<div id="SiteTitle">
+					<a href="#" id="headLogo"><img alt="logo" src="../../img/洛林博客.jpg" /></a>
+				</div>
+			</div>
+			<div class="clear"></div>
+
+			<!-- 主体身体 -->
+			<div id="main_body">
+				<div id="main_wrap">
+					<div id="main_container">
+						<!-- 主体上部菜单栏 -->
+						<div id="tab_nav">
+							<ul>
+								<li>
+									<a id="blogManage" href="#">博客</a>
+								</li>
+								<li>
+									<a id="blogPhoto" href="#">相册</a>
+								</li>
+								<li>
+									<a id="blogFile" href="#" class="current_nav">文件</a>
+								</li>
+								<li>
+									<a id="blogSetting" href="#">设置</a>
+								</li>
+							</ul>
+							<div class="clear"></div>
+						</div>
+						<div id="sub_nav">
+						</div>
+
+						<!-- 主体内容 -->
+						<div id="content_area">
+							<div>
+								<h4>附件仓库</h4>
+							</div>
+							<div id="post_list">
+								<table>
+									<thead>
+										<tr>
+											<th class="post-title">文件名</th>
+											<th>文件类型</th>
+											<th>文件大小(KB)</th>
+											<th>所属博客</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<colgroup>
+										<col width="30%" />
+										<col width="10%" />
+										<col width="10%" />
+										<col width="20%" />
+									</colgroup>
+									<tbody>
+										<tr>
+											<td class="post-title">
+												123
+											</td>
+											<td>
+												.txt
+											</td>
+											<td>
+												1024
+											</td>
+											<td>
+												<a>文章一</a>
+											</td>
+											<td>
+												<a href="javascript:void(0)">下载</a>
+											</td>
+										</tr>
+										<tr class="alt">
+											<td class="post-title">
+												321
+											</td>
+											<td>
+												.png
+											</td>
+											<td>
+												1024
+											</td>
+											<td>
+												<a>文章二	</a>
+											</td>
+											<td>
+												<a href="javascript:void(0)">下载</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 主体左侧菜单栏 -->
+				<div id="left_container">
+					<div id="left_nav">
+						<h2>操作</h2>
+						<div id="remind">
+							因服务器压力原因，文件只能每篇博客限制上传一个，且限大小，同时不提供之外上传文件的服务
+						</div>
+					</div>
+					<div id="sidebar_categories">
+					</div>
+				</div>
+
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<!-- 脚部 -->
+		<div id="footer">
+			<a>©2017 小叶子</a>
+		</div>
+
+		<!-- jquery,bootstrap -->
+		<script type="text/javascript" src="../../js/jquery.js"></script>
+		<script type="text/javascript" src="../../bootstrap/js/bootstrap.js"></script>
+
+		<!-- 第三方 -->
+
+		<!-- 博客后管通用 -->
+		<script type="text/javascript" src="../../js/blog/blogPublic.js"></script>
+
+		<!-- 本页面所属 -->
+		<script type="text/javascript">
+		</script>
+
+	</body>
+
+</html>

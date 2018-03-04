@@ -16,6 +16,8 @@ public class FormController {
 	private static final String[] test = { "index" };
 	private static final String[] main = { "main", "looking", "suggestion" };
 	private static final String[] userInfo = { "userinfo" };
+	private static final String[] blog = { "blogDraft", "blogFiles", "blogHandle", "blogManage", "blogPhotos",
+			"blogPortal", "blogRead", "blogSettings" };
 
 	/**
 	 * 根据路径找到应该展示的视图位置并展示视图
@@ -35,6 +37,8 @@ public class FormController {
 			path = "main/" + formname;
 		} else if (Utils.isThisStringGroup(userInfo, formname)) {
 			path = "userinfo/" + formname;
+		} else if (Utils.isThisStringGroup(blog, formname)) {
+			path = "blog/" + formname;
 		} else {
 			path = "error";
 		}
@@ -44,6 +48,11 @@ public class FormController {
 	@RequestMapping(value = "/userInfo/{formname}")
 	public String goUserInfoForm(@PathVariable String formname) {
 		return "userinfo/" + formname;
+	}
+
+	@RequestMapping(value = "/blog/{formname}")
+	public String goBlogForm(@PathVariable String formname) {
+		return "blog/" + formname;
 	}
 
 }

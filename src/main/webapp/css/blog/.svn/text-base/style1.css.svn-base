@@ -1,0 +1,162 @@
+@CHARSET "UTF-8";
+
+body {
+	color: #000;
+	background-color: #e6e6e6;
+	font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
+	font-size: 12px;
+	color: #000;
+}
+
+li {
+	list-style: none;
+}
+
+.container {
+	margin: 0 auto;
+	width: 80%;
+	min-width: 950px;
+	background-color: #fff;
+	padding: 30px;
+	margin-top: 50px;
+	margin-bottom: 100px;
+	box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+}
+
+
+
+.header {
+	padding-bottom: 5px;
+	margin-top: 10px;
+}
+
+.header a:hover {
+	color: #21759b;
+	text-decoration: none;
+}
+
+.blogTitle {
+	height: 60px;
+	clear: both;
+}
+
+.blogTitle h1 {
+	font-size: 26px;
+	font-weight: bold;
+	line-height: 1.5em;
+	margin-top: 20px;
+}
+
+.blogTitle h1 a {
+	color: #515151;
+}
+
+.navigation {
+	font-size: 13px;
+	border-bottom: 1px solid #ededed;
+	border-top: 1px solid #ededed;
+	height: 50px;
+	clear: both;
+	margin-top: 25px;
+}
+
+#navList {
+	min-height: 30px;
+	float: left;
+}
+
+#navList li {
+	float: left;
+	margin: 0 40px 0 0;
+}
+
+#navList a {
+	color: #6a6a6a;
+	font-weight: bold;
+	display: block;
+	width: 5em;
+	height: 22px;
+	float: left;
+	text-align: center;
+	padding-top: 19px;
+}
+
+#navList a:hover {
+	color: black;
+}
+
+
+.main {
+	width: 100%;
+	margin-top: 30px;
+	text-align: left;
+	overflow: hidden;
+}
+
+.content {
+	min-height: 220px;
+	padding: 0px 0px 10px 0;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	float: left;
+	margin-left: 10px;
+	width: 70%;
+}
+
+.side {
+	margin-top: 10px;
+	width: 230px;
+	min-height: 200px;
+	padding: 0px 0 0px 5px;
+	float: right;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.userItem {
+	background: #fff;
+	margin-bottom: 35px;
+	word-wrap: break-word;
+}
+
+.itemTitle {
+	font-weight: bold;
+	line-height: 1.2;
+	font-size: 17px;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	text-align: left;
+}
+
+#userItemInfo {
+	font-size: 14px;
+	overflow: hidden;
+	margin-top: 15px;
+	line-height: 1.5;
+	text-align: left;
+	overflow: hidden;
+}
+
+.articalFile {
+	margin-top: 50px;
+	line-height: 1.5;
+	text-align: left;
+}
+
+.articalFile ul {
+	padding: 0;
+}
+
+.footer {
+	color: #686868;
+	text-align: center;
+	min-height: 15px;
+	_height: 15px;
+	border-top: 1px solid #ededed;
+	margin-top: 50px;
+	padding-top: 10px;
+	margin-bottom: 10px;
+	color: #686868;
+}

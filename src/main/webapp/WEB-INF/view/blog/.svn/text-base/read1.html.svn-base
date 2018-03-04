@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+
+		<!--bootstrap-->
+		<link rel="stylesheet" href="../../bootstrap/css/bootstrap.css" />
+
+		<!-- 第三方 -->
+		<link rel="stylesheet" href="../../css/clock/clock.css" />
+		<link rel="stylesheet" href="../../css/popup/popup.css" />
+
+		<!--自定义-->
+		<link rel="stylesheet" href="../../css/blog/style1.css" />
+		<link rel="stylesheet" href="../../css/blog/read1.css" />
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="header">
+				<div class="blogTitle">
+					<h1>
+						<a id="headTitle" href="javascript:void(0)">叶灬黎</a>
+					</h1>
+				</div>
+				<div class="navigation">
+					<ul id="navList">
+						<li>
+							<a id="mainhome" href="javascript:void(0)">洛林博客</a>
+						</li>
+						<li>
+							<a id="myhome" href="javascript:void(0)">首页</a>
+						</li>
+						<li>
+							<a id="newartical" href="javascript:void(0)">新文章</a>
+						</li>
+						<li>
+							<a id="contact" href="javascript:void(0)">联系</a>
+						</li>
+						<li>
+							<a id="manage" href="javascript:void(0)">管理</a>
+						</li>
+						<li>
+							<a id="draft" href="javascript:void(0)">草稿箱</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="main">
+				<div class="content">
+					<div class="read">
+						<div class="first">
+							<a href="">文章一</a><br>
+							<span>Posted on 2017-11-13 14:55 叶灬黎 阅读(74) 评论(0) </span>
+							<a class="edit" href="javascript:void(0);">编辑</a>
+							<a class="collect" href="javascript:void(0);">收藏</a>
+						</div>
+						<div class="second">
+							厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<br/>
+						</div>
+					</div>
+
+					<div id="commentList">
+						<div class="commentTop">
+							<span>评论列表</span>
+						</div>
+						<div id="allComment">
+							<div class="oneComment">
+								<div>
+									<a href="#lou_1" name="lou_1">#1楼</a>
+									<span>2018-02-08 09:49 |</span>
+									<span class="hidden">1</span>
+									<a href="javascript:void(0);" class="commentUser">大个子</a>
+								</div>
+								<p>
+									123456789
+								</p>
+							</div>
+							<div class="oneComment">
+								<div>
+									<a href="#lou_2" name="lou_2">#2楼</a>
+									<span>2018-02-08 09:50 |</span>
+									<span class="hidden">2</span>
+									<a href="javascript:void(0);" class="commentUser">小个子</a>
+								</div>
+								<p>
+									123456789
+								</p>
+							</div>
+						</div>
+						<div id="pager_bottom" style="margin-left: 20px;">
+							<nav aria-label="Page navigation">
+								<ul class="pagination">
+									<li id="firstli">
+										<a href="javascript:void(0);" onclick="">&laquo;</a>
+									</li>
+									<li id="lastli">
+										<a href="javascript:void(0);" onclick="">&raquo;</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+
+					<div id="commentWrite">
+						<div class="commentTop">
+							<span>发表评论</span>
+						</div>
+						<div id="writeComment">
+							<span>昵称：</span>
+							<span id="commentUser">叶灬黎</span>
+							<span style="display: block; margin-top: 5px;"><span>评论内容：</span><span class="count hide">已经输入<span>0</span>字</span>
+							</span>
+							<textarea rows="12" cols="20" id="textarea" class="form-control" style="width: 400px;" oninput="$wordCount()"></textarea>
+							<button type="submit" style="margin-top: 5px;" class="btn btn-primary " id="submit">提交评论</button>
+							<button type="reset" style="margin-top: 5px;" class="btn btn-primary " id="reset">清空</button>
+						</div>
+						<div id="notComment" class="hide">
+							<span>只有注册用户可以评论。请</span>
+							<a href="javascript:void(0)" onclick="goLogin()">登录</a><span>来访问网站。</span>
+						</div>
+					</div>
+				</div>
+				<div class="side">
+					<div class="userItem">
+						<h3 class="itemTitle">博主信息</h3>
+						<div id="userItemInfo">
+							昵称：
+							<a id="nick" href="javascript:void(0)">叶灬黎</a><br> 博龄：
+							<a id="garAge" href="javascript:void(0)" title="入园时间：2016-06-04">1年5月</a><br> 粉丝：
+							<a id="fan" href="javascript:void(0)">2</a><br> 关注：
+							<a id="follow" href="javascript:void(0)">2</a><br>
+						</div>
+					</div>
+					<div class="calendar">
+						<h3 class="itemTitle">时间</h3>
+						<div id="hoverclock"></div>
+					</div>
+					<div class="articalFile">
+						<h3 class="itemTitle">文章档案</h3>
+						<div id="articalFileNav">
+							<ul>
+								<li>
+									<a href="javascript:void(0)">2017年7月 (1)</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">©2017 小叶子</div>
+		</div>
+
+		<!-- bootstrap、juqery -->
+		<script type="text/javascript" src="../../js/jquery.js"></script>
+		<script type="text/javascript" src="../../bootstrap/js/bootstrap.js"></script>
+
+		<!-- 第三方 -->
+		<script type="text/javascript" src="../../js/clock/clock.js"></script>
+		<script type="text/javascript" src="../../js/popup/popup.js"></script>
+
+		<!-- 自定义 -->
+		<script type="text/javascript" src="../../js/blog/blogportal.js"></script>
+		<script type="text/javascript" src="../../js/pages.js"></script>
+		<script type="text/javascript">
+			/*自定义分页的必备参数*/
+			var currentPage = 1;
+			var totalPage = 30;
+
+			/*准备工作*/
+			//时钟
+			$("#hoverclock").hoverclock({
+				"h_width": 200,
+				"h_height": 200,
+				//"h_hourNumSize": "80",
+				// "h_hourNumRadii": "200",
+				// "h_hourNumShow": false,
+				// "h_minuteNumShow":false,
+				"h_hourNumColor": "deeppink",
+				"h_backColor": "white",
+				//"h_borderColor": "gold",
+				//"h_frontColor":"red",
+				"h_linkText": dateFormat()
+			});
+
+			//转换时间
+			function dateFormat() {
+				var date = new Date();
+
+				var str = "";
+				str += date.getFullYear() + "-";
+				if(date.getMonth() + 1 < 10) {
+					str += "0" + (date.getMonth() + 1) + "-";
+				} else {
+					str += (date.getMonth() + 1) + "-";
+				}
+				if(date.getDate() < 10) {
+					str += "0" + date.getDate();
+				} else {
+					str += date.getDate();
+				}
+				return str;
+			}
+
+			//url取参
+			var $getQueryString = function(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null)
+					return unescape(r[2]);
+				return null;
+			}
+
+			/*文章逻辑*/
+			//跳转编辑文章（验明身份）
+			$(".edit").click(function() {
+				alert("编辑");
+			});
+
+			//收藏文章（验明身份）
+			$(".collect").click(function() {
+				alert("收藏");
+			});
+
+			/*评论逻辑*/
+			//跳转评论人首页
+			$(".commentUser").click(function() {
+				var userId = $(this).prev().text();
+				alert(userId);
+			});
+
+			/*写评论逻辑*/
+			//评论计数
+			var $wordCount = function() {
+				$(".count").removeClass("hide");
+				var count = $("textarea").val().length;
+				if(count == 0) {
+					$(".count").addClass("hide");
+				}
+				$(".count span").text(count);
+			}
+
+			//提交
+			$("#submit").click(function() {
+				var count = $("textarea").val().length;
+				if(count == 0) {
+					jqalert({
+						title: '提示弹窗',
+						cont: '评论不得为空'
+					});
+				} else if(count > 140) {
+					jqalert({
+						title: '提示弹窗',
+						cont: '评论不得超过140字'
+					});
+				} else {
+					jqalert({
+						title: '确认弹窗',
+						cont: '您是否确认提交评论',
+						yestext: '确定',
+						notext: '取消',
+						yesfn: function() {
+							jqtoast('success');
+						},
+						nofn: function() {
+						}
+					});
+				}
+
+			});
+
+			//清空
+			$("#reset").click(function() {
+				jqalert({
+					title: '确认弹窗',
+					cont: '您是否确认清空评论',
+					yestext: '确定',
+					notext: '取消',
+					yesfn: function() {
+						$("textarea").val("");
+						$(".count").addClass("hide");
+					},
+					nofn: function() {
+					}
+				});
+			});
+
+			/*自定义分页的逻辑*/
+			$(function() {
+
+				$getPages();
+				$(document).on("click", ".pagination li", function() {
+					var current = $.trim($(this).text());
+					if(current == "«") {
+						var temp = $.trim($(".pagination li.active").prev().text());
+						if(temp != "«") {
+							var $a = $(".pagination li.active");
+							$(".pagination li.active").removeClass("active");
+							$a.prev().addClass("active");
+							currentPage = parseInt($.trim($(".pagination li.active").text()));
+							console.log(currentPage);
+							$(".page_item").remove();
+							$getPages();
+						}
+					} else if(current == "»") {
+						var temp = $.trim($(".pagination li.active").next().text());
+						if(temp != "»") {
+							var $a = $(".pagination li.active");
+							$(".pagination li.active").removeClass("active");
+							$a.next().addClass("active");
+							currentPage = parseInt($.trim($(".pagination li.active").text()));
+							console.log(currentPage);
+							$(".page_item").remove();
+							$getPages();
+						}
+					} else if(current == "...") {
+
+					} else {
+						$(this).siblings("li").removeClass("active");
+						$(this).addClass("active");
+						currentPage = parseInt($.trim($(".pagination li.active").text()));
+						console.log(currentPage);
+						$(".page_item").remove();
+						$getPages();
+					}
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

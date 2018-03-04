@@ -1,0 +1,38 @@
+/*头部菜单栏逻辑*/
+$("#goPortal").click(function() {
+	window.location.href = "../../view/main/main.html";
+});
+
+$("#goUserInfo").click(function() {
+	window.location.href = "../../view/userinfo/userinfo.html";
+});
+
+$("#goLooking").click(function() {
+	window.location.href = "../../view/main/looking.html";
+})
+
+/*logo及昵称标签逻辑*/
+$("#headLogo").click(function() {
+	window.location.href = "../../view/main/main.html";
+});
+
+$("#headNick").click(function() {
+	window.location.href = "../../view/blog/blogPortal.html";
+});
+
+/*主体上部菜单栏逻辑*/
+$("#blogManage").click(function() {
+	window.location.href = "../../view/blog/blogManage.html";
+});
+
+$("#blogPhoto").click(function() {
+	window.location.href = "../../view/blog/blogPhotos.html";
+});
+
+$("#blogFile").click(function() {
+	window.location.href = "../../view/blog/blogFiles.html";
+});
+
+$("#blogSetting").click(function() {
+	window.location.href = "../../view/blog/blogSettings.html";
+});

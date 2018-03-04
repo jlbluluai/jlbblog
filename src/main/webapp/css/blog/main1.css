@@ -1,0 +1,35 @@
+.category{
+	border-bottom: 2px solid #000000;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.oneArtical{
+	margin: 25px auto;
+	background-color: #fff;
+	box-shadow:0 2px 6px rgba(100, 100, 100, 0.3);
+	border: solid 1px #ccc;
+}
+
+
+.first{
+	padding: 5px 10px;
+	border-bottom: solid 1px #ccc;
+	background-color: #ece5d6;
+	font-size: 15px;
+}
+
+.first a{
+	color: #458092;
+}
+
+.second{
+	padding: 20px 15px 15px;
+	border-bottom: solid 1px #ccc;
+}
+
+.third{
+	padding: 5px 10px;
+	font-size: 14px;
+	color: #c3baba;
+}

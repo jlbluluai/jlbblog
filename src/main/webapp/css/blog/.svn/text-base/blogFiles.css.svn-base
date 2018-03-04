@@ -1,0 +1,8 @@
+#remind{
+	padding: 5px 5px;
+	color: red;
+}
+
+#content_area h4{
+	font-size: 20px;
+}

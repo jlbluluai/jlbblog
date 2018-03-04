@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>我的草稿 - 博客后台 - 洛林博客</title>
+
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+
+		<!-- 第三方 -->
+
+		<!-- 博客后管通用 -->
+		<link href="css/blog/blogPublic.css" rel="stylesheet" />
+
+		<!-- 本页面所属 -->
+		<link rel="stylesheet" href="css/blog/blogDraft.css" />
+
+	</head>
+
+	<body>
+		<!-- 头部 -->
+		<div id="top_nav">
+			<div id="left">
+				«
+				<a href="#" id="goPortal">网站首页</a>
+				<a href="#" id="goUserInfo">我的园子</a>
+				<a href="#" id="goLooking">找一找</a>
+			</div>
+			<div id="right">
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<!-- 主体 -->
+		<div id="main">
+			<!-- 主体头部 -->
+			<div id="main_head">
+				<div id="blog_title">
+					<a href="#" id="headNick">测试</a>
+				</div>
+				<div id="SiteTitle">
+					<a href="#" id="headLogo"><img alt="logo" src="img/洛林博客.jpg" /></a>
+				</div>
+			</div>
+			<div class="clear"></div>
+
+			<!-- 主体身体 -->
+			<div id="main_body">
+				<div id="main_wrap">
+					<div id="main_container">
+						<!-- 主体上部菜单栏 -->
+						<div id="tab_nav">
+							<ul>
+								<li>
+									<a id="blogManage" href="#" class="current_nav">博客</a>
+								</li>
+								<li>
+									<a id="blogPhoto" href="#">相册</a>
+								</li>
+								<li>
+									<a id="blogFile" href="#">文件</a>
+								</li>
+								<li>
+									<a id="blogSetting" href="#">设置</a>
+								</li>
+							</ul>
+							<div class="clear"></div>
+						</div>
+						<div id="sub_nav">
+						</div>
+
+						<!-- 主体内容 -->
+						<div id="content_area">
+							<div>
+								<h4>草稿箱</h4>
+							</div>
+							<div id="post_list">
+								<table cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<th class="post-title">标题</th>
+										<th class="publish-status">发布状态</th>
+										<th>操作</th>
+										<th>操作</th>
+									</tr>
+									<tr id="post-row-7966035">
+										<td class="post-title">
+											<a href="http://www.cnblogs.com/yeli/p/7966035" id="post_title_link_7966035">01_基于一次请求并采用pageHelper的分页</a>（2017-12-03 14:16）</td>
+										<td>未发布</td>
+										<td>
+											<a href="/EditPosts.aspx?postid=7966035&update=1">编辑</a>
+										</td>
+
+										<td>
+											<a href="javascript:void(0)" onclick="return deletePost(7966035)">删除</a>
+										</td>
+									</tr>
+									<tr id="post-row-7966036" class="alt">
+										<td class="post-title">
+											<a href="http://www.cnblogs.com/yeli/p/7966036" id="post_title_link_7966036">02_redis在ssm中的接入</a>（2017-12-03 14:16）</td>
+										<td>未发布</td>
+										<td>
+											<a href="/EditPosts.aspx?postid=7966036&update=1">编辑</a>
+										</td>
+
+										<td>
+											<a href="javascript:void(0)" onclick="return deletePost(7966036)">删除</a>
+										</td>
+									</tr>
+									<tr id="post-row-7966032">
+										<td class="post-title">
+											<a href="http://www.cnblogs.com/yeli/p/7966032" id="post_title_link_7966032">00_JavaWeb应用目录</a>（2017-12-03 14:15）</td>
+										<td>未发布</td>
+										<td>
+											<a href="/EditPosts.aspx?postid=7966032&update=1">编辑</a>
+										</td>
+
+										<td>
+											<a href="javascript:void(0)" onclick="return deletePost(7966032)">删除</a>
+										</td>
+									</tr>
+									<tr id="post-row-7826338" class="alt">
+										<td class="post-title">
+											<a href="http://www.cnblogs.com/yeli/p/7826338" id="post_title_link_7826338">01_mybatis入门</a>（2017-11-13 14:55）</td>
+										<td>未发布</td>
+										<td>
+											<a href="/EditPosts.aspx?postid=7826338&update=1">编辑</a>
+										</td>
+
+										<td>
+											<a href="javascript:void(0)" onclick="return deletePost(7826338)">删除</a>
+										</td>
+									</tr>
+								</table>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- 主体左侧菜单栏 -->
+				<div id="left_container">
+					<div id="left_nav">
+						<h2>操作</h2>
+						<ul>
+							<li>
+								<a href="#" id="goBlogWrite">撰写新博客</a>
+							</li>
+							<li>
+								<a href="#" id="goDraft">草稿箱</a>
+							</li>
+						</ul>
+					</div>
+					<div id="sidebar_categories">
+						<h2>分类</h2>
+						<ul id="post_categories">
+							<li>
+								<a href="blogManage?catagory=1">通用</a>
+							</li>
+							<li>
+								<a href="blogManage?catagory=2">IT</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<!-- 脚部 -->
+		<div id="footer">
+			<a>©2017 小叶子</a>
+		</div>
+
+		<!-- jquery,bootstrap -->
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+
+		<!-- 第三方 -->
+
+		<!-- 博客后管通用 -->
+		<script type="text/javascript" src="js/blog/blogPublic.js"></script>
+		<script type="text/javascript" src="js/blog/blogPublicBlog.js" ></script>
+
+		<!-- 本页面所属 -->
+		<script type="text/javascript">
+			
+		</script>
+
+	</body>
+
+</html>

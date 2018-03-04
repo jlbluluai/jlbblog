@@ -1,0 +1,48 @@
+#content_area>h4 {
+	font-size: 20px;
+	margin-bottom: 20px;
+	line-height: 30px;
+	border-bottom: 1px dashed #ccc;
+}
+
+#artical {
+	margin-left: 15px;
+}
+
+#artical label {
+	font-size: 14px;
+}
+
+.pti {
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+#artical h1 {
+	font-size: 25px;
+}
+
+#artical h2 {
+	font-size: 23px;
+}
+
+#artical h3 {
+	font-size: 20px;
+}
+
+#artical h4 {
+	font-size: 17px;
+}
+
+#artical h5 {
+	font-size: 14px;
+}
+
+.catagorySelect {
+	border: 1px dashed #666;
+	padding: 5px 5px;
+}
+
+.pubSel{
+	padding: 5px 5px;
+}
