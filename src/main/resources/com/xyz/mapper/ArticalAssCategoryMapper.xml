@@ -8,7 +8,6 @@
   <delete id="deleteByPrimaryKey" parameterType="com.xyz.domain.ArticalAssCategoryKey">
     delete from t_artical_associate_category
     where aid = #{aid,jdbcType=BIGINT}
-      and cid = #{cid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.xyz.domain.ArticalAssCategoryKey">
     insert into t_artical_associate_category (aid, cid)

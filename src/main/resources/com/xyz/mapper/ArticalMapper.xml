@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.xyz.domain.Artical">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="reprint" jdbcType="VARCHAR" property="reprint" />
     <result column="uid" jdbcType="BIGINT" property="uid" />
     <result column="is_public" jdbcType="TINYINT" property="isPublic" />
     <result column="is_publish" jdbcType="TINYINT" property="isPublish" />
@@ -15,13 +16,14 @@
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.xyz.domain.Artical">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="content_rich" jdbcType="LONGVARCHAR" property="contentRich" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, uid, is_public, is_publish, is_nice, is_examine, view_num, comment_num, 
+    id, title, reprint, uid, is_public, is_publish, is_nice, is_examine, view_num, comment_num, 
     leave_time
   </sql>
   <sql id="Blob_Column_List">
-    content
+    content,content_rich
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
@@ -36,14 +38,14 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.xyz.domain.Artical">
-    insert into t_artical (id, title, uid, 
+    insert into t_artical (id, title, reprint, uid, 
       is_public, is_publish, is_nice, 
       is_examine, view_num, comment_num, 
-      leave_time, content)
-    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{uid,jdbcType=BIGINT}, 
+      leave_time, content,content_rich)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{reprint,jdbcType=VARCHAR}, #{uid,jdbcType=BIGINT}, 
       #{isPublic,jdbcType=TINYINT}, #{isPublish,jdbcType=TINYINT}, #{isNice,jdbcType=TINYINT}, 
       #{isExamine,jdbcType=TINYINT}, #{viewNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, 
-      #{leaveTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+      #{leaveTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR},#{content_rich,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.xyz.domain.Artical">
     insert into t_artical
@@ -53,6 +55,9 @@
       </if>
       <if test="title != null">
         title,
+      </if>
+      <if test="reprint != null">
+        reprint,
       </if>
       <if test="uid != null">
         uid,
@@ -81,6 +86,9 @@
       <if test="content != null">
         content,
       </if>
+      <if test="contentRich != null">
+        content_rich,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -88,6 +96,9 @@
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="reprint != null">
+        #{reprint,jdbcType=VARCHAR},
       </if>
       <if test="uid != null">
         #{uid,jdbcType=BIGINT},
@@ -116,6 +127,9 @@
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="contentRich != null">
+        #{contentRich,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.xyz.domain.Artical">
@@ -123,6 +137,9 @@
     <set>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="reprint != null">
+        reprint = #{reprint,jdbcType=VARCHAR},
       </if>
       <if test="uid != null">
         uid = #{uid,jdbcType=BIGINT},
@@ -151,12 +168,16 @@
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="contentRich != null">
+        content_rich = #{contentRich,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xyz.domain.Artical">
     update t_artical
     set title = #{title,jdbcType=VARCHAR},
+      reprint = #{reprint,jdbcType=VARCHAR},
       uid = #{uid,jdbcType=BIGINT},
       is_public = #{isPublic,jdbcType=TINYINT},
       is_publish = #{isPublish,jdbcType=TINYINT},
@@ -165,12 +186,14 @@
       view_num = #{viewNum,jdbcType=INTEGER},
       comment_num = #{commentNum,jdbcType=INTEGER},
       leave_time = #{leaveTime,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR},
+      content_rich = #{contentRich,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xyz.domain.Artical">
     update t_artical
     set title = #{title,jdbcType=VARCHAR},
+      reprint = #{reprint,jdbcType=VARCHAR},
       uid = #{uid,jdbcType=BIGINT},
       is_public = #{isPublic,jdbcType=TINYINT},
       is_publish = #{isPublish,jdbcType=TINYINT},

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyz.mapper.FileMapper">
+  <resultMap id="BaseResultMap" type="com.xyz.domain.File">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+    <result column="filestyle" jdbcType="VARCHAR" property="filestyle" />
+    <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="category" jdbcType="INTEGER" property="category" />
+    <result column="uploadTime" jdbcType="TIMESTAMP" property="uploadtime" />
+    <result column="folder" jdbcType="VARCHAR" property="folder" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, filename, filestyle, uid, category, uploadTime, folder
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.xyz.domain.File">
+    insert into t_file (id, filename, filestyle, 
+      uid, category, uploadTime, 
+      folder)
+    values (#{id,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{filestyle,jdbcType=VARCHAR}, 
+      #{uid,jdbcType=BIGINT}, #{category,jdbcType=INTEGER}, #{uploadtime,jdbcType=TIMESTAMP}, 
+      #{folder,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xyz.domain.File">
+    insert into t_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="filename != null">
+        filename,
+      </if>
+      <if test="filestyle != null">
+        filestyle,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="uploadtime != null">
+        uploadTime,
+      </if>
+      <if test="folder != null">
+        folder,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filestyle != null">
+        #{filestyle,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtime != null">
+        #{uploadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="folder != null">
+        #{folder,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xyz.domain.File">
+    update t_file
+    <set>
+      <if test="filename != null">
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filestyle != null">
+        filestyle = #{filestyle,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=INTEGER},
+      </if>
+      <if test="uploadtime != null">
+        uploadTime = #{uploadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="folder != null">
+        folder = #{folder,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xyz.domain.File">
+    update t_file
+    set filename = #{filename,jdbcType=VARCHAR},
+      filestyle = #{filestyle,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=BIGINT},
+      category = #{category,jdbcType=INTEGER},
+      uploadTime = #{uploadtime,jdbcType=TIMESTAMP},
+      folder = #{folder,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

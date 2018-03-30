@@ -23,9 +23,8 @@ public class ArticalCategoryServiceImpl implements ArticalCategoryService {
 	private ArticalCategoryMapperP articalCategoryMapperP;
 
 	@Override
-	public ArticalCategory getAppointedItem(Integer uid) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArticalCategory getAppointedItem(Integer id) {
+		return articalCategoryMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
@@ -36,8 +35,7 @@ public class ArticalCategoryServiceImpl implements ArticalCategoryService {
 
 	@Override
 	public boolean saveAppointedItem(ArticalCategory item) {
-		// TODO Auto-generated method stub
-		return false;
+		return articalCategoryMapper.insertSelective(item) > 0;
 	}
 
 	@Override

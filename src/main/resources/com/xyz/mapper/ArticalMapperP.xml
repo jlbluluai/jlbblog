@@ -5,6 +5,7 @@
   <resultMap type="com.xyz.domain.Artical" id="selectPagesResultMap">
   		<id column="aid" jdbcType="BIGINT" property="id" />
     	<result column="atitle" jdbcType="VARCHAR" property="title" />
+    	<result column="areprint" jdbcType="VARCHAR" property="reprint" />
     	<result column="auid" jdbcType="BIGINT" property="uid" />
     	<result column="aispublic" jdbcType="TINYINT" property="isPublic" />
     	<result column="aispublish" jdbcType="TINYINT" property="isPublish" />
@@ -32,7 +33,8 @@
   		select
   			a.id aid,
   			a.title atitle,
-  			a.content acontent,
+  			a.reprint reprint,
+  			SUBSTRING(a.content,1,100) acontent,
   			a.uid auid,
   			a.is_public aispublic,
   			a.is_publish aispublish,

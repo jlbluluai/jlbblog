@@ -9,6 +9,8 @@ public class Artical implements Serializable {
 
 	private String title;
 
+	private String reprint;
+
 	private Long uid;
 
 	private Byte isPublic;
@@ -26,6 +28,8 @@ public class Artical implements Serializable {
 	private Date leaveTime;
 
 	private String content;
+
+	private String contentRich;
 
 	private static final long serialVersionUID = 1L;
 
@@ -164,6 +168,22 @@ public class Artical implements Serializable {
 
 	public void setUserInfo(UserInfo userInfo) {
 		this.userInfo = userInfo;
+	}
+
+	public String getContentRich() {
+		return contentRich;
+	}
+
+	public void setContentRich(String contentRich) {
+		this.contentRich = contentRich;
+	}
+
+	public String getReprint() {
+		return reprint;
+	}
+
+	public void setReprint(String reprint) {
+		this.reprint = reprint;
 	}
 
 }
