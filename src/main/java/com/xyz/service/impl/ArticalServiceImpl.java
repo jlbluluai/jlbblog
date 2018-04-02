@@ -39,10 +39,15 @@ public class ArticalServiceImpl implements ArticalService {
 	@Qualifier("fileService")
 	private FileService fileService;
 
+	/**
+	 * 获取一篇博客，根据id
+	 */
 	@Override
 	public Artical getAppointedItem(Long uid) {
-		// TODO Auto-generated method stub
-		return null;
+		Artical artical = articalMapper.selectByPrimaryKey(uid);
+		ArticalAssCategoryKey articalAssCategoryKey = articalAssCategoryMapper.selectOne(uid);
+		artical.setCategory(articalAssCategoryKey.getCid());
+		return artical;
 	}
 
 	@Override
@@ -101,10 +106,11 @@ public class ArticalServiceImpl implements ArticalService {
 		count += articalAssCategoryMapper.insertSelective(ac1);
 		count += articalAssCategoryMapper.insertSelective(ac2);
 
-		if (file.getFilename() != null && fileService.saveAppointedItem(file)) {
-			count++;
-			return count == 4;
-		}
+		// if (file.getFilename() != null &&
+		// fileService.saveAppointedItem(file)) {
+		// count++;
+		// return count == 4;
+		// }
 
 		return count == 3;
 	}
@@ -133,10 +139,11 @@ public class ArticalServiceImpl implements ArticalService {
 		count += articalAssCategoryMapper.insertSelective(ac1);
 		count += articalAssCategoryMapper.insertSelective(ac2);
 
-		if (file.getFilename() != null && fileService.saveAppointedItem(file)) {
-			count++;
-			return count == 6;
-		}
+		// if (file.getFilename() != null &&
+		// fileService.saveAppointedItem(file)) {
+		// count++;
+		// return count == 6;
+		// }
 
 		return count == 5;
 	}

@@ -32,4 +32,19 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="selectOne" resultMap="BaseResultMap">
+		select
+			aid,cid
+		from
+			t_artical_associate_category,
+			t_artical_category
+		where
+			aid = #{aid}
+		and
+			cid = id
+		and
+			pid is not null
+	</select>
+	
 </mapper>

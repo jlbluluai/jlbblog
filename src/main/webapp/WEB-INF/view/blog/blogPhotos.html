@@ -185,7 +185,7 @@
 							<!-- 主体-->
 							<div class="modal-body" style="overflow: hidden;">
 								<div class="form-group">
-									<label class="col-sm-3 control-label" style="margin-top: 7px;font-size: 14px;">请选择头像:</label>
+									<label class="col-sm-3 control-label" style="margin-top: 7px;font-size: 14px;">请选择图片：</label>
 									<div class="col-sm-9">
 										<input id="file" name="myfile" type="file" data-show-caption="true">
 										<p class="help-block">支持jpg、jpeg、png格式，大小不超过2.0M</p>
@@ -237,7 +237,7 @@
 		<script type="text/javascript">
 			/*上传照片逻辑*/
 			$(function() {
-				var path = "${base}/admin/product/upload.htm";
+				var path = "${base}/admin/product/upload";
 				$initFileInput("file", path);
 			});
 

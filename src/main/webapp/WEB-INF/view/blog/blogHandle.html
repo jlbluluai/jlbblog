@@ -1,196 +1,340 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<meta charset="utf-8" />
-		<title>新博客 - 博客后台 - 洛林博客</title>
+<head>
+<meta charset="utf-8" />
+<title>新博客 - 博客后台 - 洛林博客</title>
 
-		<!-- bootstrap -->
-		<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<!-- bootstrap -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
 
-		<!-- 第三方 -->
+<!-- 第三方 -->
 
-		<!-- 博客后管通用 -->
-		<link href="css/blog/blogPublic.css" rel="stylesheet" />
+<!-- 博客后管通用 -->
+<link href="css/blog/blogPublic.css" rel="stylesheet" />
 
-		<!-- 本页面所属 -->
-		<link rel="stylesheet" href="css/blog/blogHandle.css" />
+<!-- 本页面所属 -->
+<link rel="stylesheet" href="css/blog/blogHandle.css" />
 
-	</head>
+</head>
 
-	<body onbeforeunload="return pageBeforeunload(event);">
-		<!-- 头部 -->
-		<div id="top_nav">
-			<div id="left">
-				«
-				<a href="#" id="goPortal">网站首页</a>
-				<a href="#" id="goUserInfo">我的园子</a>
-				<a href="#" id="goLooking">找一找</a>
-			</div>
-			<div id="right">
-			</div>
-			<div class="clear"></div>
+<body onbeforeunload="return pageBeforeunload(event);">
+	<!-- 头部 -->
+	<div id="top_nav">
+		<div id="left">
+			« <a href="#" id="goPortal">网站首页</a> <a href="#" id="goUserInfo">我的园子</a>
+			<a href="#" id="goLooking">找一找</a>
 		</div>
+		<div id="right"></div>
+		<div class="clear"></div>
+	</div>
 
-		<!-- 主体 -->
-		<div id="main">
-			<!-- 主体头部 -->
-			<div id="main_head">
-				<div id="blog_title">
-					<a href="#" id="headNick">测试</a>
-				</div>
-				<div id="SiteTitle">
-					<a href="#" id="headLogo"><img alt="logo" src="img/洛林博客.jpg" /></a>
-				</div>
+	<!-- 主体 -->
+	<div id="main">
+		<!-- 主体头部 -->
+		<div id="main_head">
+			<div id="blog_title">
+				<a href="#" id="headNick">测试</a>
 			</div>
-			<div class="clear"></div>
+			<div id="SiteTitle">
+				<a href="#" id="headLogo"><img alt="logo" src="img/洛林博客.jpg" /></a>
+			</div>
+		</div>
+		<div class="clear"></div>
 
-			<!-- 主体身体 -->
-			<div id="main_body">
-				<div id="main_wrap">
-					<div id="main_container">
-						<!-- 主体上部菜单栏 -->
-						<div id="tab_nav">
-							<ul>
-								<li>
-									<a id="blogManage" href="#" class="current_nav">博客</a>
-								</li>
-								<li>
-									<a id="blogPhoto" href="#">相册</a>
-								</li>
-								<li>
-									<a id="blogFile" href="#">文件</a>
-								</li>
-								<li>
-									<a id="blogSetting" href="#">设置</a>
-								</li>
-							</ul>
-							<div class="clear"></div>
-						</div>
-						<div id="sub_nav">
-						</div>
-
-						<!-- 主体内容 -->
-						<div id="content_area">
-							<h4>撰写博客</h4>
-							<div id="artical">
-								<label class="pti">标题</label>
-								<input type="text" id="title" class="form-control" placeholder="请输入标题" />
-								<label class="pti">转载（如若转载，请填写该项，写入有效地址）</label>
-								<input type="text" id="reprint" class="form-control" placeholder="请输入原文地址" />
-								<label class="pti">内容</label>
-								<div id="editor">
-								</div>
-								<label class="pti">选择随博附件（每篇博客可选择一个文件，每个文件大小不得超过2M）</label>
-								<input type="file" class="form-control" />
-
-								<label class="pti">分类</label>
-								<div class="catagorySelect">
-									IT:
-									<label class="radio-inline">
-               							<input type="radio" value="1" name="catagoryRadios">
-               							Java
-									</label>
-									<label class="radio-inline">
-                						<input type="radio" value="2" name="catagoryRadios">
-                						C++
-									</label>
-									<br /> 生活:
-									<label class="radio-inline">
-               							<input type="radio" value="3" name="catagoryRadios">
-               							居家
-									</label>
-									<label class="radio-inline">
-                						<input type="radio" value="4" name="catagoryRadios">
-                						饮食
-									</label>
-								</div>
-								<label class="pti">发布选项</label>
-								<div class="pubSel">
-									<label class="radio-inline">
-               							<input type="radio" checked="" value="1" name="pubSelRadios">
-               							公开
-									</label>
-									<label class="radio-inline">
-                						<input type="radio" value="2" name="pubSelRadios">
-                						私人
-									</label>
-								</div>
-								<button type="button" class="btn btn-primary" id="publish">发布</button>
-								<button type="button" class="btn btn-primary" id="draft">存为草稿</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- 主体左侧菜单栏 -->
-				<div id="left_container">
-					<div id="left_nav">
-						<h2>操作</h2>
+		<!-- 主体身体 -->
+		<div id="main_body">
+			<div id="main_wrap">
+				<div id="main_container">
+					<!-- 主体上部菜单栏 -->
+					<div id="tab_nav">
 						<ul>
-							<li>
-								<a href="#" id="goBlogWrite">撰写新博客</a>
-							</li>
-							<li>
-								<a href="#" id="goDraft">草稿箱</a>
-							</li>
+							<li><a id="blogManage" href="#" class="current_nav">博客</a></li>
+							<li><a id="blogPhoto" href="#">相册</a></li>
+							<li><a id="blogFile" href="#">文件</a></li>
+							<li><a id="blogSetting" href="#">设置</a></li>
 						</ul>
+						<div class="clear"></div>
 					</div>
-					<div id="sidebar_categories">
-						<h2>分类</h2>
-						<ul id="post_categories">
-							<li>
-								<a href="blogManage?catagory=1">通用</a>
-							</li>
-							<li>
-								<a href="blogManage?catagory=2">IT</a>
-							</li>
-						</ul>
+					<div id="sub_nav"></div>
+
+					<!-- 主体内容 -->
+					<div id="content_area">
+						<h4>撰写博客</h4>
+						<div id="artical">
+							<label class="pti">标题</label> <input type="text" id="title"
+								class="form-control" placeholder="请输入标题" /> <label class="pti">转载（如若转载，请填写该项，写入有效地址）</label>
+							<input type="text" id="reprint" class="form-control"
+								placeholder="请输入原文地址" /> <label class="pti">内容</label>
+							<div id="editor"></div>
+							<label class="pti">选择随博附件（每篇博客可选择一个文件，每个文件大小不得超过2M） 暂未实现</label> 
+							<input type="file" class="form-control" id="myFile" /> 
+							<label class="pti">分类</label>
+							<div class="catagorySelect">
+								<!-- IT: <label class="radio-inline"> <input type="radio"
+									value="1" name="catagoryRadios"> Java
+								</label> <label class="radio-inline"> <input type="radio"
+									value="2" name="catagoryRadios"> C++
+								</label> <br /> 生活: <label class="radio-inline"> <input
+									type="radio" value="3" name="catagoryRadios"> 居家
+								</label> <label class="radio-inline"> <input type="radio"
+									value="4" name="catagoryRadios"> 饮食
+								</label> -->
+							</div>
+							<label class="pti">发布选项</label>
+							<div class="pubSel">
+								<label class="radio-inline"> <input type="radio"
+									checked="" value="1" name="pubSelRadios"> 公开
+								</label> <label class="radio-inline"> <input type="radio"
+									value="0" name="pubSelRadios"> 私人
+								</label>
+							</div>
+							<button type="button" class="btn btn-primary" id="publish">发布</button>
+							<button type="button" class="btn btn-primary" id="draft">存为草稿</button>
+						</div>
 					</div>
 				</div>
-
-				<div class="clear"></div>
 			</div>
+
+			<!-- 主体左侧菜单栏 -->
+			<div id="left_container">
+				<div id="left_nav">
+					<h2>操作</h2>
+					<ul>
+						<li><a href="#" id="goBlogWrite">撰写新博客</a></li>
+						<li><a href="#" id="goDraft">草稿箱</a></li>
+					</ul>
+				</div>
+				<div id="sidebar_categories">
+					<h2>分类</h2>
+					<ul id="post_categories">
+						<li><a href="blogManage?catagory=1">通用</a></li>
+						<li><a href="blogManage?catagory=2">IT</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="clear"></div>
 		</div>
+	</div>
 
-		<!-- 脚部 -->
-		<div id="footer">
-			<a>©2017 小叶子</a>
-		</div>
+	<!-- 脚部 -->
+	<div id="footer">
+		<a>©2017 小叶子</a>
+	</div>
 
-		<!-- jquery,bootstrap -->
-		<script type="text/javascript" src="js/jquery.js"></script>
-		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+	<!-- jquery,bootstrap -->
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/jquery.tmpl.js"></script>
 
-		<!-- 第三方 -->
-		<!-- wangEditor -->
-		<script type="text/javascript" src="js/wangEditor/wangEditor.min.js"></script>
+	<!-- 第三方 -->
+	<!-- wangEditor -->
+	<script type="text/javascript" src="js/wangEditor/wangEditor.min.js"></script>
 
-		<!-- 博客后管通用 -->
-		<script type="text/javascript" src="js/blog/blogPublic.js"></script>
-		<script type="text/javascript" src="js/blog/blogPublicBlog.js"></script>
+	<!-- 博客后管通用 -->
+	<script type="text/javascript" src="js/blog/blogPublic.js"></script>
+	<script type="text/javascript" src="js/blog/blogPublicBlog.js"></script>
 
-		<!-- 本页面所属 -->
-		<script type="text/javascript">
-			/*创建editor*/
-			var E = window.wangEditor;
-			var editor = new E('#editor');
-			editor.create();
+	<script type="text/x-jquery-tmpl" id="t1">
+		${name}:
+		{{each(i,e) categorys}}
+			<label class="radio-inline"> 
+				<input type="radio" value="${e.id}" name="catagoryRadios"> ${e.name}
+			</label> 
+		{{/each}} 
+		<br />
+	</script>
 
-			/*获取html*/
-			$("#publish").click(function() {
-				alert(editor.txt.html());
-			});
-
-			/*获取text*/
-			$("#draft").click(function() {
-				alert(editor.txt.text());
-			});
-
-			function pageBeforeunload(evt) {
-				return 'Are you sure you want to leave this page?';
+	<!-- 本页面所属 -->
+	<script type="text/javascript">
+		/*准备工作*/
+		var way = "00";
+		
+		var $getQueryString = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null)
+				return unescape(r[2]);
+			return null;
+		}
+		
+		
+		/*修改回显数据*/
+		var aid = "";
+		aid = $getQueryString("aid");
+		$(function(){
+			if(aid != "" && aid != null){
+				way = "01";
+				$("#content_area h4").html("修改博客");
+				$getOneArtical(aid);
 			}
-		</script>
-	</body>
+		});
+		
+		var $getOneArtical = function(aid){
+			$.ajax({
+				type : "get",
+				url : "getOneArtical",
+				async : true,
+				data : {
+					aid : aid
+				},
+				success : function(data) {
+					console.log(data);
+					if(data ==null){
+						alert("该博客不存在");
+					}else{
+						$("#title").val(data.title);
+						$("#reprint").val(data.reprint);
+						editor.txt.html(data.contentRich);
+						$("input[type='radio'][name='catagoryRadios'][value='"+data.category+"']").attr("checked","checked");
+						$("input[type='radio'][name='pubSelRadios'][value='"+data.isPublic+"']").attr("checked","checked");
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+	
+	
+		/*分类回显*/
+		$(function() {
+			$getCategorys();
+		});
+
+		//获取分类
+		var $getCategorys = function() {
+			$.ajax({
+				type : "get",
+				url : "getCategorys",
+				async : true,
+				success : function(data) {
+					console.log(data);
+					$("#t1").tmpl(data).appendTo(".catagorySelect");
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+
+		/*创建editor*/
+		var E = window.wangEditor;
+		var editor = new E('#editor');
+		editor.create();
+
+		/*获取html*/
+		$("#publish").click(function() {
+			//alert(editor.txt.html());
+			var title = $("#title").val();
+			var reprint = $("#reprint").val();
+			var content = editor.txt.text();
+			var contentRich = editor.txt.html();
+			var category = $("input[type='radio'][name='catagoryRadios']:checked").val();
+			var isPublic = $("input[type='radio'][name='pubSelRadios']:checked").val();
+			
+			var flag = true;
+			if(title == ""){
+				alert("请输入标题");
+				flag = false;
+			}
+			if(content == ""){
+				alert("请输入内容");
+				flag = false;
+			}
+			if(category == undefined){
+				alert("请选择分类");
+				flag = false;
+			}
+			
+			if(flag){
+				$.ajax({
+					type : "post",
+					url : "handleOneBlog",
+					dataType : "json",
+					contentType : "application/json",
+					data : JSON.stringify({
+						title : title,
+						reprint : reprint,
+						content : content,
+						contentRich : contentRich,
+						category : category,
+						myFile : "",
+						isPublic : isPublic,
+						isPublish : "1",
+						id : aid,
+						way : way
+					}),
+					async : true,
+					success : function(data) {
+						console.log(data);
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
+		});
+
+		/*获取text*/
+		$("#draft").click(function() {
+			//alert(editor.txt.text());
+
+			var title = $("#title").val();
+			var reprint = $("#reprint").val();
+			var content = editor.txt.text();
+			var contentRich = editor.txt.html();
+			var category = $("input[type='radio'][name='catagoryRadios']:checked").val();
+			var isPublic = $("input[type='radio'][name='pubSelRadios']:checked").val();
+			
+			var flag = true;
+			if(title == ""){
+				alert("请输入标题");
+				flag = false;
+			}
+			if(content == ""){
+				alert("请输入内容");
+				flag = false;
+			}
+			if(category == undefined){
+				alert("请选择分类");
+				flag = false;
+			}
+			
+			if(flag){
+				$.ajax({
+					type : "post",
+					url : "handleOneBlog",
+					dataType : "json",
+					contentType : "application/json",
+					data : JSON.stringify({
+						title : title,
+						reprint : reprint,
+						content : content,
+						contentRich : contentRich,
+						category : category,
+						myFile : "",
+						isPublic : isPublic,
+						isPublish : "0",
+						id : aid,
+						way : way
+					}),
+					async : true,
+					success : function(data) {
+						console.log(data);
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
+		});
+
+		function pageBeforeunload(evt) {
+			return 'Are you sure you want to leave this page?';
+		}
+	</script>
+</body>
 
 </html>
