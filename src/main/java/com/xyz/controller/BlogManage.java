@@ -1,6 +1,8 @@
 package com.xyz.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
 import com.xyz.domain.File;
 import com.xyz.domain.User;
+import com.xyz.dto.PagesFeedback;
 import com.xyz.service.ArticalService;
 import com.xyz.util.FtpUtils;
 import com.xyz.util.Utils;
@@ -172,6 +176,38 @@ public class BlogManage {
 	@RequestMapping(value = "/getOneArtical", method = RequestMethod.GET)
 	public Artical getOneArtical(@RequestParam("aid") Long id) {
 		return articalService.getAppointedItem(id);
+	}
+
+	/**
+	 * 博客主页的文章列表获取
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getBlogPortalArticals", method = RequestMethod.GET)
+	public PagesFeedback getBlogPortalArticals(HttpServletRequest request, @RequestParam("uid") Long uid,
+			@RequestParam("current") Integer current) {
+		PagesFeedback feedback = new PagesFeedback();
+		User user = (User) request.getSession().getAttribute("user");
+
+		Artical artical = new Artical();
+		artical.setIsPublish((byte) 1);
+		if (!(user != null && (user.getId()).equals(uid))) {// 不是本人只能访问公开博客
+			artical.setIsPublic((byte) 1);
+		}
+		artical.setSort(1);
+
+		PageInfo<Artical> pageInfo = new PageInfo<>();
+		pageInfo = articalService.getAppointedPageItems(current, 16, artical);
+
+		List<Object> list = new ArrayList<Object>();
+		for (Artical art : pageInfo.getList()) {
+			list.add(art);
+		}
+		feedback.setoList(list);
+		feedback.setTotalPages(pageInfo.getPages());
+
+		return feedback;
 	}
 
 }
