@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
+import com.xyz.domain.Comment;
 import com.xyz.domain.File;
 import com.xyz.domain.User;
 import com.xyz.dto.PagesFeedback;
 import com.xyz.service.ArticalService;
+import com.xyz.service.CommentService;
 import com.xyz.util.FtpUtils;
 import com.xyz.util.Utils;
 
@@ -37,6 +40,10 @@ public class BlogManage {
 	@Autowired
 	@Qualifier("articalService")
 	private ArticalService articalService;
+
+	@Autowired
+	@Qualifier("commentService")
+	private CommentService commentService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -196,6 +203,7 @@ public class BlogManage {
 			artical.setIsPublic((byte) 1);
 		}
 		artical.setSort(1);
+		artical.setUid(uid);
 
 		PageInfo<Artical> pageInfo = new PageInfo<>();
 		pageInfo = articalService.getAppointedPageItems(current, 16, artical);
@@ -207,6 +215,38 @@ public class BlogManage {
 		feedback.setoList(list);
 		feedback.setTotalPages(pageInfo.getPages());
 
+		return feedback;
+	}
+
+	/**
+	 * 获取指定博客的评论
+	 * 
+	 * @param harvest
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getBlogComments", method = RequestMethod.GET)
+	@ResponseBody
+	public PagesFeedback getBlogComments(@RequestParam("current") Integer current, @RequestParam("aid") Long aid) {
+		logger.info(f1 + "获取博客评论开始" + f2);
+		PagesFeedback feedback = new PagesFeedback();
+		Comment comment = new Comment();
+		comment.setAid(aid);
+
+		PageInfo<Comment> pageInfo = commentService.getAppointedPageItems(current, 8, comment);
+
+		List<Object> list = new ArrayList<Object>();
+		int count = 1;
+		int floor = 1;
+		for (Comment comm : pageInfo.getList()) {
+			floor = (current - 1) * 8 + count;
+			comm.setFloor(floor);
+			list.add(comm);
+			count++;
+		}
+		feedback.setoList(list);
+		feedback.setTotalPages(pageInfo.getPages());
+		logger.info(f1 + "获取博客评论结束" + f2);
 		return feedback;
 	}
 

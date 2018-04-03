@@ -163,11 +163,11 @@
 		<script type="text/x-jquery-tmpl" id="t1">
 						<div class="oneArtical">
 							<div class="first">
-								<a href="javascript:void(0);">${title}</a>
+								<a href="javascript:void(0);" onclick="$goRead(${id})">${title}</a>
 							</div>
 							<div class="second">
 								摘要：${content}
-								<a href="javascript:void(0);">阅读全文</a>
+								<a href="javascript:void(0);" onclick="$goRead(${id})">阅读全文</a>
 							</div>
 							<div class="third">
 								posted @ 2017-12-03 14:16 ${user.nickname} 阅读(${viewNum}) 评论(${commentNum})
@@ -232,9 +232,13 @@
 				console.log(a);
 			});
 			
-			var uid = $getQueryString("uid");
+			var uid;
 			/*文章列表逻辑*/
 			$(function(){
+				uid = $getQueryString("uid");
+				if(uid == "" || uid == undefined || uid == null){
+					window.parent.location.href = "../error";
+				}
 				$getPageItems(uid,currentPage);
 			});
 			
@@ -245,7 +249,7 @@
 					url : "../getBlogPortalArticals",
 					dataType : "json",
 					data : {
-						uid : 7,
+						uid : uid,
 						current : current
 					},
 					async : true,
@@ -316,19 +320,13 @@
 			});
 
 			/*文章列表逻辑*/
-			//文章名跳转
-			$(".first a").click(function() {
-				window.parent.location.href = "../blogRead";
-			});
-			
-			//阅读全文跳转
-			$(".second a").click(function(){
-				window.parent.location.href = "../blogRead";
-			});
+			var $goRead = function(id){
+				window.parent.location.href = "../blogRead?aid="+id;
+			}
 			
 			//文章档案跳转（后移至公共js）
 			$("#articalFileNav").click(function(){
-				window.parent.location.href = "../blogPortal?category=1";
+				window.parent.location.href = "../blogPortal?uid="+uid+"&category=1";
 			});
 			
 		</script>

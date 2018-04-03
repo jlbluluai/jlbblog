@@ -93,3 +93,23 @@
 	font-family: 楷体;
 	font-style: oblique;
 }
+
+.second h1 {
+	font-size: 25px;
+}
+
+.second h2 {
+	font-size: 23px;
+}
+
+.second h3 {
+	font-size: 20px;
+}
+
+.second h4 {
+	font-size: 17px;
+}
+
+.second h5 {
+	font-size: 14px;
+}

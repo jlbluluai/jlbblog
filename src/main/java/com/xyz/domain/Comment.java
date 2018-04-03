@@ -16,9 +16,11 @@ public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+    
     /*视图属性*/
     private User user;
     private Artical artical;
+    private Integer floor;
 
     public Long getId() {
         return id;
@@ -75,6 +77,15 @@ public class Comment implements Serializable {
 	public void setArtical(Artical artical) {
 		this.artical = artical;
 	}
+
+	public Integer getFloor() {
+		return floor;
+	}
+
+	public void setFloor(Integer floor) {
+		this.floor = floor;
+	}
+	
     
     
 }

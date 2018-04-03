@@ -46,6 +46,9 @@
 			<if test="uid != null">
 				and c.uid = #{uid}
 			</if>
+			<if test="aid != null">
+				and c.aid = #{aid}
+			</if>
 		</where>
 		order by c.create_time desc
 	</select>

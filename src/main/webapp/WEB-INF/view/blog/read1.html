@@ -59,7 +59,7 @@
 							<a class="collect" href="javascript:void(0);">收藏</a>
 						</div>
 						<div class="second">
-							厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
+							<!-- 厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
 							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
 							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
 							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
@@ -80,7 +80,7 @@
 							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
 							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
 							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/>
+							<br/> -->
 						</div>
 					</div>
 
@@ -89,7 +89,7 @@
 							<span>评论列表</span>
 						</div>
 						<div id="allComment">
-							<div class="oneComment">
+							<!-- <div class="oneComment">
 								<div>
 									<a href="#lou_1" name="lou_1">#1楼</a>
 									<span>2018-02-08 09:49 |</span>
@@ -110,7 +110,7 @@
 								<p>
 									123456789
 								</p>
-							</div>
+							</div> -->
 						</div>
 						<div id="pager_bottom" style="margin-left: 20px;">
 							<nav aria-label="Page navigation">
@@ -179,6 +179,7 @@
 		<!-- bootstrap、juqery -->
 		<script type="text/javascript" src="../js/jquery.js"></script>
 		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="../js/jquery.tmpl.js"></script>
 
 		<!-- 第三方 -->
 		<script type="text/javascript" src="../js/clock/clock.js"></script>
@@ -187,6 +188,21 @@
 		<!-- 自定义 -->
 		<script type="text/javascript" src="../js/blog/blogportal.js"></script>
 		<script type="text/javascript" src="../js/pages.js"></script>
+		
+		<script type="text/x-jquery-tmpl" id="t1">
+							<div class="oneComment">
+								<div>
+									<a href="#lou_${floor}" name="lou_${floor}">#${floor}楼</a>
+									<span>${dateFormat(createTime)} |</span>
+									<span class="hidden">${artical.user.id}</span>
+									<a href="javascript:void(0);" class="commentUser">${artical.user.nickname}</a>
+								</div>
+								<p>
+									${content}
+								</p>
+							</div>
+		</script>
+		
 		<script type="text/javascript">
 			/*自定义分页的必备参数*/
 			var currentPage = 1;
@@ -230,13 +246,42 @@
 			//url取参
 			var $getQueryString = function(name) {
 				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-				var r = window.location.search.substr(1).match(reg);
+				var r = window.parent.location.search.substr(1).match(reg);
 				if(r != null)
 					return unescape(r[2]);
 				return null;
 			}
 
 			/*文章逻辑*/
+			var aid;
+			//主体显示
+			$(function(){
+				aid = $getQueryString("aid");
+				$getOneArtical(aid);
+			});
+			
+			//获取一篇博客
+			var $getOneArtical = function(aid){
+				$.ajax({
+					type : "get",
+					url : "../getOneArtical",
+					dataType : "json",
+					data : {
+						aid : aid
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						$(".first a:eq(0)").text(data.title);
+						$(".first span").text("Posted on "+dateFormat(data.leaveTime)+" "+data.user.nickname+" 阅读("+data.viewNum+") 评论("+data.commentNum+") ")
+						$(".second").html(data.contentRich);
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
+			
 			//跳转编辑文章（验明身份）
 			$(".edit").click(function() {
 				alert("编辑");
@@ -248,8 +293,89 @@
 			});
 
 			/*评论逻辑*/
+			//评论列表
+			$(function(){
+				$getPageItems(currentPage, aid);
+			});
+			
+			var $getPageItems = function(current,aid){
+				$.ajax({
+					type : "get",
+					url : "../getBlogComments",
+					dataType : "json",
+					data : {
+						current : current,
+						aid : aid
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						$("#t1").tmpl(data.oList).appendTo("#allComment");
+						totalPage = data.totalPages;
+						$getPages();
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
+			
+			/*自定义分页的逻辑*/
+			$(function() {
+
+				$(document).on(
+						"click",
+						".pagination li",
+						function() {
+							var current = $.trim($(this).text());
+							if (current == "«") {
+								var temp = $.trim($(".pagination li.active").prev()
+										.text());
+								if (temp != "«") {
+									var $a = $(".pagination li.active");
+									$(".pagination li.active")
+											.removeClass("active");
+									$a.prev().addClass("active");
+									currentPage = parseInt($.trim($(
+											".pagination li.active").text()));
+									$(".page_item").remove();
+									//$getPages();
+									$("#allComment").empty();
+									$getPageItems(current,aid);
+								}
+							} else if (current == "»") {
+								var temp = $.trim($(".pagination li.active").next()
+										.text());
+								if (temp != "»") {
+									var $a = $(".pagination li.active");
+									$(".pagination li.active")
+											.removeClass("active");
+									$a.next().addClass("active");
+									currentPage = parseInt($.trim($(
+											".pagination li.active").text()));
+									$(".page_item").remove();
+									//$getPages();
+									$("#allComment").empty();
+									$getPageItems(current,aid);
+								}
+							} else if (current == "...") {
+
+							} else {
+								$(this).siblings("li").removeClass("active");
+								$(this).addClass("active");
+								currentPage = parseInt($.trim($(
+										".pagination li.active").text()));
+								$(".page_item").remove();
+								//$getPages();
+								$("#allComment").empty();
+								$getPageItems(current,aid);
+							}
+						});
+
+			});
+			
 			//跳转评论人首页
-			$(".commentUser").click(function() {
+			$(document).on('click',".commentUser",function() {
 				var userId = $(this).prev().text();
 				alert(userId);
 			});
@@ -310,47 +436,6 @@
 				});
 			});
 
-			/*自定义分页的逻辑*/
-			$(function() {
-
-				$getPages();
-				$(document).on("click", ".pagination li", function() {
-					var current = $.trim($(this).text());
-					if(current == "«") {
-						var temp = $.trim($(".pagination li.active").prev().text());
-						if(temp != "«") {
-							var $a = $(".pagination li.active");
-							$(".pagination li.active").removeClass("active");
-							$a.prev().addClass("active");
-							currentPage = parseInt($.trim($(".pagination li.active").text()));
-							console.log(currentPage);
-							$(".page_item").remove();
-							$getPages();
-						}
-					} else if(current == "»") {
-						var temp = $.trim($(".pagination li.active").next().text());
-						if(temp != "»") {
-							var $a = $(".pagination li.active");
-							$(".pagination li.active").removeClass("active");
-							$a.next().addClass("active");
-							currentPage = parseInt($.trim($(".pagination li.active").text()));
-							console.log(currentPage);
-							$(".page_item").remove();
-							$getPages();
-						}
-					} else if(current == "...") {
-
-					} else {
-						$(this).siblings("li").removeClass("active");
-						$(this).addClass("active");
-						currentPage = parseInt($.trim($(".pagination li.active").text()));
-						console.log(currentPage);
-						$(".page_item").remove();
-						$getPages();
-					}
-				});
-
-			});
 		</script>
 	</body>
 

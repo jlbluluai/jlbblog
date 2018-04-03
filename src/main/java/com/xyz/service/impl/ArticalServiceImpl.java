@@ -11,12 +11,14 @@ import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalAssCategoryKey;
 import com.xyz.domain.ArticalCategory;
 import com.xyz.domain.File;
+import com.xyz.domain.User;
 import com.xyz.mapper.ArticalAssCategoryMapper;
 import com.xyz.mapper.ArticalMapper;
 import com.xyz.mapper.ArticalMapperP;
 import com.xyz.service.ArticalCategoryService;
 import com.xyz.service.ArticalService;
 import com.xyz.service.FileService;
+import com.xyz.service.UserService;
 
 @Transactional
 @Service("articalService")
@@ -38,6 +40,10 @@ public class ArticalServiceImpl implements ArticalService {
 	@Autowired
 	@Qualifier("fileService")
 	private FileService fileService;
+	
+	@Autowired
+	@Qualifier("userService")
+	private UserService userService;
 
 	/**
 	 * 获取一篇博客，根据id
@@ -47,6 +53,8 @@ public class ArticalServiceImpl implements ArticalService {
 		Artical artical = articalMapper.selectByPrimaryKey(uid);
 		ArticalAssCategoryKey articalAssCategoryKey = articalAssCategoryMapper.selectOne(uid);
 		artical.setCategory(articalAssCategoryKey.getCid());
+		User user = userService.getAppointedItem(artical.getUid());
+		artical.setUser(user);
 		return artical;
 	}
 
