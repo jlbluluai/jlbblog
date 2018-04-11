@@ -35,4 +35,18 @@
 			f.fid = #{fid}
 		</if>
 	</select>
+	
+	<select id="selectCount" resultType="int">
+		select
+			count(*)
+		from
+			t_follow
+		where
+			<if test="mid != null">
+				mid = #{mid}
+			</if>
+			<if test="fid != null">
+				fid = #{fid}
+			</if>
+	</select>
 </mapper>

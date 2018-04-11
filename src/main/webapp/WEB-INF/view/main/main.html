@@ -397,8 +397,9 @@
 				$jumpOthers("userinfo", "");
 			});
 
+			//跳转至博客模块
 			$("#main_menu a:eq(1)").click(function() {
-				alert("我的博客");
+				$jumpToBlog();
 			});
 
 			$("#main_menu a:eq(2)")
@@ -686,6 +687,30 @@
 					} else {
 						window.location.href = address + "?id=" + data
 								+ consule;
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		}
+		
+		//跳转至博客主页
+		var $jumpToBlog = function() {
+			$.ajax({
+				type : "get",
+				url : "jumpToBlog",
+				data : {
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					if (data == 0) {
+						alert("请先登录")
+					} else if(data == -1){
+						alert("您不是博主！");
+					} else {
+						window.location.href = "blogPortal?uid=" + data;
 					}
 				},
 				error : function() {

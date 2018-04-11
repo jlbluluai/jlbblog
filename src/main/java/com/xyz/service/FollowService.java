@@ -7,5 +7,7 @@ import com.xyz.domain.FollowKey;
 public interface FollowService {
 
 	List<FollowKey> getFollows(FollowKey follow);
+	
+	int getFanFollowCount(FollowKey follow);
 
 }

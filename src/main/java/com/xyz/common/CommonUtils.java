@@ -2,6 +2,9 @@ package com.xyz.common;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -92,14 +95,20 @@ public final class CommonUtils {
 	}
 
 	public static void main(String[] args) {
-		String str = "12345";
-		try {
-			str = CommonUtils.getAppointedStr(str, 1, 14);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String str1 = "2017-11";
+        String str2 = "2018-04";
+        Calendar bef = Calendar.getInstance();
+        Calendar aft = Calendar.getInstance();
+        try {
+			bef.setTime(sdf.parse(str1));
+			aft.setTime(sdf.parse(str2));
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		System.out.println(str);
+        int result = aft.get(Calendar.MONTH) - bef.get(Calendar.MONTH);
+        int month = (aft.get(Calendar.YEAR) - bef.get(Calendar.YEAR)) * 12;
+        System.out.println(Math.abs(month + result+1));   
 	}
 
 }

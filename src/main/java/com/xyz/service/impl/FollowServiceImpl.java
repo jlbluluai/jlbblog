@@ -29,4 +29,12 @@ public class FollowServiceImpl implements FollowService {
 		return followMapperP.selectPages(follow);
 	}
 
+	/**
+	 * 获取粉丝和关注的数量
+	 */
+	@Override
+	public int getFanFollowCount(FollowKey follow) {
+		return followMapperP.selectCount(follow);
+	}
+
 }

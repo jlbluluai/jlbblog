@@ -131,7 +131,7 @@
 	<!-- 根据登录名选择登录匹配的方式 -->
 	<select id="selectByLoginname" resultMap="BaseResultMap">
 		select 
-			id,nickname
+			id,nickname,iid
 		from
 			t_user
 		where

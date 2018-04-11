@@ -1,5 +1,6 @@
 package com.xyz.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,14 +20,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
+import com.xyz.common.DateUtils;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
 import com.xyz.domain.Comment;
 import com.xyz.domain.File;
+import com.xyz.domain.FollowKey;
 import com.xyz.domain.User;
+import com.xyz.dto.BloggerDto;
 import com.xyz.dto.PagesFeedback;
+import com.xyz.dto.StringTemp;
 import com.xyz.service.ArticalService;
 import com.xyz.service.CommentService;
+import com.xyz.service.FollowService;
+import com.xyz.service.UserService;
 import com.xyz.util.FtpUtils;
 import com.xyz.util.Utils;
 
@@ -44,6 +51,14 @@ public class BlogManage {
 	@Autowired
 	@Qualifier("commentService")
 	private CommentService commentService;
+	
+	@Autowired
+	@Qualifier("userService")
+	private UserService userService;
+	
+	@Autowired
+	@Qualifier("followService")
+	private FollowService followService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -248,6 +263,96 @@ public class BlogManage {
 		feedback.setTotalPages(pageInfo.getPages());
 		logger.info(f1 + "获取博客评论结束" + f2);
 		return feedback;
+	}
+	
+	/**
+	 * 获取评论人的信息
+	 * @return
+	 */
+	@RequestMapping(value="/getCommenter", method = RequestMethod.GET)
+	@ResponseBody
+	public StringTemp getCommenter(HttpServletRequest request){
+		StringTemp stringTemp = new StringTemp();
+		
+		User user = (User) request.getSession().getAttribute("user");
+		if(user == null){
+			return stringTemp;
+		}
+		String nickname = user.getNickname();
+		stringTemp.setStr(nickname);
+		
+		return stringTemp;
+	}
+
+	/**
+	 * 写一篇评论
+	 * 
+	 * @param aid
+	 * @param content
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/writeOneComment", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean writeOneComment(@RequestParam("aid") Long aid, @RequestParam("content") String content,
+			HttpServletRequest request) {
+		boolean flag = false;
+
+		User user = (User) request.getSession().getAttribute("user");
+		if (user == null) {
+			return false;
+		}
+
+		Comment comment = new Comment();
+		comment.setAid(aid);
+		comment.setContent(content);
+		comment.setUid(user.getId());
+		comment.setCreateTime(new Date());
+
+		flag = commentService.saveAppointedItem(comment);
+
+		return flag;
+	}
+	
+	
+	/*公共部分获取信息*/
+	/**
+	 * 根据文章id获取博主的相关信息
+	 * @param aid
+	 * @return
+	 */
+	@RequestMapping(value="/getTheBlogger", method = RequestMethod.GET)
+	@ResponseBody
+	public BloggerDto getTheBlogger(@RequestParam("aid")Long aid,@RequestParam("uid")Long uid){
+		BloggerDto bloggerDto = new BloggerDto();
+		
+		if(aid != null){
+			uid = articalService.getAppointedItem(aid).getUid();
+		}
+		User user = userService.getAppointedItem(uid);
+		bloggerDto.setUid(uid);
+		bloggerDto.setNickname(user.getNickname());
+		
+		try {
+			bloggerDto.setMakeDay(DateUtils.dateFormatCST(user.getMakeDay().toString()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		bloggerDto.setBlogAge(DateUtils.getTheDiscrepantMonths(user.getMakeDay(), new Date()));
+		
+		
+		FollowKey followKey = new FollowKey();
+		followKey.setFid(uid);
+		int fans =followService.getFanFollowCount(followKey);
+		bloggerDto.setFans(fans);
+		
+		followKey = new FollowKey();
+		followKey.setMid(uid);
+		int follows = followService.getFanFollowCount(followKey);
+		bloggerDto.setFollows(follows);
+		
+		return bloggerDto;
 	}
 
 }

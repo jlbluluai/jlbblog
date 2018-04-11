@@ -8,4 +8,5 @@ public interface FollowMapperP{
 	
 	List<FollowKey> selectPages(FollowKey follow);
 
+	int selectCount(FollowKey follow);
 }

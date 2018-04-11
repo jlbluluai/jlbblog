@@ -54,33 +54,11 @@
 					<div class="read">
 						<div class="first">
 							<a href="">文章一</a><br>
-							<span>Posted on 2017-11-13 14:55 叶灬黎 阅读(74) 评论(0) </span>
+							<span></span>
 							<a class="edit" href="javascript:void(0);">编辑</a>
 							<a class="collect" href="javascript:void(0);">收藏</a>
 						</div>
 						<div class="second">
-							<!-- 厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/>厄齐恶趣味企鹅为其恶趣味恶气<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> 厄齐恶趣味企鹅为其恶趣味恶气
-							<br/> -->
 						</div>
 					</div>
 
@@ -132,7 +110,7 @@
 						</div>
 						<div id="writeComment">
 							<span>昵称：</span>
-							<span id="commentUser">叶灬黎</span>
+							<span id="commentUser">..</span>
 							<span style="display: block; margin-top: 5px;"><span>评论内容：</span><span class="count hide">已经输入<span>0</span>字</span>
 							</span>
 							<textarea rows="12" cols="20" id="textarea" class="form-control" style="width: 400px;" oninput="$wordCount()"></textarea>
@@ -150,10 +128,10 @@
 						<h3 class="itemTitle">博主信息</h3>
 						<div id="userItemInfo">
 							昵称：
-							<a id="nick" href="javascript:void(0)">叶灬黎</a><br> 博龄：
-							<a id="garAge" href="javascript:void(0)" title="入园时间：2016-06-04">1年5月</a><br> 粉丝：
-							<a id="fan" href="javascript:void(0)">2</a><br> 关注：
-							<a id="follow" href="javascript:void(0)">2</a><br>
+							<a id="nick" href="javascript:void(0)"></a><br> 博龄：
+							<a id="garAge" href="javascript:void(0)" title=""></a><br> 粉丝：
+							<a id="fan" href="javascript:void(0)"></a><br> 关注：
+							<a id="follow" href="javascript:void(0)"></a><br>
 						</div>
 					</div>
 					<div class="calendar">
@@ -221,12 +199,30 @@
 				"h_backColor": "white",
 				//"h_borderColor": "gold",
 				//"h_frontColor":"red",
-				"h_linkText": dateFormat()
+				"h_linkText": dateFormatClock()
 			});
+			
+			function dateFormatClock() {
+				var date = new Date();
+
+				var str = "";
+				str += date.getFullYear() + "-";
+				if(date.getMonth() + 1 < 10) {
+					str += "0" + (date.getMonth() + 1) + "-";
+				} else {
+					str += (date.getMonth() + 1) + "-";
+				}
+				if(date.getDate() < 10) {
+					str += "0" + date.getDate();
+				} else {
+					str += date.getDate();
+				}
+				return str;
+			}
 
 			//转换时间
-			function dateFormat() {
-				var date = new Date();
+			function dateFormat(time) {
+				var date = new Date(time);
 
 				var str = "";
 				str += date.getFullYear() + "-";
@@ -381,6 +377,37 @@
 			});
 
 			/*写评论逻辑*/
+			$(function(){
+				$getCommenter();
+			});
+			
+			var $getCommenter = function(){
+				$.ajax({
+					type : "get",
+					url : "../getCommenter",
+					dataType : "json",
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data.str == null){
+							$("#writeComment").addClass("hide");
+							$("#notComment").removeClass("hide");
+						}else{
+							$("#commentUser").text(data.str);
+						}
+						
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
+			
+			function goLogin(){
+				window.parent.location.href = "../loginForm";
+			}
+			
+			
 			//评论计数
 			var $wordCount = function() {
 				$(".count").removeClass("hide");
@@ -411,7 +438,8 @@
 						yestext: '确定',
 						notext: '取消',
 						yesfn: function() {
-							jqtoast('success');
+							var content = $("textarea").val();
+							$writeOneComment(aid, content);
 						},
 						nofn: function() {
 						}
@@ -419,6 +447,29 @@
 				}
 
 			});
+			
+			//提交交互
+			var $writeOneComment = function(aid,content){
+				$.ajax({
+					type : "post",
+					url : "../writeOneComment",
+					dataType : "json",
+					data : {
+						aid : aid,
+						content : content
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data){
+							window.location.reload();
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
 
 			//清空
 			$("#reset").click(function() {

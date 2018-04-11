@@ -122,10 +122,10 @@
 						<h3 class="itemTitle">博主信息</h3>
 						<div id="userItemInfo">
 							昵称：
-							<a id="nick" href="javascript:void(0)">叶灬黎</a><br> 博龄：
-							<a id="garAge" href="javascript:void(0)" title="入园时间：2016-06-04">1年5月</a><br> 粉丝：
-							<a id="fan" href="javascript:void(0)">2</a><br> 关注：
-							<a id="follow" href="javascript:void(0)">2</a><br>
+							<a id="nick" href="javascript:void(0)"></a><br> 博龄：
+							<a id="garAge" href="javascript:void(0)" title=""></a><br> 粉丝：
+							<a id="fan" href="javascript:void(0)"></a><br> 关注：
+							<a id="follow" href="javascript:void(0)"></a><br>
 						</div>
 					</div>
 					<div class="calendar">
@@ -194,12 +194,31 @@
 				"h_backColor": "white",
 				//"h_borderColor": "gold",
 				//"h_frontColor":"red",
-				"h_linkText": dateFormat()
+				"h_linkText": dateFormatClock()
 			});
+			
+			
+			function dateFormatClock() {
+				var date = new Date();
+
+				var str = "";
+				str += date.getFullYear() + "-";
+				if(date.getMonth() + 1 < 10) {
+					str += "0" + (date.getMonth() + 1) + "-";
+				} else {
+					str += (date.getMonth() + 1) + "-";
+				}
+				if(date.getDate() < 10) {
+					str += "0" + date.getDate();
+				} else {
+					str += date.getDate();
+				}
+				return str;
+			}
 
 			//转换时间
-			function dateFormat() {
-				var date = new Date();
+			function dateFormat(time) {
+				var date = new Date(time);
 
 				var str = "";
 				str += date.getFullYear() + "-";

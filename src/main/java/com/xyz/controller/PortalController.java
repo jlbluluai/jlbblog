@@ -247,6 +247,27 @@ public class PortalController {
 		log.info(f1 + "相关需要获取用户id的跳转结束" + f2);
 		return uid;
 	}
+	
+	/**
+	 * 跳转至博客模块
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/jumpToBlog", method = RequestMethod.GET)
+	@ResponseBody
+	public Long jumpToBlog(HttpSession session) {
+		Long uid = 0L;
+		User user = (User) session.getAttribute("user");
+		
+		if(user != null && user.getIid()!=3){
+			return -1L;
+		}
+		
+		if (user != null) {
+			uid = user.getId();
+		}
+		return uid;
+	}
 
 	/* 意见箱逻辑 */
 

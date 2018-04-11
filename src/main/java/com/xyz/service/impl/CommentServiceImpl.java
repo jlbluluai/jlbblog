@@ -33,10 +33,13 @@ public class CommentServiceImpl implements CommentService {
 		return false;
 	}
 
+	/**
+	 * 写一篇评论
+	 */
 	@Override
 	public boolean saveAppointedItem(Comment item) {
 		// TODO Auto-generated method stub
-		return false;
+		return commentMapper.insertSelective(item) > 0;
 	}
 
 	@Override
