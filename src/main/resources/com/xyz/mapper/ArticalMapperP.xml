@@ -115,5 +115,6 @@
   	where
   		is_publish = 1
   </select>
+  
 
 </mapper>

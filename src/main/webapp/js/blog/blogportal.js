@@ -16,7 +16,7 @@ $("#mainhome").click(function() {
 });
 
 $("#myhome").click(function() {
-	window.parent.location.href = "../blogPortal";
+	window.parent.location.href = "../blogPortal?uid="+uid;
 });
 
 $("#newartical").click(function() {
@@ -52,6 +52,7 @@ var $getTheBlogger = function(){
 		async : true,
 		success : function(data) {
 			console.log(data);
+			uid = data.uid;
 			$("#nick").text(data.nickname);
 			$("#garAge").text(data.blogAge);
 			$("#garAge").attr("title","入园时间："+data.makeDay);
@@ -65,21 +66,27 @@ var $getTheBlogger = function(){
 }
 
 $("#nick").click(function() {
-	window.parent.location.href = "../userinfo";
+	window.parent.location.href = "../userinfo?id="+uid;
 });
 
 $("#garAge").click(function() {
-	window.parent.location.href = "../userinfo";
+	window.parent.location.href = "../userinfo?id="+uid;
 });
 
 $("#fan")
 		.click(
 				function() {
-					window.parent.location.href = "../userinfo?consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
+					window.parent.location.href = "../userinfo?id="+uid+"&consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
 				});
 
 $("#follow")
 		.click(
 				function() {
-					window.parent.location.href = "../userinfo?consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
+					window.parent.location.href = "../userinfo?id="+uid+"&consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
 				});
+
+
+//文章档案跳转（后移至公共js）
+$("#articalFileNav").click(function(){
+	window.parent.location.href = "../blogPortal?uid="+uid+"&category=1";
+});

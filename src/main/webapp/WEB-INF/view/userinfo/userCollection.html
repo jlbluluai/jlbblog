@@ -53,8 +53,8 @@
 	<script type="text/x-jquery-tmpl" id="t1">
 			<div class="onecollection"">
 				<div class="firstground">
-					[ <a href="javascript:void(0)">${artical.user.nickname}</a> ]&nbsp; <a
-						href="javascript:void(0)">${artical.title}</a>
+					[ <a href="javascript:void(0)" onclick="$goBlogger(${artical.user.id})">${artical.user.nickname}</a> ]&nbsp; <a
+						href="javascript:void(0)" onclick="$goArtical(${artical.id})">${artical.title}</a>
 				</div>
 				<div class="secondground">
 					<span>收藏时间：</span> <span>${dateFormat(createTime)}</span>
@@ -108,6 +108,15 @@
 			}
 
 			return str;
+		}
+		
+		/*跳转逻辑*/
+		var $goArtical = function(aid){
+			window.parent.location.href = "../blogRead?aid=" + aid;
+		}
+		
+		var $goBlogger = function(uid){
+			window.parent.location.href = "../blogPortal?uid=" + uid;
 		}
 
 		/*主体逻辑*/

@@ -23,6 +23,7 @@ import com.github.pagehelper.PageInfo;
 import com.xyz.common.DateUtils;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
+import com.xyz.domain.Collection;
 import com.xyz.domain.Comment;
 import com.xyz.domain.File;
 import com.xyz.domain.FollowKey;
@@ -31,6 +32,7 @@ import com.xyz.dto.BloggerDto;
 import com.xyz.dto.PagesFeedback;
 import com.xyz.dto.StringTemp;
 import com.xyz.service.ArticalService;
+import com.xyz.service.CollectionService;
 import com.xyz.service.CommentService;
 import com.xyz.service.FollowService;
 import com.xyz.service.UserService;
@@ -51,14 +53,18 @@ public class BlogManage {
 	@Autowired
 	@Qualifier("commentService")
 	private CommentService commentService;
-	
+
 	@Autowired
 	@Qualifier("userService")
 	private UserService userService;
-	
+
 	@Autowired
 	@Qualifier("followService")
 	private FollowService followService;
+
+	@Autowired
+	@Qualifier("collectionService")
+	private CollectionService collectionService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -97,7 +103,7 @@ public class BlogManage {
 		Byte isPublish = (byte) js.getInt("isPublish");
 		Integer category = Integer.parseInt(js.getString("category"));
 		Long id = 0L;
-		if (js.get("id") == null) {
+		if (js.get("id") != null) {
 			id = Long.parseLong(js.getString("id"));
 		}
 		String way = js.getString("way");
@@ -108,8 +114,6 @@ public class BlogManage {
 
 		Date now = new Date();
 		User user = (User) request.getSession().getAttribute("user");
-		user = new User();
-		user.setId(7L);
 
 		Artical artical = new Artical();
 		artical.setId(id);
@@ -119,11 +123,8 @@ public class BlogManage {
 		artical.setUid(user.getId());
 		artical.setIsPublic(isPublic);
 		artical.setIsPublish(isPublish);
-		artical.setIsExamine((byte) 0);
-		artical.setIsNice((byte) 0);
 		artical.setReprint(reprint);
-		artical.setViewNum(0);
-		artical.setCommentNum(0);
+
 		artical.setLeaveTime(now);
 
 		File file = new File();
@@ -141,6 +142,10 @@ public class BlogManage {
 		articalCategory.setId(category);
 
 		if ("00".equals(way)) {// 新增
+			artical.setIsExamine((byte) 0);
+			artical.setIsNice((byte) 0);
+			artical.setViewNum(0);
+			artical.setCommentNum(0);
 			flag = articalService.writeOneBlog(artical, articalCategory, file);
 		} else if ("01".equals(way)) {// 修改
 			flag = articalService.modifyOneBlog(artical, articalCategory, file);
@@ -264,23 +269,24 @@ public class BlogManage {
 		logger.info(f1 + "获取博客评论结束" + f2);
 		return feedback;
 	}
-	
+
 	/**
 	 * 获取评论人的信息
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/getCommenter", method = RequestMethod.GET)
+	@RequestMapping(value = "/getCommenter", method = RequestMethod.GET)
 	@ResponseBody
-	public StringTemp getCommenter(HttpServletRequest request){
+	public StringTemp getCommenter(HttpServletRequest request) {
 		StringTemp stringTemp = new StringTemp();
-		
+
 		User user = (User) request.getSession().getAttribute("user");
-		if(user == null){
+		if (user == null) {
 			return stringTemp;
 		}
 		String nickname = user.getNickname();
 		stringTemp.setStr(nickname);
-		
+
 		return stringTemp;
 	}
 
@@ -313,46 +319,181 @@ public class BlogManage {
 
 		return flag;
 	}
-	
-	
-	/*公共部分获取信息*/
+
 	/**
-	 * 根据文章id获取博主的相关信息
+	 * 收藏一篇博客
+	 * 
+	 * @param request
 	 * @param aid
 	 * @return
 	 */
-	@RequestMapping(value="/getTheBlogger", method = RequestMethod.GET)
+	@RequestMapping(value = "/collectOneBlog", method = RequestMethod.POST)
 	@ResponseBody
-	public BloggerDto getTheBlogger(@RequestParam("aid")Long aid,@RequestParam("uid")Long uid){
+	public Integer collectOneBlog(HttpServletRequest request, @RequestParam("aid") Long aid,
+			@RequestParam("uid") Long uid) {
+		Integer flag = 0;
+
+		User user = (User) request.getSession().getAttribute("user");
+
+		if (user == null) {
+			return 1;
+		}
+
+		if (user.getId().equals(uid)) {
+			return 2;
+		}
+
+		Collection collection = new Collection();
+		collection.setAid(aid);
+		collection.setUid(user.getId());
+		collection.setCreateTime(new Date());
+
+		if (collectionService.saveAppointedItem(collection)) {
+			flag = 3;
+		}
+
+		return flag;
+	}
+
+	/**
+	 * 跳转编辑博客验明身份
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/verEditBlog", method = RequestMethod.POST)
+	@ResponseBody
+	public Integer verEditBlog(HttpServletRequest request, @RequestParam("uid") Long uid) {
+
+		User user = (User) request.getSession().getAttribute("user");
+
+		if (user == null) {
+			return 1;
+		}
+
+		if (!user.getId().equals(uid)) {
+			return 2;
+		}
+
+		return 3;
+	}
+
+	/* 公共部分获取信息 */
+	/**
+	 * 根据文章id获取博主的相关信息
+	 * 
+	 * @param aid
+	 * @return
+	 */
+	@RequestMapping(value = "/getTheBlogger", method = RequestMethod.GET)
+	@ResponseBody
+	public BloggerDto getTheBlogger(@RequestParam("aid") Long aid, @RequestParam("uid") Long uid) {
 		BloggerDto bloggerDto = new BloggerDto();
-		
-		if(aid != null){
+
+		if (aid != null) {
 			uid = articalService.getAppointedItem(aid).getUid();
 		}
 		User user = userService.getAppointedItem(uid);
 		bloggerDto.setUid(uid);
 		bloggerDto.setNickname(user.getNickname());
-		
+
 		try {
 			bloggerDto.setMakeDay(DateUtils.dateFormatCST(user.getMakeDay().toString()));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		bloggerDto.setBlogAge(DateUtils.getTheDiscrepantMonths(user.getMakeDay(), new Date()));
-		
-		
+
 		FollowKey followKey = new FollowKey();
 		followKey.setFid(uid);
-		int fans =followService.getFanFollowCount(followKey);
+		int fans = followService.getFanFollowCount(followKey);
 		bloggerDto.setFans(fans);
-		
+
 		followKey = new FollowKey();
 		followKey.setMid(uid);
 		int follows = followService.getFanFollowCount(followKey);
 		bloggerDto.setFollows(follows);
-		
+
 		return bloggerDto;
 	}
 
+	/* 博客后管逻辑 */
+	/**
+	 * 获取博客后管分类相关的博客列表
+	 * 
+	 * @param cid
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getTheCategoryBloggerBlogs", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Artical> getTheCategoryBloggerBlogs(@RequestParam("category") Integer cid, HttpServletRequest request) {
+		List<Artical> articals = new ArrayList<Artical>();
+
+		User user = (User) request.getSession().getAttribute("user");
+		Long uid = user.getId();
+
+		Artical artical = new Artical();
+		artical.setUid(uid);
+		artical.setIsPublish((byte) 1);
+		if (cid != null) {
+			artical.setCategory(cid);
+		}
+		artical.setSort(1);
+		PageInfo<Artical> pageInfo = articalService.getAppointedPageItems(1, Integer.MAX_VALUE, artical);
+
+		articals = pageInfo.getList();
+
+		return articals;
+	}
+	
+	/**
+	 * 获取草稿箱博客列表
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/getDraftBlogs", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Artical> getDraftBlogs(HttpServletRequest request){
+		List<Artical> articals = new ArrayList<Artical>();
+
+		User user = (User) request.getSession().getAttribute("user");
+		Long uid = user.getId();
+
+		Artical artical = new Artical();
+		artical.setUid(uid);
+		artical.setIsPublish((byte) 0);
+		artical.setSort(1);
+		PageInfo<Artical> pageInfo = articalService.getAppointedPageItems(1, Integer.MAX_VALUE, artical);
+
+		articals = pageInfo.getList();
+
+		return articals;
+	}
+
+	/**
+	 * 删除一篇博客
+	 * @param aid
+	 * @param uid
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/cutOneBlog",method = RequestMethod.POST)
+	@ResponseBody
+	public Integer cutOneBlog(@RequestParam("aid")Long aid,@RequestParam("uid")Long uid,
+			HttpServletRequest request){
+		
+		User user = (User)request.getSession().getAttribute("user");
+		
+		if(user == null || !user.getId().equals(uid)){
+			return 1;
+		}
+		
+		if(articalService.cutAppointedItem(aid)){
+			return 2;
+		}
+		
+		return 3;
+	}
 }

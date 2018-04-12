@@ -35,8 +35,7 @@ public class CollectionServiceImpl implements CollectionService {
 
 	@Override
 	public boolean saveAppointedItem(Collection item) {
-		// TODO Auto-generated method stub
-		return false;
+		return collectionMapper.insertSelective(item) > 0;
 	}
 
 	/**

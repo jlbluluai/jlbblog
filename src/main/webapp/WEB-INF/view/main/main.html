@@ -288,12 +288,12 @@
 					<div class='post_item_body'>
 						<div>
 							<h4>
-								<a href="javascript:void(0);" onclick="">${title}</a>
+								<a href="blogRead?aid=${id}" onclick="">${title}</a>
 							</h4>
 						</div>
 						<div>
 							<div style="float: left; margin-right: 5px;">
-								<a href="#"><img src="${userInfo.headpic}" width="50"
+								<a href="blogPortal?uid=${user.id}"><img src="${userInfo.headpic}" width="50"
 									height="50" /></a>
 							</div>
 							<div>
@@ -302,7 +302,7 @@
 							</div>
 						</div>
 						<div class="post_item_foot">
-							<a href="#">${user.nickname}</a> <span>发布于</span> <span
+							<a href="blogPortal?uid=${user.id}">${user.nickname}</a> <span>发布于</span> <span
 								class="glyphicon glyphicon-time">${dateFormat(leaveTime)}</span> <span
 								class="glyphicon glyphicon-copyright-mark">评论量(${commentNum})</span> <span
 								class="glyphicon glyphicon-share">浏览量(${viewNum})</span>

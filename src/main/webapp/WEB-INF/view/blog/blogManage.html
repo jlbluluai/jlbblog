@@ -81,7 +81,9 @@
 										<th>操作</th>
 										<th>操作</th>
 									</tr>
-									<tr id="post-row-7966035">
+									<tbody id="articals">
+									</tbody>
+									 <!-- <tr id="post-row-7966035">
 										<td class="post-title">
 											<a href="http://www.cnblogs.com/yeli/p/7966035" id="post_title_link_7966035">01_基于一次请求并采用pageHelper的分页</a>（2017-12-03 14:16）</td>
 										<td>发布</td>
@@ -136,7 +138,7 @@
 										<td>
 											<a href="javascript:void(0)" onclick="return deletePost(7826338)">删除</a>
 										</td>
-									</tr>
+									</tr>  -->
 								</table>
 							</div>
 
@@ -160,12 +162,12 @@
 					<div id="sidebar_categories">
 						<h2>分类</h2>
 						<ul id="post_categories">
-							<li>
+							<!-- <li>
 								<a href="?catagory=1">通用</a>
 							</li>
 							<li>
 								<a href="?catagory=2">IT</a>
-							</li>
+							</li> -->
 						</ul>
 					</div>
 				</div>
@@ -182,12 +184,41 @@
 		<!-- jquery,bootstrap -->
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/jquery.tmpl.js"></script>
 
 		<!-- 第三方 -->
 
 		<!-- 博客后管通用 -->
 		<script type="text/javascript" src="js/blog/blogPublic.js"></script>
 		<script type="text/javascript" src="js/blog/blogPublicBlog.js"></script>
+		
+		<script type="text/x-jquery-tmpl" id="t2">
+							<li>
+								<a href="?catagory=${id}&name=${encodeURI(encodeURI(name))}">${name}</a>
+							</li>
+		</script>
+		
+		<script type="text/x-jquery-tmpl" id="t1">
+									<tr class="alt">
+										<td class="post-title">
+											<a href="blogRead?aid=${id}">${title}</a>（${dateFormat(leaveTime)}）</td>
+										{{if isPublish==1}}
+											<td>发布</td>
+										{{/if}}
+										{{if isPublish==0}}
+											<td>未发布</td>
+										{{/if}}
+										<td>${viewNum}</td>
+										<td>${commentNum}</td>
+										<td>
+											<a href="blogHandle?aid=${id}">编辑</a>
+										</td>
+
+										<td>
+											<a href="javascript:void(0)" onclick="$cutOneBlog(${id},${user.id})">删除</a>
+										</td>
+									</tr>
+		</script>
 
 		<!-- 本页面所属 -->
 		<script type="text/javascript">
@@ -199,18 +230,83 @@
 					return unescape(r[2]);
 				return null;
 			}
+			
+			//转换时间
+			function dateFormat(time) {
+				var date = new Date(time);
+
+				var str = "";
+				str += date.getFullYear() + "-";
+				if(date.getMonth() + 1 < 10) {
+					str += "0" + (date.getMonth() + 1) + "-";
+				} else {
+					str += (date.getMonth() + 1) + "-";
+				}
+				if(date.getDate() < 10) {
+					str += "0" + date.getDate();
+				} else {
+					str += date.getDate();
+				}
+				return str;
+			}
 
 			/*分类逻辑*/
 			$(document).ready(function() {
 				var catagory = $getQueryString("catagory");
+				var name = decodeURI($getQueryString("name"));
 				if(catagory == null) {
 					$("#sub_nav").empty();
 					$("#sub_nav").text("当前分类：所有");
 				} else {
 					$("#sub_nav").empty();
-					$("#sub_nav").text("当前分类：" + catagory);
+					$("#sub_nav").text("当前分类：" + name);
 				}
+				$getAppointedBlogs(catagory);
 			});
+			
+			var $getAppointedBlogs = function(category){
+				$.ajax({
+					type : "get",
+					url : "getTheCategoryBloggerBlogs",
+					async : true,
+					dataType : "json",
+					data : {
+						category : category
+					},
+					success : function(data) {
+						console.log(data);
+						$("#t1").tmpl(data).appendTo("#articals");
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
+			
+			var $cutOneBlog = function(aid,uid){
+				$.ajax({
+					type : "post",
+					url : "cutOneBlog",
+					async : true,
+					dataType : "json",
+					data : {
+						aid : aid,
+						uid : uid
+					},
+					success : function(data) {
+						console.log(data);
+						if(data == 1){
+							alert("请确保您是作者");
+						} else if(data == 2){
+							window.location.reload();
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
+			
 		</script>
 	</body>
 

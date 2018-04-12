@@ -21,7 +21,7 @@
 
 		<!--头部-->
 		<div id="head">
-			<button type="button" class="btn btn-warning btn-block">进入博客</button>
+			<button type="button" id="goBlog" class="btn btn-warning btn-block">进入博客</button>
 			<div>
 				<label>排序方式：</label> <select class="form-control">
 					<option value="01">按时间</option>
@@ -66,10 +66,10 @@
 
 	<script type="text/x-jquery-tmpl" id="t1">
 					<div class='post_item_body'>
-						<h4><a href='javascript:void(0)'>${title}</a></h4>
+						<h4><a href='javascript:void(0)' onclick="$goArtical(${id})">${title}</a></h4>
 						<span>&nbsp; ${content}</span>
 						<div class='post_item_foot'>
-							<a href='javascript:void(0)'>${user.nickname}</a>
+							<a href='javascript:void(0)' onclick="$goBlogger(${uid})">${user.nickname}</a>
 							<span>发布于</span>
 							<span>${dateFormat(leaveTime)}</span>
 							<span class="glyphicon glyphicon-copyright-mark">评论量(${commentNum})</span>
@@ -183,6 +183,20 @@
 			});
 
 		});
+		
+		
+		/*跳转逻辑*/
+		$("#goBlog").click(function(){
+			window.parent.location.href = "../blogPortal?uid="+ id;
+		});
+		
+		var $goArtical = function(aid){
+			window.parent.location.href = "../blogRead?aid=" + aid;
+		}
+		
+		var $goBlogger = function(uid){
+			window.parent.location.href = "../blogPortal?uid=" + uid;
+		}
 
 		/*主体逻辑*/
 

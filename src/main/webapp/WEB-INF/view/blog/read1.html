@@ -280,12 +280,55 @@
 			
 			//跳转编辑文章（验明身份）
 			$(".edit").click(function() {
-				alert("编辑");
+				$.ajax({
+					type : "post",
+					url : "../verEditBlog",
+					dataType : "json",
+					data : {
+						uid : uid
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data == 1){
+							alert("请先登录！");
+						} else if(data == 2){
+							alert("您不是作者，无权编辑！");
+						} else if(data == 3){
+							window.parent.location.href = "../blogHandle?aid="+aid;								
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
 			});
 
 			//收藏文章（验明身份）
 			$(".collect").click(function() {
-				alert("收藏");
+				$.ajax({
+					type : "post",
+					url : "../collectOneBlog",
+					dataType : "json",
+					data : {
+						aid : aid,
+						uid : uid
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data == 1){
+							alert("请登录再收藏！");
+						} else if(data == 2){
+							alert("请不要收藏自己的博客！");
+						} else if(data == 3){
+							alert("收藏成功！");
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
 			});
 
 			/*评论逻辑*/
@@ -337,7 +380,7 @@
 									$(".page_item").remove();
 									//$getPages();
 									$("#allComment").empty();
-									$getPageItems(current,aid);
+									$getPageItems(currentPage,aid);
 								}
 							} else if (current == "»") {
 								var temp = $.trim($(".pagination li.active").next()
@@ -352,7 +395,7 @@
 									$(".page_item").remove();
 									//$getPages();
 									$("#allComment").empty();
-									$getPageItems(current,aid);
+									$getPageItems(currentPage,aid);
 								}
 							} else if (current == "...") {
 
@@ -364,7 +407,7 @@
 								$(".page_item").remove();
 								//$getPages();
 								$("#allComment").empty();
-								$getPageItems(current,aid);
+								$getPageItems(currentPage,aid);
 							}
 						});
 
@@ -373,7 +416,7 @@
 			//跳转评论人首页
 			$(document).on('click',".commentUser",function() {
 				var userId = $(this).prev().text();
-				alert(userId);
+				window.parent.location.href = "../userinfo?id="+userId;
 			});
 
 			/*写评论逻辑*/
@@ -486,6 +529,8 @@
 					}
 				});
 			});
+			
+			
 
 		</script>
 	</body>

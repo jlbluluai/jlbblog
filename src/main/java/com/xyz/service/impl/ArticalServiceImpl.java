@@ -40,7 +40,7 @@ public class ArticalServiceImpl implements ArticalService {
 	@Autowired
 	@Qualifier("fileService")
 	private FileService fileService;
-	
+
 	@Autowired
 	@Qualifier("userService")
 	private UserService userService;
@@ -72,8 +72,7 @@ public class ArticalServiceImpl implements ArticalService {
 
 	@Override
 	public boolean cutAppointedItem(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+		return articalMapper.deleteByPrimaryKey(id) > 0;
 	}
 
 	/**
@@ -130,7 +129,7 @@ public class ArticalServiceImpl implements ArticalService {
 	public boolean modifyOneBlog(Artical artical, ArticalCategory articalCategory, File file) {
 		int count = 0;
 
-		count += articalMapper.updateByPrimaryKey(artical);
+		count += articalMapper.updateByPrimaryKeySelective(artical);
 
 		Integer cid = articalCategory.getId();
 		Integer pid = articalCategoryService.getAppointedItem(cid).getPid();
