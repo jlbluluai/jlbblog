@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>主页-洛林博客</title>
+<title>主页-林区</title>
 <!--bootstrap、jquery-->
 <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -13,7 +13,7 @@
 <!--自定义-->
 <link href="css/userinfo/userItemPublic.css" type="text/css" rel="stylesheet" />
 <!--标签页图标-->
-<link rel="icon" href="img/luo.ico" mce_href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 
 <body style="overflow: -Scroll; overflow-y: hidden">
@@ -27,7 +27,7 @@
 	<!--头部-->
 	<div id="head" class="container-fluid">
 		<div id="logo">
-			<a href="main"><img src="img/洛林博客.jpg" /></a>
+			<a href="main"><img src="img/logo.png" height="50" /></a>
 		</div>
 		<div id="head_user">
 			<span>欢迎你，</span>
@@ -113,7 +113,7 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					$("title").html(data.master + "的主页-洛林博客");
+					$("title").html(data.master + "的主页-林区");
 					$("#head_user span").text("欢迎你，" + data.access);
 					if (data.master != data.access) {
 						$("#userMain").text("他的主页")

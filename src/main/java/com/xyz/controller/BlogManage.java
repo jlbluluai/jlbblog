@@ -418,6 +418,25 @@ public class BlogManage {
 		return bloggerDto;
 	}
 
+	/**
+	 * 获取博客后管的统一信息
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getBehindBlogger", method = RequestMethod.GET)
+	@ResponseBody
+	public BloggerDto getBehindBlogger(HttpServletRequest request) {
+		BloggerDto bloggerDto = new BloggerDto();
+
+		User user = (User) request.getSession().getAttribute("user");
+
+		bloggerDto.setUid(user.getId());
+		bloggerDto.setNickname(user.getNickname());
+
+		return bloggerDto;
+	}
+
 	/* 博客后管逻辑 */
 	/**
 	 * 获取博客后管分类相关的博客列表
@@ -447,15 +466,16 @@ public class BlogManage {
 
 		return articals;
 	}
-	
+
 	/**
 	 * 获取草稿箱博客列表
+	 * 
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/getDraftBlogs", method = RequestMethod.GET)
+	@RequestMapping(value = "/getDraftBlogs", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Artical> getDraftBlogs(HttpServletRequest request){
+	public List<Artical> getDraftBlogs(HttpServletRequest request) {
 		List<Artical> articals = new ArrayList<Artical>();
 
 		User user = (User) request.getSession().getAttribute("user");
@@ -474,26 +494,27 @@ public class BlogManage {
 
 	/**
 	 * 删除一篇博客
+	 * 
 	 * @param aid
 	 * @param uid
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/cutOneBlog",method = RequestMethod.POST)
+	@RequestMapping(value = "/cutOneBlog", method = RequestMethod.POST)
 	@ResponseBody
-	public Integer cutOneBlog(@RequestParam("aid")Long aid,@RequestParam("uid")Long uid,
-			HttpServletRequest request){
-		
-		User user = (User)request.getSession().getAttribute("user");
-		
-		if(user == null || !user.getId().equals(uid)){
+	public Integer cutOneBlog(@RequestParam("aid") Long aid, @RequestParam("uid") Long uid,
+			HttpServletRequest request) {
+
+		User user = (User) request.getSession().getAttribute("user");
+
+		if (user == null || !user.getId().equals(uid)) {
 			return 1;
 		}
-		
-		if(articalService.cutAppointedItem(aid)){
+
+		if (articalService.cutAppointedItem(aid)) {
 			return 2;
 		}
-		
+
 		return 3;
 	}
 }

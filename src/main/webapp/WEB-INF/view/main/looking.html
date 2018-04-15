@@ -3,12 +3,16 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>洛林博客--找找看</title>
+		<title>林区--找找看</title>
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 		<link rel="stylesheet" href="css/looking.css" />
-		<script type="text/javascript" src="js/pages.js" ></script>
+		<script type="text/javascript" src="js/jquery.tmpl.js"></script>
+		<script type="text/javascript" src="js/pages.js"></script>
+		
+		<!-- logo -->
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon">
 	</head>
 
 	<body>
@@ -56,8 +60,8 @@
 			<div class="main">
 				<div class="leftList">
 					<div class="articals">
-						<ul>
-							<li>
+						<ul id="artUL">
+							<!-- <li>
 								<div class="artical">
 									<div class="first">
 										<a>这是文章标题一</a>
@@ -110,7 +114,7 @@
 										<span class="glyphicon glyphicon-share">浏览(100)</span>
 									</div>
 								</div>
-							</li>
+							</li> -->
 						</ul>
 					</div>
 
@@ -142,6 +146,26 @@
 				©2017 小叶子
 			</div>
 		</div>
+		
+		
+		<script type="text/x-jquery-tmpl" id="t1">
+							<li>
+								<div class="artical">
+									<div class="first">
+										<a href="blogRead?aid=${id}">{{html title}}</a>
+									</div>
+									<div class="second">
+										{{html content}}......
+									</div>
+									<div class="third">
+										<a href="blogPortal?uid=${uid}">${nickname}</a>
+										<span class="glyphicon glyphicon-time">${pubTime}</span>
+										<span class="glyphicon glyphicon-copyright-mark">评论(${commentNum})</span>
+										<span class="glyphicon glyphicon-share">浏览(${viewNum})</span>
+									</div>
+								</div>
+							</li>
+		</script>
 
 		<script type="text/javascript">
 			
@@ -155,24 +179,47 @@
 					return unescape(r[2]);
 				return null;
 			}
+			
+			var key = decodeURI($getQueryString("key"));
 
 			$(function() {
 
-				var key = decodeURI($getQueryString("key"));
-				console.log(key);
+				
 				if(key != "null" && key !="") {
 					$("#container1").css("display", "none");
 					$("#container2").css("display", "block");
 					$(".looking input").val("");
 					$(".looking2 input").val(key);
+					$getPageItems(key, 1);
 				}else{
 					$("#container1").css("display", "block");
 					$("#container2").css("display", "none");
 					$(".looking input").val("");
 					$(".looking2 input").val("");
 				}
-
 			});
+			
+			var $getPageItems = function(condition,current){
+				$.ajax({
+					type : "get",
+					url : "getSearchResult",
+					dataType : "json",
+					data : {
+						current : current,
+						condition : condition
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						$("#t1").tmpl(data.oList).appendTo("#artUL");
+						totalPage = data.totalPages;
+						$getPages();
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}
 
 			$(".looking button").click(function() {
 				var key = encodeURI(encodeURI($(".looking input").val()));
@@ -184,6 +231,60 @@
 				window.location.href = "looking?key=" + key;
 			});
 
+			
+			/*自定义分页的逻辑*/
+			$(function() {
+
+				$(document).on(
+						"click",
+						".pagination li",
+						function() {
+							var current = $.trim($(this).text());
+							if (current == "«") {
+								var temp = $.trim($(".pagination li.active").prev()
+										.text());
+								if (temp != "«") {
+									var $a = $(".pagination li.active");
+									$(".pagination li.active")
+											.removeClass("active");
+									$a.prev().addClass("active");
+									currentPage = parseInt($.trim($(
+											".pagination li.active").text()));
+									$(".page_item").remove();
+									//$getPages();
+									$("#artUL").empty();
+									$getPageItems(key,currentPage);
+								}
+							} else if (current == "»") {
+								var temp = $.trim($(".pagination li.active").next()
+										.text());
+								if (temp != "»") {
+									var $a = $(".pagination li.active");
+									$(".pagination li.active")
+											.removeClass("active");
+									$a.next().addClass("active");
+									currentPage = parseInt($.trim($(
+											".pagination li.active").text()));
+									$(".page_item").remove();
+									//$getPages();
+									$("#artUL").empty();
+									$getPageItems(key,currentPage);
+								}
+							} else if (current == "...") {
+
+							} else {
+								$(this).siblings("li").removeClass("active");
+								$(this).addClass("active");
+								currentPage = parseInt($.trim($(
+										".pagination li.active").text()));
+								$(".page_item").remove();
+								//$getPages();
+								$("#artUL").empty();
+								$getPageItems(key,currentPage);
+							}
+						});
+
+			});
 			
 		</script>
 	</body>

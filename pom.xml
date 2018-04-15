@@ -31,6 +31,7 @@
 		<jackson.version>2.9.0</jackson.version>
 		<ftp.version>3.4</ftp.version>
 		<junit.version>4.12</junit.version>
+		<solr>7.1.0</solr>
 	</properties>
 
 	<dependencies>
@@ -245,6 +246,19 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- solr -->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+			<version>${solr}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>woodstox-core-asl</artifactId>
+					<groupId>org.codehaus.woodstox</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 

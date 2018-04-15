@@ -53,6 +53,7 @@ var $getTheBlogger = function(){
 		success : function(data) {
 			console.log(data);
 			uid = data.uid;
+			$("#headTitle").text(data.nickname);
 			$("#nick").text(data.nickname);
 			$("#garAge").text(data.blogAge);
 			$("#garAge").attr("title","入园时间："+data.makeDay);

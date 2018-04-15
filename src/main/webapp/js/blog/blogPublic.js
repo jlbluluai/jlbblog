@@ -4,7 +4,7 @@ $("#goPortal").click(function() {
 });
 
 $("#goUserInfo").click(function() {
-	window.location.href = "userinfo";
+	window.location.href = "userinfo?id="+uid;
 });
 
 $("#goLooking").click(function() {
@@ -17,7 +17,7 @@ $("#headLogo").click(function() {
 });
 
 $("#headNick").click(function() {
-	window.location.href = "blogPortal";
+	window.location.href = "blogPortal?uid="+uid;
 });
 
 /*主体上部菜单栏逻辑*/
@@ -36,3 +36,28 @@ $("#blogFile").click(function() {
 $("#blogSetting").click(function() {
 	window.location.href = "blogSettings";
 });
+
+$(function(){
+	$getTheBlogger();
+});
+
+var uid;
+
+var $getTheBlogger = function(){
+	$.ajax({
+		type : "get",
+		url : "getBehindBlogger",
+		dataType : "json",
+		data : {
+		},
+		async : true,
+		success : function(data) {
+			console.log(data);
+			$("#headNick").text(data.nickname);
+			uid = data.uid;
+		},
+		error : function() {
+			alert("数据获取失败");
+		}
+	});
+}
