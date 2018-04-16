@@ -45,13 +45,15 @@
 	</bean>
 
 	<!-- 定义Spring MVC的拦截器 -->
-	<!-- <mvc:interceptors>
+	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/*" />
 			<bean class="com.xyz.interceptor.RegisterInterceptor" />
 		</mvc:interceptor>
-		<mvc:interceptor> <mvc:mapping path="/*" /> <bean class="com.xyz.interceptor.LoginInterceptor" 
-			/> </mvc:interceptor>
-	</mvc:interceptors> -->
+		<mvc:interceptor>
+			<mvc:mapping path="/*" />
+			<bean class="com.xyz.interceptor.BlogBehindInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 </beans>

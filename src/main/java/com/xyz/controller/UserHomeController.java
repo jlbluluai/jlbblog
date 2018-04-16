@@ -43,6 +43,7 @@ import com.xyz.service.FollowService;
 import com.xyz.service.MessageService;
 import com.xyz.service.UserInfoService;
 import com.xyz.service.UserService;
+import com.xyz.util.CompressUtils;
 import com.xyz.util.FtpConnect;
 import com.xyz.util.Utils;
 
@@ -134,8 +135,15 @@ public class UserHomeController {
 				+ "properties/ftp-connect.properties";
 		prop = URLDecoder.decode(prop);
 		Properties properties = Utils.getProperties(prop);
-		String headpic = "http://" + properties.getProperty("url") + ":" + properties.getProperty("nginxPort") + "/"
-				+ info.getHeadpic();
+
+		String headpic = "";
+		if (info.getHeadpic() != null) {
+			headpic = "http://" + properties.getProperty("url") + ":" + properties.getProperty("nginxPort") + "/"
+					+ info.getHeadpic();
+		} else {
+			headpic = "../img/noneAvatar.jpg";
+		}
+
 		info.setHeadpic(headpic);
 		json.put("userinfo", info);
 		json.put("nickname", userService.getAppointedItem(userInfo.getId()).getNickname());
@@ -245,8 +253,30 @@ public class UserHomeController {
 			follow.setFid(uid);
 		}
 		List<FollowKey> list = followService.getFollows(follow);
+
+		String prop = FtpConnect.class.getClassLoader().getResource("/").getPath()
+				+ "properties/ftp-connect.properties";
+		prop = URLDecoder.decode(prop);
+		Properties properties = Utils.getProperties(prop);
+		List<FollowKey> list2 = new ArrayList<FollowKey>();
+		for (FollowKey followKey : list) {
+			String headpic = "";
+			if (followKey.getHeadpic() != null) {
+				headpic = "http://" + properties.getProperty("url") + ":" + properties.getProperty("nginxPort") + "/"
+						+ followKey.getHeadpic();
+			} else {
+				headpic = "../img/noneAvatar.jpg";
+			}
+			followKey.setHeadpic(headpic);
+			if (module == 1) {
+				followKey.setNowId(followKey.getFid());
+			} else {
+				followKey.setNowId(followKey.getMid());
+			}
+			list2.add(followKey);
+		}
 		log.info(f1 + "获取用户关注与粉丝结束" + f2);
-		return list;
+		return list2;
 	}
 
 	/* 评论逻辑 */
@@ -474,8 +504,8 @@ public class UserHomeController {
 			File tempFile = new File(headname);
 			// 将文件写入临时文件
 			file.transferTo(tempFile);
-			// 将文件上传到ftp服务器
-			FtpConnect.uploadOneFile(tempFile, "headpic");
+			// 压缩文件并将文件上传到ftp服务器
+			FtpConnect.uploadOneFile(CompressUtils.compressPic(tempFile, headname, 50, 50, 1), "headpic");
 			// 修改用户信息
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(user.getId());
@@ -494,6 +524,5 @@ public class UserHomeController {
 			response.getWriter().write(json.toString());
 		}
 	}
-	
-	
+
 }

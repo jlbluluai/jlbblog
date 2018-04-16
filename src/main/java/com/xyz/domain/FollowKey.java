@@ -11,6 +11,9 @@ public class FollowKey implements Serializable {
 
 	/* 视图属性 */
 	private User user;
+	private String headpic;
+	
+	private Long nowId;
 
 	public Long getMid() {
 		return mid;
@@ -35,5 +38,23 @@ public class FollowKey implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public String getHeadpic() {
+		return headpic;
+	}
+
+	public void setHeadpic(String headpic) {
+		this.headpic = headpic;
+	}
+
+	public Long getNowId() {
+		return nowId;
+	}
+
+	public void setNowId(Long nowId) {
+		this.nowId = nowId;
+	}
+	
+	
 
 }

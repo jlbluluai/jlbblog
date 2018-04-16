@@ -5,6 +5,7 @@
 	<resultMap type="com.xyz.domain.FollowKey" id="selectPagesResultMap">
 		<id column="mid" property="mid" />
 		<id column="fid" property="fid" />
+		<result column="headpic" property="headpic"/>
 		<association property="user" javaType="com.xyz.domain.User">
 			<id column="uid" property="id"/>
    			<result column="nickname" property="nickname"/>
@@ -16,7 +17,8 @@
 			f.mid mid,
 			f.fid fid,
 			u.id uid,
-			u.nickname nickname
+			u.nickname nickname,
+			ui.headpic headpic
 		from
 			t_follow f
 		left join
@@ -24,6 +26,10 @@
 			t_user u
 		on
 			f.fid = u.id
+		left join
+			t_user_info ui
+		on
+			ui.id = u.id
 		where 
 			f.mid = #{mid}
 		</if>
@@ -31,6 +37,10 @@
 			t_user u
 		on
 			f.mid = u.id
+		left join
+			t_user_info ui
+		on
+			ui.id = u.id
 		where
 			f.fid = #{fid}
 		</if>

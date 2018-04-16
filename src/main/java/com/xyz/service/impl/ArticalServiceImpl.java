@@ -60,8 +60,7 @@ public class ArticalServiceImpl implements ArticalService {
 
 	@Override
 	public boolean changeAppointedItem(Artical item) {
-		// TODO Auto-generated method stub
-		return false;
+		return articalMapper.updateByPrimaryKeySelective(item) > 0;
 	}
 
 	@Override

@@ -18,9 +18,9 @@
 		<!--横向导航栏-->
 		<div class="navigation">
 			<ul class="nav nav-tabs">
-				<li role="presentation" class="active" value="0"><a href="#">小叶子的关注</a>
+				<li role="presentation" class="active" value="0"><a href="#">关注</a>
 				</li>
-				<li role="presentation" value="1"><a href="#">小叶子的粉丝</a></li>
+				<li role="presentation" value="1"><a href="#">粉丝</a></li>
 			</ul>
 		</div>
 
@@ -57,11 +57,11 @@
 	<script type="text/x-jquery-tmpl" id="t1">
 				<li>
 					<div class="ava_pic">
-						<a href=""><img src="../img/noneAvatar.jpg" title="昵称"
+						<a href="javascript:void(0);" onclick="$goFollow(${nowId})"><img src="${headpic}" title="昵称"
 							height="70" width="70" /></a>
 					</div>
 					<div class="ava_name">
-						<a href="">${user.nickname}</a>
+						<a href="javascript:void(0);" onclick="$goFollow(${nowId})">${user.nickname}</a>
 					</div>
 				</li>
 	</script>
@@ -75,7 +75,7 @@
 				return unescape(r[2]);
 			return null;
 		}
-		
+
 		/* $(window.parent.document).find("iframe").load(function() {
 			var main = $(window.parent.document).find("iframe");
 			console.log(main);
@@ -124,6 +124,10 @@
 					alert("数据获取失败");
 				}
 			});
+		}
+
+		var $goFollow = function(id) {
+			window.parent.location.href = "../userinfo?id=" + id;
 		}
 	</script>
 </body>

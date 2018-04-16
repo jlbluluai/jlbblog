@@ -37,4 +37,12 @@ public class FollowServiceImpl implements FollowService {
 		return followMapperP.selectCount(follow);
 	}
 
+	/**
+	 * 进行关注
+	 */
+	@Override
+	public boolean saveOneFollow(FollowKey followKey) {
+		return followMapper.insertSelective(followKey) > 0;
+	}
+
 }

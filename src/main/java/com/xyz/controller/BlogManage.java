@@ -202,7 +202,14 @@ public class BlogManage {
 	@ResponseBody
 	@RequestMapping(value = "/getOneArtical", method = RequestMethod.GET)
 	public Artical getOneArtical(@RequestParam("aid") Long id) {
-		return articalService.getAppointedItem(id);
+		Artical artical = articalService.getAppointedItem(id);
+		int viewNum = artical.getViewNum();
+		viewNum++;
+		Artical artical2 = new Artical();
+		artical2.setId(artical.getId());
+		artical2.setViewNum(viewNum);
+		articalService.changeAppointedItem(artical2);
+		return artical;
 	}
 
 	/**
@@ -314,6 +321,14 @@ public class BlogManage {
 		comment.setContent(content);
 		comment.setUid(user.getId());
 		comment.setCreateTime(new Date());
+
+		Artical artical = articalService.getAppointedItem(aid);
+		int commentNum = artical.getCommentNum();
+		commentNum++;
+		Artical artical2 = new Artical();
+		artical2.setId(artical.getId());
+		artical2.setCommentNum(commentNum);
+		articalService.changeAppointedItem(artical2);
 
 		flag = commentService.saveAppointedItem(comment);
 
@@ -435,6 +450,38 @@ public class BlogManage {
 		bloggerDto.setNickname(user.getNickname());
 
 		return bloggerDto;
+	}
+
+	/**
+	 * 添加关注
+	 * 
+	 * @param uid
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/addFollow", method = RequestMethod.POST)
+	@ResponseBody
+	public Integer addFollow(@RequestParam("uid") Long uid, HttpServletRequest request) {
+		int i = 0;
+
+		User user = (User)request.getSession().getAttribute("user");
+		if(user == null){
+			return 1;
+		}
+		
+		if(uid.equals(user.getId())){
+			return 2;
+		}
+		
+		FollowKey followKey = new FollowKey();
+		followKey.setMid(user.getId());
+		followKey.setFid(uid);
+		
+		if(followService.saveOneFollow(followKey)){
+			return 3;
+		}
+		
+		return i;
 	}
 
 	/* 博客后管逻辑 */

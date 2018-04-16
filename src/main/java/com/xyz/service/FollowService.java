@@ -9,5 +9,7 @@ public interface FollowService {
 	List<FollowKey> getFollows(FollowKey follow);
 	
 	int getFanFollowCount(FollowKey follow);
+	
+	boolean saveOneFollow(FollowKey followKey);
 
 }

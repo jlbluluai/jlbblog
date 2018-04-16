@@ -87,6 +87,39 @@ $("#follow")
 				});
 
 
+$("#addFollow").click(function(){
+	$addFollow(uid);
+});
+
+//加关注
+var $addFollow = function(uid){
+	$.ajax({
+		type : "post",
+		url : "../addFollow",
+		dataType : "json",
+		data : {
+			uid : uid
+		},
+		async : true,
+		success : function(data) {
+			console.log(data);
+			if(data == 1){
+				alert("您未登录，无法关注");
+			}else if(data == 2){
+				alert("您本人无法关注自己");
+			}else if(data == 3){
+				alert("关注成功");
+			}else{
+				alert("关注失败");
+			}
+		},
+		error : function() {
+			alert("请勿重复关注");
+		}
+	});
+}
+
+
 //文章档案跳转（后移至公共js）
 $("#articalFileNav").click(function(){
 	window.parent.location.href = "../blogPortal?uid="+uid+"&category=1";
