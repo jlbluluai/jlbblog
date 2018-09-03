@@ -31,12 +31,16 @@ public class Artical implements Serializable {
 
 	private String contentRich;
 
+	private Integer fid;
+
 	private static final long serialVersionUID = 1L;
 
 	/* 视图属性 */
 	private User user;
 	private UserInfo userInfo;
 	private List<ArticalCategory> articalCategorys;
+	private List<Long> mids;
+	private File file;
 
 	private Integer sort; // 排序方式
 
@@ -184,6 +188,30 @@ public class Artical implements Serializable {
 
 	public void setReprint(String reprint) {
 		this.reprint = reprint;
+	}
+
+	public List<Long> getMids() {
+		return mids;
+	}
+
+	public void setMids(List<Long> mids) {
+		this.mids = mids;
+	}
+
+	public Integer getFid() {
+		return fid;
+	}
+
+	public void setFid(Integer fid) {
+		this.fid = fid;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 
 }

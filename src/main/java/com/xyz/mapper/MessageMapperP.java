@@ -9,4 +9,6 @@ public interface MessageMapperP {
 	List<Message> selectPages(Message message);
 
 	int deleteBatch(Long[] id);
+	
+	int selectCount1(Message message);
 }

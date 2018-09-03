@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
+import com.xyz.base.RedisDao;
 import com.xyz.domain.RecommendCategory;
 import com.xyz.mapper.RecommendCategoryMapper;
 import com.xyz.mapper.RecommendCategoryMapperP;
@@ -21,6 +22,9 @@ public class RecommendCategoryServiceImpl implements RecommendCategoryService {
 
 	@Autowired
 	private RecommendCategoryMapperP recommendCategoryMapperP;
+	
+	@Autowired
+	private RedisDao redisDao;
 
 	@Override
 	public RecommendCategory getAppointedItem(Integer uid) {
@@ -57,7 +61,12 @@ public class RecommendCategoryServiceImpl implements RecommendCategoryService {
 	 */
 	@Override
 	public List<RecommendCategory> getAllRecommends() {
-		return recommendCategoryMapperP.selectRecommends();
+		List<RecommendCategory> list = redisDao.get("recommendCategory");
+		if(list == null){
+			list = recommendCategoryMapperP.selectRecommends();
+			redisDao.set("recommendCategory", list);
+		}
+		return list;
 	}
 
 }

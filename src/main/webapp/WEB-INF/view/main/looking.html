@@ -211,9 +211,13 @@
 					async : true,
 					success : function(data) {
 						console.log(data);
-						$("#t1").tmpl(data.oList).appendTo("#artUL");
-						totalPage = data.totalPages;
-						$getPages();
+						if(data.totalPages == 0){
+							$("#artUL").html("&nbsp;&nbsp;<span style='font-size:16px;'>未查询到相关博客。</span>");
+						}else{
+							$("#t1").tmpl(data.oList).appendTo("#artUL");
+							totalPage = data.totalPages;
+							$getPages();
+						}
 					},
 					error : function() {
 						alert("数据获取失败");

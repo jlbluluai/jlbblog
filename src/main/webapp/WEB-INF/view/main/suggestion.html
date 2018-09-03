@@ -8,6 +8,8 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 <link rel="stylesheet" href="css/suggestion.css" />
+<link rel="stylesheet" href="css/popup/popup.css" />
+<script type="text/javascript" src="js/popup/popup.js"></script>
 
 <!-- logo -->
 <link rel="icon" href="img/favicon.ico" type="image/x-icon">
@@ -93,7 +95,10 @@
 			$("#submit").click(function() {
 				var content = $.trim($(".opinion textarea").val());
 				if (content == "") {
-					alert("请确认有内容提交！");
+					jqalert({
+						title: '提示弹窗',
+						cont: '请确认有内容提交！'
+					});
 				} else {
 					$writeOneSuggestion(content);
 				}
@@ -103,11 +108,22 @@
 
 				var temp = $.trim($(".opinion textarea").val());
 				if (temp == "") {
-					alert("请确认有内容清空！");
+					jqalert({
+						title: '提示弹窗',
+						cont: '请确认有内容清空'
+					});
 				} else {
-					if (confirm("是否确认清空？")) {
-						$(".opinion textarea").val("");
-					}
+					jqalert({
+						title: '确认弹窗',
+						cont: '是否确认清空？',
+						yestext: '确定',
+						notext: '取消',
+						yesfn: function() {
+							$(".opinion textarea").val("");
+						},
+						nofn: function() {
+						}
+					});
 				}
 			});
 
@@ -126,10 +142,16 @@
 				success : function(data) {
 					console.log(data);
 					if (data) {
-						alert("提交成功，感谢您的建议");
+						jqalert({
+							title: '提示弹窗',
+							cont: '提交成功，感谢您的建议'
+						});
 						$(".opinion textarea").val("");
 					} else {
-						alert("意见提交失败");
+						jqalert({
+							title: '提示弹窗',
+							cont: '请登录后再提交您宝贵 的建议'
+						});
 					}
 				},
 				error : function() {
@@ -158,12 +180,14 @@
 									"新版特性:<br>" + data[0].content);
 							
 							$.each(data,function(i,e){
-								var temp ="<li>\
-												<p>\
-												（"+e.title+"）新版特性:<br>"+e.content+"\
-												</p>\
-											</li>"	;
-								$(".word_carousel ul").append(temp)
+								if(i != 0){
+									var temp ="<li>\
+													<p>\
+													("+e.title+")该版特性:<br>"+e.content+"\
+													</p>\
+												</li>"	;
+									$(".word_carousel ul").append(temp)
+								}
 							});
 							//$("#t1").tmpl(data).appendTo(".word_carousel ul");
 						},

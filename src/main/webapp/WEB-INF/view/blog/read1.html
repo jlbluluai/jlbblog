@@ -28,13 +28,13 @@
 				<div class="navigation">
 					<ul id="navList">
 						<li>
-							<a id="mainhome" href="javascript:void(0)">洛林博客</a>
+							<a id="mainhome" href="javascript:void(0)">林区</a>
 						</li>
 						<li>
 							<a id="myhome" href="javascript:void(0)">首页</a>
 						</li>
 						<li>
-							<a id="newartical" href="javascript:void(0)">新文章</a>
+							<a id="newartical" href="javascript:void(0)">新博客</a>
 						</li>
 						<li>
 							<a id="contact" href="javascript:void(0)">联系</a>
@@ -57,6 +57,7 @@
 							<span></span>
 							<a class="edit" href="javascript:void(0);">编辑</a>
 							<a class="collect" href="javascript:void(0);">收藏</a>
+							<a class="quality" href="javascript:void(0);">申精</a>
 						</div>
 						<div class="second">
 						</div>
@@ -139,7 +140,7 @@
 						<h3 class="itemTitle">时间</h3>
 						<div id="hoverclock"></div>
 					</div>
-					<div class="articalFile">
+					<!-- <div class="articalFile">
 						<h3 class="itemTitle">文章档案</h3>
 						<div id="articalFileNav">
 							<ul>
@@ -148,11 +149,35 @@
 								</li>
 							</ul>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 
 			<div class="footer">©2017 小叶子</div>
+		</div>
+		
+		
+		<!-- 申精模态框 -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<!--主体-->
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="myModalLabel">博客申精窗口</h4>
+						</div>
+						<!-- 主体-->
+						<div class="modal-body">
+							<label>请输入你的申精理由：</label>
+							<textarea rows="5" cols="80" class="form-control" id="reason"></textarea>
+						</div>
+						<!--脚注 -->
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" id="apply_submit">提交</button>
+						</div>
+					</div>
+				</div>
 		</div>
 
 		<!-- bootstrap、juqery -->
@@ -173,8 +198,8 @@
 								<div>
 									<a href="#lou_${floor}" name="lou_${floor}">#${floor}楼</a>
 									<span>${dateFormat(createTime)} |</span>
-									<span class="hidden">${artical.user.id}</span>
-									<a href="javascript:void(0);" class="commentUser">${artical.user.nickname}</a>
+									<span class="hidden">${user.id}</span>
+									<a href="javascript:void(0);" class="commentUser">${user.nickname}</a>
 								</div>
 								<p>
 									${content}
@@ -271,7 +296,20 @@
 						console.log(data);
 						$(".first a:eq(0)").text(data.title);
 						$(".first span").text("Posted on "+dateFormat(data.leaveTime)+" "+data.user.nickname+" 阅读("+data.viewNum+") 评论("+data.commentNum+") ")
-						$(".second").html(data.contentRich);
+						
+						var rurl = "";
+						var file = "";
+						
+						if(data.reprint != ""){
+							rurl = "转载自：<a target='_blank' href="+data.reprint+">"+data.reprint+"</a></br></br>" ;
+						}
+						if(data.file != null){
+							var name = data.file.filename+"."+data.file.filestyle;
+							file = "</br></br>随博文件：<a href='ftp://yezi:123456@106.15.229.200/file/"+name+"' target='_blank'>"+name+"</a>"; 
+						}
+						
+						
+						$(".second").html(rurl+data.contentRich+file);
 					},
 					error : function() {
 						alert("数据获取失败");
@@ -292,9 +330,15 @@
 					success : function(data) {
 						console.log(data);
 						if(data == 1){
-							alert("请先登录！");
+							jqalert({
+								title: '提示弹窗',
+								cont: '请先登录！'
+							});
 						} else if(data == 2){
-							alert("您不是作者，无权编辑！");
+							jqalert({
+								title: '提示弹窗',
+								cont: '您不是作者，无权编辑！'
+							});
 						} else if(data == 3){
 							window.parent.location.href = "../blogHandle?aid="+aid;								
 						}
@@ -319,17 +363,92 @@
 					success : function(data) {
 						console.log(data);
 						if(data == 1){
-							alert("请登录再收藏！");
+							jqalert({
+								title: '提示弹窗',
+								cont: '请登录再收藏！'
+							});
 						} else if(data == 2){
-							alert("请不要收藏自己的博客！");
+							jqalert({
+								title: '提示弹窗',
+								cont: '请不要收藏自己的博客！'
+							});
 						} else if(data == 3){
-							alert("收藏成功！");
+							jqalert({
+								title: '提示弹窗',
+								cont: '收藏成功！'
+							});
 						}
 					},
 					error : function() {
 						alert("数据获取失败");
 					}
 				});
+			});
+			
+			// 申精验明身份
+			$(".quality").click(function() {
+				$.ajax({
+					type : "post",
+					url : "../verEditBlog",
+					dataType : "json",
+					data : {
+						uid : uid
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data == 1){
+							jqalert({
+								title: '提示弹窗',
+								cont: '请先登录！！'
+							});
+						} else if(data == 2){
+							jqalert({
+								title: '提示弹窗',
+								cont: '您不是作者，无权申精！'
+							});
+						} else if(data == 3){
+							$('#myModal').modal('show');
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			});
+			
+			
+			// 申精提交
+			$("#apply_submit").click(function() {
+				var reason = $.trim($("#reason").val());
+				if(reason != ""){
+					$.ajax({
+						type : "post",
+						url : "../blogQuality",
+						dataType : "json",
+						data : {
+							aid : aid,
+							reason : reason
+						},
+						async : true,
+						success : function(data) {
+							console.log(data);
+							if(data){
+								window.location.reload();
+							}else{
+								jqalert({
+									title: '提示弹窗',
+									cont: '申请提交失败！！'
+								});
+							}
+						},
+						error : function() {
+							alert("数据获取失败");
+						}
+					});
+				}else{
+					alert("请输入理由！！！");					
+				}
 			});
 
 			/*评论逻辑*/
@@ -350,9 +469,13 @@
 					async : true,
 					success : function(data) {
 						console.log(data);
-						$("#t1").tmpl(data.oList).appendTo("#allComment");
-						totalPage = data.totalPages;
-						$getPages();
+						if(data.totalPages == 0){
+							$("#allComment").text("暂未有评论");
+						} else{
+							$("#t1").tmpl(data.oList).appendTo("#allComment");
+							totalPage = data.totalPages;
+							$getPages();
+						}
 					},
 					error : function() {
 						alert("数据获取失败");

@@ -11,6 +11,8 @@
 <!--自定义-->
 <link rel="stylesheet" href="../css/userinfo/userMessage.css" />
 <script type="text/javascript" src="../js/pages.js"></script>
+<!-- 第三方 -->
+<link rel="stylesheet" href="../css/popup/popup.css" />
 </head>
 
 <body>
@@ -112,7 +114,7 @@
 								</tr>
 								<tr>
 									<td class="right"><label>消息内容：</label></td>
-									<td id="content"></td>
+									<td id="content" style="width: 400px;"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -141,6 +143,8 @@
 	<!-- 第三方 -->
 	<!-- tmpl模版 -->
 	<script type="text/javascript" src="../js/jquery.tmpl.js"></script>
+	<!-- 提示框 -->
+	<script type="text/javascript" src="../js/popup/popup.js"></script>
 
 	<script type="text/x-jquery-tmpl" id="t1">
 					<tr>
@@ -155,7 +159,7 @@
 							{{/if}}
 							</a><div style="display: none;">${content}</div><div style="display: none;">${status}</div><div style="display: none;">${id}</div></td>
 						<td>${dateFormat(createTime)}</td>
-						<td><a href="#" onclick="$deleteOneMessage(${id})">删除</a></td>
+						<td><a href="#" onclick="$deleteOneMessage(${id},'${title}')">删除</a></td>
 					</tr>
 	</script>
 
@@ -274,24 +278,37 @@
 				});
 				console.log(a);
 				if (a.length == 0) {
-					alert("请确认有选项删除")
-				} else if (confirm("是否确认删除所选")) {
-					$.ajax({
-						type : "post",
-						url : "../cutBatchMessages",
-						dataType : "json",
-						traditional : true,
-						data : {
-							id : a
+					jqalert({
+						title: '提示弹窗',
+						cont: '请确认有选项删除'
+					});
+				} else {
+					jqalert({
+						title: '确认弹窗',
+						cont: '您是否确认删除所选',
+						yestext: '确定',
+						notext: '取消',
+						yesfn: function() {
+							$.ajax({
+								type : "post",
+								url : "../cutBatchMessages",
+								dataType : "json",
+								traditional : true,
+								data : {
+									id : a
+								},
+								async : true,
+								success : function(data) {
+									if(data ==true){
+										window.location.reload();
+									}
+								},
+								error : function() {
+									alert("数据获取失败");
+								}
+							});
 						},
-						async : true,
-						success : function(data) {
-							if(data ==true){
-								window.location.reload();
-							}
-						},
-						error : function() {
-							alert("数据获取失败");
+						nofn: function() {
 						}
 					});
 				}
@@ -347,9 +364,13 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					$("#t1").tmpl(data.oList).appendTo("#receiveBox");
-					totalPage = data.totalPages;
-					$getPages();
+					if(data.totalPages == 0){
+						$("#receiveBox").html("<tr><td colspan='5'>您未有任何消息</td></tr>");
+					} else{
+						$("#t1").tmpl(data.oList).appendTo("#receiveBox");
+						totalPage = data.totalPages;
+						$getPages();
+					}
 				},
 				error : function() {
 					alert("数据获取失败");
@@ -426,7 +447,7 @@
 			$("#sender").text(sender);
 			$("#time").text(time);
 			$("#title").text(title);
-			$("#content").text(content);
+			$("#content").html(content);
 			
 			$("#readModal").modal({
 				/*显示模态框*/
@@ -458,24 +479,38 @@
 		});
 		
 		/*删除消息逻辑*/
-		var $deleteOneMessage = function(id){
-			$.ajax({
-				type : "post",
-				url : "../cutBatchMessages",
-				dataType : "json",
-				data : {
-					id : id
+		var $deleteOneMessage = function(id ,title){
+			jqalert({
+				title: '确认弹窗',
+				cont: '您是否确认删除消息：'+title,
+				yestext: '确定',
+				notext: '取消',
+				yesfn: function() {
+					$.ajax({
+						type : "post",
+						url : "../cutBatchMessages",
+						dataType : "json",
+						data : {
+							id : id
+						},
+						async : true,
+						success : function(data) {
+							if(data ==true){
+								window.location.reload();
+							}
+						},
+						error : function() {
+							alert("数据获取失败");
+						}
+					});
 				},
-				async : true,
-				success : function(data) {
-					if(data ==true){
-						window.location.reload();
-					}
-				},
-				error : function() {
-					alert("数据获取失败");
+				nofn: function() {
 				}
 			});
+		}
+		
+		function goLogin(){
+			window.parent.location.href = "../loginForm";
 		}
 	</script>
 </body>

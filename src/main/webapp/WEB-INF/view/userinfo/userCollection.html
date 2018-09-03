@@ -136,9 +136,13 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					$("#t1").tmpl(data.oList).appendTo("#collection_list");
-					totalPage = data.totalPages;
-					$getPages();
+					if(data.totalPages == 0){
+						$("#collection_list").text("您未有任何收藏");
+					} else{
+						$("#t1").tmpl(data.oList).appendTo("#collection_list");
+						totalPage = data.totalPages;
+						$getPages();
+					}
 				},
 				error : function() {
 					alert("数据获取失败");

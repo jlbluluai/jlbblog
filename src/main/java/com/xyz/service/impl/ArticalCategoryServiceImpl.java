@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
+import com.xyz.base.RedisDao;
 import com.xyz.domain.ArticalCategory;
 import com.xyz.mapper.ArticalCategoryMapper;
 import com.xyz.mapper.ArticalCategoryMapperP;
@@ -21,6 +22,9 @@ public class ArticalCategoryServiceImpl implements ArticalCategoryService {
 
 	@Autowired
 	private ArticalCategoryMapperP articalCategoryMapperP;
+
+	@Autowired
+	private RedisDao redisDao;
 
 	@Override
 	public ArticalCategory getAppointedItem(Integer id) {
@@ -55,7 +59,12 @@ public class ArticalCategoryServiceImpl implements ArticalCategoryService {
 	 */
 	@Override
 	public List<ArticalCategory> getAllCategorys() {
-		return articalCategoryMapperP.selectAll();
+		List<ArticalCategory> list = redisDao.get("articalCategory");
+		if (list == null) {
+			list = articalCategoryMapperP.selectAll();
+			redisDao.set("articalCategory", list);
+		}
+		return list;
 	}
 
 }

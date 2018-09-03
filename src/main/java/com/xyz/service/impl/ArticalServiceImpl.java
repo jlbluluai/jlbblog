@@ -51,6 +51,9 @@ public class ArticalServiceImpl implements ArticalService {
 	@Override
 	public Artical getAppointedItem(Long uid) {
 		Artical artical = articalMapper.selectByPrimaryKey(uid);
+		if (artical.getFid() != null) {
+			artical.setFile(fileService.getAppointedItem(artical.getFid()));
+		}
 		ArticalAssCategoryKey articalAssCategoryKey = articalAssCategoryMapper.selectOne(uid);
 		artical.setCategory(articalAssCategoryKey.getCid());
 		User user = userService.getAppointedItem(artical.getUid());

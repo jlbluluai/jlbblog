@@ -93,6 +93,12 @@
 								and 
 									uid != #{user.id})
   			</if>
+  			<if test="mids != null">
+  				and uid in
+  					<foreach item="item" index="index" collection="mids" open="(" separator="," close=")">
+        				#{item}
+  					</foreach>
+  			</if>
   		</where>
   		order by
   			<if test="sort == 1">

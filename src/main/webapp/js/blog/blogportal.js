@@ -24,7 +24,7 @@ $("#newartical").click(function() {
 });
 
 $("#contact").click(function() {
-	alert("功能暂未实现");
+	alert("该板块尚未开发");
 });
 
 $("#manage").click(function() {
@@ -67,23 +67,107 @@ var $getTheBlogger = function(){
 }
 
 $("#nick").click(function() {
-	window.parent.location.href = "../userinfo?id="+uid;
+	$.ajax({
+		type : "get",
+		url : "../verGoYuan",
+		dataType : "json",
+		data : {
+		},
+		async : true,
+		success : function(data) {
+			console.log(data);
+			if(data == 1){
+				jqalert({
+					title: '提示弹窗',
+					cont: '您未登录，无法前往园子'
+				});
+			} else{
+				window.parent.location.href = "../userinfo?id="+uid;
+			}
+		},
+		error : function() {
+			alert("数据获取失败");
+		}
+	});
 });
 
 $("#garAge").click(function() {
-	window.parent.location.href = "../userinfo?id="+uid;
+	$.ajax({
+		type : "get",
+		url : "../verGoYuan",
+		dataType : "json",
+		data : {
+		},
+		async : true,
+		success : function(data) {
+			console.log(data);
+			if(data == 1){
+				jqalert({
+					title: '提示弹窗',
+					cont: '您未登录，无法前往园子'
+				});
+			} else{
+				window.parent.location.href = "../userinfo?id="+uid;
+			}
+		},
+		error : function() {
+			alert("数据获取失败");
+		}
+	});
 });
 
 $("#fan")
 		.click(
 				function() {
-					window.parent.location.href = "../userinfo?id="+uid+"&consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
+					$.ajax({
+						type : "get",
+						url : "../verGoYuan",
+						dataType : "json",
+						data : {
+						},
+						async : true,
+						success : function(data) {
+							console.log(data);
+							if(data == 1){
+								jqalert({
+									title: '提示弹窗',
+									cont: '您未登录，无法前往园子'
+								});
+							} else{
+								window.parent.location.href = "../userinfo?id="+uid+"&consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
+							}
+						},
+						error : function() {
+							alert("数据获取失败");
+						}
+					});
 				});
 
 $("#follow")
 		.click(
 				function() {
-					window.parent.location.href = "../userinfo?id="+uid+"&consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
+					$.ajax({
+						type : "get",
+						url : "../verGoYuan",
+						dataType : "json",
+						data : {
+						},
+						async : true,
+						success : function(data) {
+							console.log(data);
+							if(data == 1){
+								jqalert({
+									title: '提示弹窗',
+									cont: '您未登录，无法前往园子'
+								});
+							} else{
+								window.parent.location.href = "../userinfo?id="+uid+"&consule=%25E5%2585%25B3%25E6%25B3%25A8%25E4%25B8%258E%25E7%25B2%2589%25E4%25B8%259D";
+							}
+						},
+						error : function() {
+							alert("数据获取失败");
+						}
+					});
 				});
 
 
@@ -104,17 +188,33 @@ var $addFollow = function(uid){
 		success : function(data) {
 			console.log(data);
 			if(data == 1){
-				alert("您未登录，无法关注");
+				jqalert({
+					title: '提示弹窗',
+					cont: '您未登录，无法关注'
+				});
 			}else if(data == 2){
-				alert("您本人无法关注自己");
+				jqalert({
+					title: '提示弹窗',
+					cont: '您本人无法关注自己'
+				});
 			}else if(data == 3){
-				alert("关注成功");
+				jqalert({
+					title: '提示弹窗',
+					cont: '关注成功'
+				});
+				$getTheBlogger();
 			}else{
-				alert("关注失败");
+				jqalert({
+					title: '提示弹窗',
+					cont: '关注失败'
+				});
 			}
 		},
 		error : function() {
-			alert("请勿重复关注");
+			jqalert({
+				title: '提示弹窗',
+				cont: '请勿重复关注'
+			});
 		}
 	});
 }

@@ -130,7 +130,7 @@
   			<id column="uid" property="id" />
   			<result column="unickname" property="nickname"/>
   		</association>
-  		<association property="artical" javaType="com.xyz.domain.User">
+  		<association property="artical" javaType="com.xyz.domain.Artical">
   			<id column="aid" property="id" />
   			<result column="atitle" property="title"/>
   		</association>

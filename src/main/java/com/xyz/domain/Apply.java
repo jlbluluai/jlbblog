@@ -4,75 +4,87 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Apply implements Serializable {
-    private Long id;
+	private Long id;
 
-    private Long uid;
+	private Long uid;
 
-    private Byte isBlogger;
+	private Byte isBlogger;
 
-    private Long aid;
+	private Long aid;
 
-    private Byte status;
+	private Byte status;
 
-    private Date createTime;
+	private Date createTime;
 
-    private String reason;
+	private String reason;
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public Long getId() {
-        return id;
-    }
+	/* 视图属性 */
+	private Message message;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Long getUid() {
-        return uid;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
+	public Long getUid() {
+		return uid;
+	}
 
-    public Byte getIsBlogger() {
-        return isBlogger;
-    }
+	public void setUid(Long uid) {
+		this.uid = uid;
+	}
 
-    public void setIsBlogger(Byte isBlogger) {
-        this.isBlogger = isBlogger;
-    }
+	public Byte getIsBlogger() {
+		return isBlogger;
+	}
 
-    public Long getAid() {
-        return aid;
-    }
+	public void setIsBlogger(Byte isBlogger) {
+		this.isBlogger = isBlogger;
+	}
 
-    public void setAid(Long aid) {
-        this.aid = aid;
-    }
+	public Long getAid() {
+		return aid;
+	}
 
-    public Byte getStatus() {
-        return status;
-    }
+	public void setAid(Long aid) {
+		this.aid = aid;
+	}
 
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
+	public Byte getStatus() {
+		return status;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setStatus(Byte status) {
+		this.status = status;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public String getReason() {
-        return reason;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setReason(String reason) {
-        this.reason = reason == null ? null : reason.trim();
-    }
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason == null ? null : reason.trim();
+	}
+
+	public Message getMessage() {
+		return message;
+	}
+
+	public void setMessage(Message message) {
+		this.message = message;
+	}
+
 }

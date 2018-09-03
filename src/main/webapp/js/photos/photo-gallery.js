@@ -1,5 +1,5 @@
 $(document).ready(function(){        
-	$('li img').on('click',function(){
+	$('ul').on('click', 'li img',function(){
 		var src = $(this).attr('src');
 		var img = '<img src="' + src + '" class="img-responsive"/>';
 		
@@ -31,6 +31,7 @@ $(document).ready(function(){
         
          
 $(document).on('click', 'a.controls', function(){
+	console.log(12);
 	var index = $(this).attr('href');
 	var src = $('ul.row li:nth-child('+ index +') img').attr('src');             
 	

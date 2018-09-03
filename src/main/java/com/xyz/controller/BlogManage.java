@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -21,21 +22,30 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.xyz.common.DateUtils;
+import com.xyz.domain.Apply;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
 import com.xyz.domain.Collection;
 import com.xyz.domain.Comment;
+import com.xyz.domain.Dynamic;
 import com.xyz.domain.File;
 import com.xyz.domain.FollowKey;
+import com.xyz.domain.Message;
 import com.xyz.domain.User;
+import com.xyz.domain.UserInfo;
 import com.xyz.dto.BloggerDto;
 import com.xyz.dto.PagesFeedback;
 import com.xyz.dto.StringTemp;
+import com.xyz.service.ApplyService;
 import com.xyz.service.ArticalService;
 import com.xyz.service.CollectionService;
 import com.xyz.service.CommentService;
+import com.xyz.service.DynamicService;
+import com.xyz.service.FileService;
 import com.xyz.service.FollowService;
 import com.xyz.service.UserService;
+import com.xyz.util.CompressUtils;
+import com.xyz.util.FtpConnect;
 import com.xyz.util.FtpUtils;
 import com.xyz.util.Utils;
 
@@ -49,6 +59,10 @@ public class BlogManage {
 	@Autowired
 	@Qualifier("articalService")
 	private ArticalService articalService;
+
+	@Autowired
+	@Qualifier("dynamicService")
+	private DynamicService dynamicService;
 
 	@Autowired
 	@Qualifier("commentService")
@@ -66,10 +80,64 @@ public class BlogManage {
 	@Qualifier("collectionService")
 	private CollectionService collectionService;
 
+	@Autowired
+	@Qualifier("applyService")
+	private ApplyService applyService;
+
+	@Autowired
+	@Qualifier("fileService")
+	private FileService fileService;
+
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
 	private String f1 = "--------------";
 	private String f2 = "--------------";
+
+	/**
+	 * 处理一篇博客前可能需要上传博客附件
+	 * 
+	 * @param file
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/uploadOneBlogFile", method = RequestMethod.POST)
+	public Integer uploadOneBlogFile(@RequestParam("myFile") MultipartFile file, HttpServletRequest request)
+			throws Exception {
+		Integer reid = 0;
+		logger.info(f1 + "开始处理上传一篇博客附件" + f2);
+
+		User user = (User) request.getSession().getAttribute("user");
+		String tempname = user.getId() + "" + Utils.createComplexId() + "";
+		String filename = tempname + "." + Utils.getTheFileStyle(file.getOriginalFilename());
+		if (!file.isEmpty()) {
+			// 创建一个临时文件
+			java.io.File tempFile = new java.io.File(filename);
+			// 将文件写入临时文件
+			file.transferTo(tempFile);
+			// 压缩文件并将文件上传到ftp服务器
+			FtpConnect.uploadOneFile(tempFile, "file");
+			// 修改用户信息
+			File record = new File();
+			record.setUid(user.getId());
+			record.setFilename(tempname);
+			record.setFilestyle(Utils.getTheFileStyle(file.getOriginalFilename()));
+			record.setCategory(1);
+			record.setUploadtime(new Date());
+			record.setFolder("file");
+
+			File temp = fileService.saveOneFileAndGetId(record);
+			if (temp.getId() != null) {
+				reid = temp.getId();
+			} else {
+				reid = -1;
+			}
+
+			tempFile.delete();
+		}
+
+		logger.info(f1 + "结束处理上传一篇博客附件" + f2);
+		return reid;
+	}
 
 	/**
 	 * 处理一篇博客，新增，修改
@@ -102,8 +170,9 @@ public class BlogManage {
 		Byte isPublic = (byte) js.getInt("isPublic");
 		Byte isPublish = (byte) js.getInt("isPublish");
 		Integer category = Integer.parseInt(js.getString("category"));
+		Integer fileId = js.getInt("file");
 		Long id = 0L;
-		if (js.get("id") != null) {
+		if (!"null".equals(js.getString("id"))) {
 			id = Long.parseLong(js.getString("id"));
 		}
 		String way = js.getString("way");
@@ -124,6 +193,9 @@ public class BlogManage {
 		artical.setIsPublic(isPublic);
 		artical.setIsPublish(isPublish);
 		artical.setReprint(reprint);
+		if (fileId != 0) {
+			artical.setFid(fileId);
+		}
 
 		artical.setLeaveTime(now);
 
@@ -147,6 +219,17 @@ public class BlogManage {
 			artical.setViewNum(0);
 			artical.setCommentNum(0);
 			flag = articalService.writeOneBlog(artical, articalCategory, file);
+
+			if (flag && isPublic == 1 && isPublish == 1) {
+				Dynamic dynamic = new Dynamic();
+				dynamic.setAid(id);
+				dynamic.setId(Utils.createComplexId());
+				dynamic.setCreateTime(new Date());
+				dynamic.setUid(user.getId());
+				dynamic.setIsBlog((byte) 1);
+				dynamicService.saveAppointedItem(dynamic);
+			}
+
 		} else if ("01".equals(way)) {// 修改
 			flag = articalService.modifyOneBlog(artical, articalCategory, file);
 		}
@@ -237,6 +320,7 @@ public class BlogManage {
 
 		List<Object> list = new ArrayList<Object>();
 		for (Artical art : pageInfo.getList()) {
+			art.setContent(art.getContent()+"...");
 			list.add(art);
 		}
 		feedback.setoList(list);
@@ -392,6 +476,61 @@ public class BlogManage {
 
 		return 3;
 	}
+	
+	
+	/**
+	 * 右侧公告栏信息跳转验明登录
+	 */
+	@RequestMapping(value = "/verGoYuan", method = RequestMethod.GET)
+	@ResponseBody
+	public Integer verGoYuan(HttpServletRequest request) {
+
+		User user = (User) request.getSession().getAttribute("user");
+
+		if (user == null) {
+			return 1;
+		}
+
+		return 0;
+	}
+
+	/**
+	 * 博客申精提交
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/blogQuality", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean blogQuality(HttpServletRequest request, @RequestParam("aid") Long aid,
+			@RequestParam("reason") String reason) {
+
+		User user = (User) request.getSession().getAttribute("user");
+		
+		Message message = new Message();
+		message.setId(Utils.createComplexId());
+		message.setCreateTime(new Date());
+		message.setPid((long) 1);
+		message.setRid(user.getId());
+		message.setStatus((byte) 0);
+		message.setTitle("博客申精提交成功致信");
+		message.setContent("您好，您的博客申精已经提交成功，我们将尽快受理审批并给您答复。");
+
+		Apply apply = new Apply();
+		apply.setIsBlogger((byte) 1);
+		apply.setCreateTime(new Date());
+		apply.setReason(reason);
+		apply.setStatus((byte) 0);
+		apply.setUid(user.getId());
+		apply.setAid(aid);
+		apply.setMessage(message);
+
+		if (applyService.saveAppointedItem(apply)) {
+			return true;
+		}
+
+		return false;
+	}
 
 	/* 公共部分获取信息 */
 	/**
@@ -464,23 +603,23 @@ public class BlogManage {
 	public Integer addFollow(@RequestParam("uid") Long uid, HttpServletRequest request) {
 		int i = 0;
 
-		User user = (User)request.getSession().getAttribute("user");
-		if(user == null){
+		User user = (User) request.getSession().getAttribute("user");
+		if (user == null) {
 			return 1;
 		}
-		
-		if(uid.equals(user.getId())){
+
+		if (uid.equals(user.getId())) {
 			return 2;
 		}
-		
+
 		FollowKey followKey = new FollowKey();
 		followKey.setMid(user.getId());
 		followKey.setFid(uid);
-		
-		if(followService.saveOneFollow(followKey)){
+
+		if (followService.saveOneFollow(followKey)) {
 			return 3;
 		}
-		
+
 		return i;
 	}
 
@@ -563,5 +702,109 @@ public class BlogManage {
 		}
 
 		return 3;
+	}
+
+	/* 相册 */
+	/**
+	 * 上传相册图片
+	 * 
+	 * @param request
+	 * @param file
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/uploadPhoto")
+	public void uploadPhoto(HttpServletRequest request, @RequestParam("myfile") MultipartFile file,
+			HttpServletResponse response) throws Exception {
+		logger.info("上传相册图片开始");
+		User user = (User) request.getSession().getAttribute("user");
+		String name = Utils.createComplexId() + "photo";
+		String fileName = name + "." + Utils.getTheFileStyle(file.getOriginalFilename());
+		if (!file.isEmpty()) {
+			// 创建一个临时文件
+			java.io.File tempFile = new java.io.File(fileName);
+			// 将文件写入临时文件
+			file.transferTo(tempFile);
+			// 压缩文件并将文件上传到ftp服务器
+			FtpConnect.uploadOneFile(CompressUtils.compressPic(tempFile, fileName, 500, 340, 1), "headpic");
+			// 添加相册信息
+			File f = new File();
+			f.setFilename(name);
+			f.setFilestyle(Utils.getTheFileStyle(file.getOriginalFilename()));
+			f.setCategory(2);
+			f.setFolder("photos");
+			f.setUid(user.getId());
+			f.setUploadtime(new Date());
+
+			if (fileService.saveAppointedItem(f)) {
+				logger.info("上传相册图片完成");
+				JSONObject json = new JSONObject();
+				json.put("msg", "上传完成");
+				response.setContentType(contentType);
+				response.getWriter().write(json.toString());
+			} else {
+				logger.info("上传相册图片失败");
+				JSONObject json = new JSONObject();
+				json.put("msg", "上传失败");
+				response.setContentType(contentType);
+				response.getWriter().write(json.toString());
+			}
+
+			tempFile.delete();
+		} else {
+			logger.error("图片接收失败");
+			JSONObject json = new JSONObject();
+			json.put("msg", "图片接收失败");
+			response.setContentType(contentType);
+			response.getWriter().write(json.toString());
+		}
+	}
+
+	/**
+	 * 获取相册图片
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/getAllPhotos", method = RequestMethod.GET)
+	@ResponseBody
+	public List<File> getAllPhotos(HttpSession session) {
+		List<File> list = new ArrayList<>();
+		logger.info("获取相册图片开始");
+
+		User user = (User) session.getAttribute("user");
+
+		File file = new File();
+		file.setUid(user.getId());
+		file.setCategory(2);
+
+		list = fileService.getAll1(file);
+
+		logger.info("获取相册图片结束");
+		return list;
+	}
+
+	/* 文件 */
+	/**
+	 * 获取用户所有文件
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/getAllFiles", method = RequestMethod.GET)
+	@ResponseBody
+	public List<File> getAllFiles(HttpSession session) {
+		List<File> list = new ArrayList<>();
+		logger.info("获取文件开始");
+
+		User user = (User) session.getAttribute("user");
+
+		File file = new File();
+		file.setUid(user.getId());
+		file.setCategory(1);
+
+		list = fileService.getAll1(file);
+
+		logger.info("获取文件结束");
+		return list;
 	}
 }

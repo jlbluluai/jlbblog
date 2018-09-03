@@ -13,6 +13,7 @@
     <result column="view_num" jdbcType="INTEGER" property="viewNum" />
     <result column="comment_num" jdbcType="INTEGER" property="commentNum" />
     <result column="leave_time" jdbcType="TIMESTAMP" property="leaveTime" />
+    <result column="fid" jdbcType="INTEGER" property="fid" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.xyz.domain.Artical">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
@@ -20,7 +21,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, title, reprint, uid, is_public, is_publish, is_nice, is_examine, view_num, comment_num, 
-    leave_time
+    leave_time, fid
   </sql>
   <sql id="Blob_Column_List">
     content,content_rich
@@ -41,11 +42,12 @@
     insert into t_artical (id, title, reprint, uid, 
       is_public, is_publish, is_nice, 
       is_examine, view_num, comment_num, 
-      leave_time, content,content_rich)
+      leave_time, content, content_rich, fid)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{reprint,jdbcType=VARCHAR}, #{uid,jdbcType=BIGINT}, 
       #{isPublic,jdbcType=TINYINT}, #{isPublish,jdbcType=TINYINT}, #{isNice,jdbcType=TINYINT}, 
       #{isExamine,jdbcType=TINYINT}, #{viewNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, 
-      #{leaveTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR},#{content_rich,jdbcType=LONGVARCHAR})
+      #{leaveTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR},#{content_rich,jdbcType=LONGVARCHAR},
+      #{fid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.xyz.domain.Artical">
     insert into t_artical
@@ -89,6 +91,9 @@
       <if test="contentRich != null">
         content_rich,
       </if>
+      <if test="fid != null">
+        fid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -129,6 +134,9 @@
       </if>
       <if test="contentRich != null">
         #{contentRich,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -171,6 +179,9 @@
       <if test="contentRich != null">
         content_rich = #{contentRich,jdbcType=LONGVARCHAR},
       </if>
+      <if test="fid != null">
+        fid = #{fid,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -187,7 +198,8 @@
       comment_num = #{commentNum,jdbcType=INTEGER},
       leave_time = #{leaveTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR},
-      content_rich = #{contentRich,jdbcType=LONGVARCHAR}
+      content_rich = #{contentRich,jdbcType=LONGVARCHAR},
+      fid = #{fid,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xyz.domain.Artical">

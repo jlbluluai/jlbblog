@@ -103,7 +103,7 @@ public final class SolrUtils {
 
 		long records = documents.getNumFound();
 		int totalPages;
-		float temp = records / nums;
+		double temp = (double)records / (double)nums;
 		if (temp == (int) temp) {
 			totalPages = (int) temp;
 		} else {
@@ -166,12 +166,13 @@ public final class SolrUtils {
 		List<ArticalSolrDto> list = new ArrayList<ArticalSolrDto>();
 
 		try {
-			PagesFeedback feedback = SolrUtils.solrQueryArticals("博客", 0, 10);
+			PagesFeedback feedback = SolrUtils.solrQueryArticals("solr", 0, 10);
+			System.out.println(feedback.getoList());
+			System.out.println(feedback.getTotalPages());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		System.out.println(list);
 	}
 
 }

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
+import com.xyz.domain.Apply;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
 import com.xyz.domain.Collection;
@@ -35,6 +36,7 @@ import com.xyz.domain.User;
 import com.xyz.domain.UserInfo;
 import com.xyz.dto.PagesFeedback;
 import com.xyz.dto.UserHome;
+import com.xyz.service.ApplyService;
 import com.xyz.service.ArticalService;
 import com.xyz.service.CollectionService;
 import com.xyz.service.CommentService;
@@ -83,6 +85,10 @@ public class UserHomeController {
 	@Autowired
 	@Qualifier("messageService")
 	private MessageService messageService;
+
+	@Autowired
+	@Qualifier("applyService")
+	private ApplyService applyService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -162,14 +168,20 @@ public class UserHomeController {
 	 */
 	@RequestMapping(value = "/getDynamics", method = RequestMethod.GET)
 	public void getDynamics(@RequestParam("id") Long uid, @RequestParam("current") Integer current,
-			HttpServletResponse response) throws Exception {
+			HttpServletResponse response, HttpSession session) throws Exception {
 		Dynamic dynamic = new Dynamic();
 		dynamic.setUid(uid);
 		PageInfo<Dynamic> pageInfo = dynamicService.getAppointedPageItems(current, 8, dynamic);
+		User user = (User) session.getAttribute("user");
 
 		JSONObject json = new JSONObject();
 		json.put("dynamics", pageInfo.getList());
 		json.put("total", pageInfo.getPages());
+		if (user.getId() == uid) {
+			json.put("isMaster", 1);
+		} else {
+			json.put("isMaster", 0);
+		}
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().write(json.toString());
 	}
@@ -201,6 +213,65 @@ public class UserHomeController {
 	}
 
 	/* 文章逻辑 */
+
+	/**
+	 * 验证用户身份
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/verUserIdd")
+	@ResponseBody
+	public Boolean verUserIdd(HttpSession session,@RequestParam("uid")Long uid) {
+		User user = (User) session.getAttribute("user");
+		
+		if(!user.getId().equals(uid)){
+			return true;
+		}
+
+		if (user.getIid() == 3) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * 博主申请提交
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/bloggerApply", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean bloggerApply(HttpServletRequest request, @RequestParam("reason") String reason) {
+
+		User user = (User) request.getSession().getAttribute("user");
+
+		Message message = new Message();
+		message.setId(Utils.createComplexId());
+		message.setCreateTime(new Date());
+		message.setPid((long) 1);
+		message.setRid(user.getId());
+		message.setStatus((byte) 0);
+		message.setTitle("博主申请提交成功致信");
+		message.setContent("您好，您的博主申请已经提交成功，我们将尽快受理审批并给您答复。");
+
+		Apply apply = new Apply();
+		apply.setIsBlogger((byte) 0);
+		apply.setCreateTime(new Date());
+		apply.setReason(reason);
+		apply.setStatus((byte) 0);
+		apply.setUid(user.getId());
+		apply.setMessage(message);
+
+		if (applyService.saveAppointedItem(apply)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * 用户信息模块获取对应文章
 	 * 
@@ -226,6 +297,7 @@ public class UserHomeController {
 		PageInfo<Artical> pageInfo = articalService.getAppointedPageItems(current, 10, artical);
 		List<Object> list = new ArrayList<Object>();
 		for (Artical art : pageInfo.getList()) {
+			art.setContent(art.getContent()+"...");
 			list.add(art);
 		}
 		feedback.setoList(list);
@@ -516,6 +588,7 @@ public class UserHomeController {
 			json.put("msg", "上传完成");
 			response.setContentType(contentType);
 			response.getWriter().write(json.toString());
+			tempFile.delete();
 		} else {
 			log.error("文件接收失败");
 			JSONObject json = new JSONObject();

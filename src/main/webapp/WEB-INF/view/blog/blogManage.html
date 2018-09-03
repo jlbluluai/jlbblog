@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
 
 		<!-- 第三方 -->
+		<link rel="stylesheet" href="css/popup/popup.css" />
 
 		<!-- 博客后管通用 -->
 		<link href="css/blog/blogPublic.css" rel="stylesheet" />
@@ -190,6 +191,7 @@
 		<script type="text/javascript" src="js/jquery.tmpl.js"></script>
 
 		<!-- 第三方 -->
+		<script type="text/javascript" src="js/popup/popup.js"></script>
 
 		<!-- 博客后管通用 -->
 		<script type="text/javascript" src="js/blog/blogPublic.js"></script>
@@ -211,14 +213,14 @@
 										{{if isPublish==0}}
 											<td>未发布</td>
 										{{/if}}
-										<td>${viewNum}</td>
 										<td>${commentNum}</td>
+										<td>${viewNum}</td>
 										<td>
 											<a href="blogHandle?aid=${id}">编辑</a>
 										</td>
 
 										<td>
-											<a href="javascript:void(0)" onclick="$cutOneBlog(${id},${user.id})">删除</a>
+											<a href="javascript:void(0)" onclick="$cutOneBlog(${id},${user.id},'${title}')">删除</a>
 										</td>
 									</tr>
 		</script>
@@ -286,28 +288,42 @@
 				});
 			}
 			
-			var $cutOneBlog = function(aid,uid){
-				$.ajax({
-					type : "post",
-					url : "cutOneBlog",
-					async : true,
-					dataType : "json",
-					data : {
-						aid : aid,
-						uid : uid
+			var $cutOneBlog = function(aid,uid,title){
+				jqalert({
+					title: '确认弹窗',
+					cont: '您是否确认删除博客：'+title,
+					yestext: '确定',
+					notext: '取消',
+					yesfn: function() {
+						$.ajax({
+							type : "post",
+							url : "cutOneBlog",
+							async : true,
+							dataType : "json",
+							data : {
+								aid : aid,
+								uid : uid
+							},
+							success : function(data) {
+								console.log(data);
+								if(data == 1){
+									jqalert({
+										title: '提示弹窗',
+										cont: '请确保您是作者'
+									});
+								} else if(data == 2){
+									window.location.reload();
+								}
+							},
+							error : function() {
+								alert("数据获取失败");
+							}
+						});
 					},
-					success : function(data) {
-						console.log(data);
-						if(data == 1){
-							alert("请确保您是作者");
-						} else if(data == 2){
-							window.location.reload();
-						}
-					},
-					error : function() {
-						alert("数据获取失败");
+					nofn: function() {
 					}
 				});
+				
 			}
 			
 		</script>

@@ -6,4 +6,6 @@ import com.xyz.domain.Message;
 public interface MessageService extends BaseService<Message, Long> {
 
 	boolean cutBatchItems(Long[] ids);
+	
+	int getCount1(Message message);
 }

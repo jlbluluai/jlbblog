@@ -35,10 +35,12 @@ public class MessageServiceImpl implements MessageService {
 		return messageMapper.updateByPrimaryKeySelective(item) > 0;
 	}
 
+	/**
+	 * 根据相关信息插入一条消息
+	 */
 	@Override
 	public boolean saveAppointedItem(Message item) {
-		// TODO Auto-generated method stub
-		return false;
+		return messageMapper.insertSelective(item) > 0;
 	}
 
 	@Override
@@ -62,5 +64,10 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public boolean cutBatchItems(Long[] ids) {
 		return messageMapperP.deleteBatch(ids) > 0;
+	}
+
+	@Override
+	public int getCount1(Message message) {
+		return messageMapperP.selectCount1(message);
 	}
 }

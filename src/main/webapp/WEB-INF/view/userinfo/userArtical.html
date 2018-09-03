@@ -10,6 +10,8 @@
 <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
 <!-- 第三方 -->
 <script type="text/javascript" src="../js/jquery.tmpl.js"></script>
+<link rel="stylesheet" href="../css/popup/popup.css" />
+<script type="text/javascript" src="../js/popup/popup.js"></script>
 <!--自定义-->
 <script type="text/javascript" src="../js/pages.js"></script>
 <link rel="stylesheet" href="../css/userinfo/userArtical.css" />
@@ -17,8 +19,8 @@
 
 <body>
 
-	<div class="container">
-
+	<div class="container" style="display: none" id="b1">
+	
 		<!--头部-->
 		<div id="head">
 			<button type="button" id="goBlog" class="btn btn-warning btn-block">进入博客</button>
@@ -52,7 +54,7 @@
 			</div>
 
 		</div>
-
+		
 		<!--分页-->
 		<div id="pager_bottom">
 			<nav aria-label="Page navigation">
@@ -62,6 +64,33 @@
 				</ul>
 			</nav>
 		</div>
+	</div>
+	
+	<div class="container" style="display: none;" id="b2">
+		您还不是博主，请点击<a href='javascript:void(0)' id='apply'>申请</a>申请成为本站博主
+	</div>
+	
+	<!-- 申精模态框 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<!--主体-->
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="myModalLabel">博主申请窗口</h4>
+						</div>
+						<!-- 主体-->
+						<div class="modal-body">
+							<label>请输入你的申请理由：</label>
+							<textarea rows="5" cols="80" class="form-control" id="reason"></textarea>
+						</div>
+						<!--脚注 -->
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+							<button type="button" class="btn btn-primary" id="apply_submit">提交</button>
+						</div>
+					</div>
+				</div>
 	</div>
 
 	<script type="text/x-jquery-tmpl" id="t1">
@@ -219,9 +248,13 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					$("#t1").tmpl(data.oList).appendTo(".post_item");
-					totalPage = data.totalPages;
-					$getPages();
+					if(data.totalPages == 0){
+						$(".post_item").text("该用户未有任何博客");
+					} else{
+						$("#t1").tmpl(data.oList).appendTo(".post_item");
+						totalPage = data.totalPages;
+						$getPages();
+					}
 				},
 				error : function() {
 					alert("数据获取失败");
@@ -282,6 +315,64 @@
 					});
 
 		});
+		
+		
+		/*判断是否博主逻辑*/
+		$(function(){
+			$.ajax({
+				type : "post",
+				url : "../verUserIdd",
+				dataType : "json",
+				data : {
+					uid : id
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					if(!data){
+						$("#b2").css("display","block");
+					} else{
+						$("#b1").css("display","block");
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+		});
+		
+		$(".container").on("click","#apply",function(){
+			$('#myModal').modal('show');
+		});
+		
+		$("#apply_submit").click(function() {
+			var reason = $.trim($("#reason").val());
+			if(reason != ""){
+				$.ajax({
+					type : "post",
+					url : "../bloggerApply",
+					dataType : "json",
+					data : {
+						reason : reason
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data){
+							window.location.reload();
+						}else{
+							alert("申精提交失败！！");
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}else{
+				alert("请输入理由！！！");					
+			}
+		});
+		
 	</script>
 
 </body>

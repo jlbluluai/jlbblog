@@ -16,6 +16,7 @@ import com.xyz.service.PubboardService;
 import com.xyz.service.UserService;
 import com.xyz.service.UserTempService;
 import com.xyz.service.UserVercodeService;
+import com.xyz.util.EncryptionUtils;
 import com.xyz.util.Utils;
 
 import net.sf.json.JSONObject;
@@ -72,6 +73,7 @@ public class LoginModuleController {
 		JSONObject js = JSONObject.fromObject(harvest);
 		String loginname = (String) js.get("loginname");
 		String password = (String) js.get("password");
+		password = EncryptionUtils.getMd5Password(password);
 
 		User user = userService.loginByPass(loginname, password);
 
@@ -107,7 +109,7 @@ public class LoginModuleController {
 			if (!userService.verEmail(email)) {
 				String code = Utils.getVerCode();
 				String[] address = { email };
-				if (Utils.sendMail("smtp.qq.com", "981378964@qq.com", "小叶子", "emzbcblhyghmbfga", address, "洛林博客注册验证码",
+				if (Utils.sendMail("smtp.qq.com", "981378964@qq.com", "小叶子", "emzbcblhyghmbfga", address, "林区注册验证码",
 						"您的验证码为  " + code)) {
 					userVercodeService.addTheCode(email, code);
 					json.put("msg", "success");
@@ -121,7 +123,7 @@ public class LoginModuleController {
 			if (userService.verEmail(email)) {
 				String code = Utils.getVerCode();
 				String[] address = { email };
-				if (Utils.sendMail("smtp.qq.com", "981378964@qq.com", "小叶子", "emzbcblhyghmbfga", address, "洛林博客找回密码验证码",
+				if (Utils.sendMail("smtp.qq.com", "981378964@qq.com", "小叶子", "emzbcblhyghmbfga", address, "林区找回密码验证码",
 						"您的验证码为  " + code)) {
 					userVercodeService.addTheCode(email, code);
 					json.put("msg", "success");
@@ -187,6 +189,7 @@ public class LoginModuleController {
 		String email = (String) js.get("email");
 		String username = (String) js.get("username");
 		String password = (String) js.get("password");
+		password = EncryptionUtils.getMd5Password(password);
 		Long id = Utils.createComplexId();
 
 		JSONObject json = new JSONObject();

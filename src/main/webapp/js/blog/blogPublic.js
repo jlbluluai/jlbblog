@@ -34,7 +34,8 @@ $("#blogFile").click(function() {
 });
 
 $("#blogSetting").click(function() {
-	window.location.href = "blogSettings";
+	alert("该板块尚未开放")
+	//window.location.href = "blogSettings";
 });
 
 $(function(){
@@ -42,6 +43,7 @@ $(function(){
 });
 
 var uid;
+var nickname;
 
 var $getTheBlogger = function(){
 	$.ajax({
@@ -54,6 +56,7 @@ var $getTheBlogger = function(){
 		success : function(data) {
 			console.log(data);
 			$("#headNick").text(data.nickname);
+			nickname = data.nickname;
 			uid = data.uid;
 		},
 		error : function() {

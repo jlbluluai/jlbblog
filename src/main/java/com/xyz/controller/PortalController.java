@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageInfo;
 import com.xyz.domain.Artical;
 import com.xyz.domain.ArticalCategory;
+import com.xyz.domain.FollowKey;
+import com.xyz.domain.Message;
 import com.xyz.domain.RecommendCategory;
 import com.xyz.domain.Suggestion;
 import com.xyz.domain.User;
@@ -30,6 +32,8 @@ import com.xyz.dto.PortalStatistic;
 import com.xyz.service.ArticalCategoryService;
 import com.xyz.service.ArticalService;
 import com.xyz.service.CommentService;
+import com.xyz.service.FollowService;
+import com.xyz.service.MessageService;
 import com.xyz.service.RecommendCategoryService;
 import com.xyz.service.SuggestionService;
 import com.xyz.service.UserService;
@@ -63,10 +67,18 @@ public class PortalController {
 	@Autowired
 	@Qualifier("suggestionService")
 	private SuggestionService suggestionService;
-	
+
 	@Autowired
 	@Qualifier("versionService")
 	private VersionService versionService;
+
+	@Autowired
+	@Qualifier("messageService")
+	private MessageService messageService;
+
+	@Autowired
+	@Qualifier("followService")
+	private FollowService followService;
 
 	// 统一设定数据
 	private String contentType = "text/html;charset=UTF-8";
@@ -133,6 +145,33 @@ public class PortalController {
 	}
 
 	/**
+	 * 获取消息数量
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/getMessageCount", method = RequestMethod.GET)
+	@ResponseBody
+	public Integer getMessageCount(HttpSession session) {
+		int count = 0;
+		log.info("获取消息数量开始");
+
+		User user = (User) session.getAttribute("user");
+
+		if (user != null) {
+			Message message = new Message();
+			message.setRid(user.getId());
+
+			count = messageService.getCount1(message);
+		} else {
+			count = -1;
+		}
+
+		log.info("获取消息数量结束");
+		return count;
+	}
+
+	/**
 	 * 根据相关条件获取主页相关文章 style：0首页，1精选，2关注
 	 * 
 	 * @param current
@@ -146,11 +185,18 @@ public class PortalController {
 			@RequestParam("category") Integer category, @RequestParam("style") Integer style, HttpSession session) {
 		PagesFeedback feedback = new PagesFeedback();
 		log.info(f1 + "获取主页文章开始" + f2);
-		System.out.println(current);
-		System.out.println(category);
-		System.out.println(style);
+		// System.out.println(current);
+		// System.out.println(category);
+		// System.out.println(style);
+		
+		String prop = FtpConnect.class.getClassLoader().getResource("/").getPath()
+				+ "properties/ftp-connect.properties";
+		prop = URLDecoder.decode(prop);
+		Properties properties = Utils.getProperties(prop);
+		
 		Artical artical = new Artical();
 		artical.setIsPublish((byte) 1);
+		artical.setSort(1);
 		if (category != 0) {
 			artical.setCategory(category);
 		}
@@ -158,12 +204,57 @@ public class PortalController {
 
 		} else if (style == 1) {
 			artical.setIsNice((byte) 1);
-		} else if (style == 2) {
+		} else if (style == 2) { // 单独完成逻辑，只在if里完成逻辑
+			User user = (User) session.getAttribute("user");
 
+			artical.setIsPublic((byte) 1);  
+
+			if (user == null) {
+				String msg = "您还未登录，无关注人";
+				feedback.setMsg(msg);
+				return feedback;
+			}
+
+			List<FollowKey> list1 = new ArrayList<>();
+			FollowKey follow = new FollowKey();
+			follow.setMid(user.getId());
+			list1 = followService.getFollows(follow);
+			
+			if(list1.size()==0){
+				String msg = "您未关注任何人";
+				feedback.setMsg(msg);
+				return feedback;
+			}
+			
+			List<Long> list2 = new ArrayList<>();
+			for(FollowKey f : list1){
+				list2.add(f.getFid());
+			}
+			
+			artical.setMids(list2);
+			
+			PageInfo<Artical> pageInfo = new PageInfo<>();
+			
+			pageInfo = articalService.getAppointedPageItems(current, 16, artical);
+
+			List<Object> list = new ArrayList<Object>();
+			for (Artical art : pageInfo.getList()) {
+				UserInfo info = art.getUserInfo();
+				String headpic = "http://" + properties.getProperty("url") + ":" + properties.getProperty("nginxPort") + "/"
+						+ info.getHeadpic();
+				info.setHeadpic(headpic);
+				art.setUserInfo(info);
+				art.setContent(art.getContent()+"...");
+				list.add(art);
+			}
+			feedback.setoList(list);
+			feedback.setTotalPages(pageInfo.getPages());
+			
+			return feedback;
 		} else {
 
 		}
-		artical.setSort(1);
+		
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			user = new User();
@@ -171,10 +262,6 @@ public class PortalController {
 		}
 		artical.setUser(user);
 
-		String prop = FtpConnect.class.getClassLoader().getResource("/").getPath()
-				+ "properties/ftp-connect.properties";
-		prop = URLDecoder.decode(prop);
-		Properties properties = Utils.getProperties(prop);
 		PageInfo<Artical> pageInfo = new PageInfo<>();
 		if (category != 0) {
 			pageInfo = articalService.getAppointedPageItems(current, 8, artical);
@@ -188,6 +275,7 @@ public class PortalController {
 					+ info.getHeadpic();
 			info.setHeadpic(headpic);
 			art.setUserInfo(info);
+			art.setContent(art.getContent()+"...");
 			list.add(art);
 		}
 		feedback.setoList(list);
@@ -195,6 +283,7 @@ public class PortalController {
 		log.info(f1 + "获取主页文章结束" + f2);
 		return feedback;
 	}
+
 
 	/**
 	 * 获取主页的登录状态
@@ -247,9 +336,10 @@ public class PortalController {
 		log.info(f1 + "相关需要获取用户id的跳转结束" + f2);
 		return uid;
 	}
-	
+
 	/**
 	 * 跳转至博客模块
+	 * 
 	 * @param session
 	 * @return
 	 */
@@ -258,11 +348,11 @@ public class PortalController {
 	public Long jumpToBlog(HttpSession session) {
 		Long uid = 0L;
 		User user = (User) session.getAttribute("user");
-		
-		if(user != null && user.getIid()!=3){
+
+		if (user != null && user.getIid() != 3) {
 			return -1L;
 		}
-		
+
 		if (user != null) {
 			uid = user.getId();
 		}

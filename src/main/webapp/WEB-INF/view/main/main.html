@@ -9,8 +9,10 @@
 <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/menu.css" />
+<link rel="stylesheet" href="css/popup/popup.css" />
 <script type="text/javascript" src="js/jquery.tmpl.js"></script>
 <script type="text/javascript" src="js/pages.js"></script>
+<script type="text/javascript" src="js/popup/popup.js"></script>
 
 <!-- logo -->
 <link rel="icon" href="img/favicon.ico" type="image/x-icon">
@@ -21,7 +23,7 @@
 
 		<!-- logo位置-->
 		<div id="logo">
-			<a href="javascript:void(0);"><img src="img/logo.png" height="50" /></a> <span>--测试2.0小叶子诚心为各位服务</span>
+			<a href="javascript:void(0);"><img src="img/logo.png" height="50" /></a> <span>--2.0小叶子为各位服务</span>
 		</div>
 
 		<!-- 用户登录信息以及搜索框 -->
@@ -54,7 +56,7 @@
 		<!-- 主菜单栏-->
 		<div id="main_menu">
 			<a href="javascript:void(0);">我的园子</a> <a href="javascript:void(0);">我的博客</a>
-			<a href="javascript:void(0);">我的收藏</a> <a href="javascript:void(0);">我的消息(<span>2</span>)
+			<a href="javascript:void(0);">我的收藏</a> <a href="javascript:void(0);">我的消息<span id="msgNum"></span>
 			</a> <a href="javascript:void(0);">找找看</a> <a href="javascript:void(0);">意见箱</a>
 		</div>
 
@@ -140,19 +142,19 @@
 
 						<div class="carousel-inner" role="listbox">
 							<div class="item active">
-								<a style="margin-left: 0;" href="http://www.baidu.com"
+								<a style="margin-left: 0;" href="https://www.taobao.com/"
 									target="_blank"><img src="img/lunbo1.png"></a>
 							</div>
 							<div class="item">
-								<a style="margin-left: 0;" href="http://www.baidu.com"
+								<a style="margin-left: 0;" href="https://www.jd.com/"
 									target="_blank"><img src="img/lunbo2.png"></a>
 							</div>
 							<div class="item">
-								<a style="margin-left: 0;" href="http://www.baidu.com"
+								<a style="margin-left: 0;" href="http://www.dangdang.com/"
 									target="_blank"><img src="img/lunbo3.png"></a>
 							</div>
 							<div class="item">
-								<a style="margin-left: 0;" href="http://www.baidu.com"
+								<a style="margin-left: 0;" href="https://www.amazon.cn/"
 									target="_blank"><img src="img/lunbo4.png"></a>
 							</div>
 						</div>
@@ -294,7 +296,7 @@
 								<a href="blogRead?aid=${id}" onclick="">${title}</a>
 							</h4>
 						</div>
-						<div>
+						<div style="min-height:40px;">
 							<div style="float: left; margin-right: 5px;">
 								<a href="blogPortal?uid=${user.id}"><img src="${userInfo.headpic}" width="50"
 									height="50" /></a>
@@ -384,9 +386,17 @@
 			});
 
 			$("#user_item a:eq(3)").click(function() {
-				if (confirm("logout?")) {
-					$logOut();
-				}
+				jqalert({
+					title: '确认弹窗',
+					cont: '您是否确认退出登录',
+					yestext: '确定',
+					notext: '取消',
+					yesfn: function() {
+						$logOut();
+					},
+					nofn: function() {
+					}
+				});
 			});
 
 			$("#user button").click(
@@ -416,11 +426,11 @@
 					.click(
 							function() {
 								$jumpOthers("userinfo",
-										"&consule=%25E6%2588%2591%25E7%259A%2584%25E6%25B6%2588%25E6%2581%25AF")
+										"&consule=%25E6%2588%2591%25E7%259A%2584%25E6%25B6%2588%25E6%2581%25AF("+count+")")
 							});
 
 			$("#main_menu a:eq(4)").click(function() {
-				alert("找找看暂未实现");
+				window.location.href = "looking";
 			});
 
 			$("#main_menu a:eq(5)").click(function() {
@@ -454,8 +464,8 @@
 					$("#top_menu ul:eq(0) li:eq(3)").remove();
 					style = 0;
 				} else if (temp == "关注") {
-					alert("功能暂未实现");
-					return;
+					//alert("功能暂未实现");
+					//return;
 					$(this).siblings("li").removeClass("active");
 					$(this).addClass("active");
 					$("#top_menu ul:eq(0) li:eq(3)").remove();
@@ -547,9 +557,22 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					$("#t3").tmpl(data.oList).appendTo("#post_list");
-					totalPage = data.totalPages;
-					$getPages();
+					if(data.msg != null){
+						jqalert({
+							title: '提示弹窗',
+							cont: data.msg,
+							yestext: '确定',
+							yesfn: function() {
+								window.location.reload();
+							}
+						});
+					} else if(data.totalPages == 0){
+						$("#post_list").html("&nbsp;&nbsp;<span style='font-size:16px;'>未查询到相关博客。</span>");
+					} else{
+						$("#t3").tmpl(data.oList).appendTo("#post_list");
+						totalPage = data.totalPages;
+						$getPages();
+					}
 				},
 				error : function() {
 					alert("数据获取失败");
@@ -665,8 +688,9 @@
 				async : true,
 				success : function(data) {
 					console.log(data);
-					$(".notLogin").css("display", "");
-					$(".inLogin").css("display", "none");
+					//$(".notLogin").css("display", "");
+					//$(".inLogin").css("display", "none");
+					window.location.reload();
 				},
 				error : function() {
 					alert("数据获取失败");
@@ -686,7 +710,10 @@
 				success : function(data) {
 					console.log(data);
 					if (data == 0) {
-						alert("请先登录")
+						jqalert({
+							title: '提示弹窗',
+							cont: '请先登录！<br/>是否跳转到<a href="loginForm">登录界面</a>'
+						});
 					} else {
 						window.location.href = address + "?id=" + data
 								+ consule;
@@ -709,9 +736,15 @@
 				success : function(data) {
 					console.log(data);
 					if (data == 0) {
-						alert("请先登录")
+						jqalert({
+							title: '提示弹窗',
+							cont: '请先登录！<br/>是否跳转到<a href="loginForm">登录界面</a>'
+						});
 					} else if(data == -1){
-						alert("您不是博主！");
+						jqalert({
+							title: '提示弹窗',
+							cont: '你不是博主！'
+						});
 					} else {
 						window.location.href = "blogPortal?uid=" + data;
 					}
@@ -721,6 +754,48 @@
 				}
 			});
 		}
+		
+		var count = 0;
+		
+		/*我的消息数量提示*/
+		$(function(){
+			$.ajax({
+				type : "get",
+				url : "getMessageCount",
+				data : {
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					if(data != -1){
+						$("#msgNum").text("("+data+")");
+						count = data;
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+			b = setInterval(function() {
+				$.ajax({
+					type : "get",
+					url : "getMessageCount",
+					data : {
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data != -1){
+							$("#msgNum").text("("+data+")");
+							count = data;
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}, 7000)
+		});
 	</script>
 </body>
 

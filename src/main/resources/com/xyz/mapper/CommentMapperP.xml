@@ -27,13 +27,20 @@
 		select
 			c.id cid,
 			c.content ccontent,
+			c.uid cuid,
 			c.create_time ccreatetime,
+			u.id uid,
+			u.nickname unickname,
 			a.id aid,
 			a.title atitle,
 			au.id auid,
 			au.nickname aunickname
 		from
 			t_comment c
+		left join
+			t_user u
+		on
+			c.uid = u.id
 		left join
 			t_artical a
 		on

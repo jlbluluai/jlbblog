@@ -42,11 +42,11 @@
 			<div id="body_navi" class="span2  col-xs-12 col-sm-3 col-md-2">
 				<ul class="nav nav-pills nav-stacked" style="display: none;">
 					<li><a id="userMain" href="javascript:void(0)">个人主页</a></li>
-					<li><a id="userArtical" href="javascript:void(0)">我的文章</a></li>
+					<li><a id="userArtical" href="javascript:void(0)">我的博客</a></li>
 					<li><a id="userFollow" href="javascript:void(0)">关注与粉丝</a></li>
 					<li><a id="userComment" href="javascript:void(0)">我的评论</a></li>
 					<li><a id="userCollection" href="javascript:void(0)">我的收藏</a></li>
-					<li><a id="userMessage" href="javascript:void(0)">我的消息</a></li>
+					<li><a id="userMessage" href="javascript:void(0)">我的消息<span id="msgNum"></span></a></li>
 					<li><a id="userChange" href="javascript:void(0)">修改信息</a></li>
 				</ul>
 			</div>
@@ -117,7 +117,7 @@
 					$("#head_user span").text("欢迎你，" + data.access);
 					if (data.master != data.access) {
 						$("#userMain").text("他的主页")
-						$("#userArtical").text("他的文章");
+						$("#userArtical").text("他的博客");
 						$("#userFollow").text("他的关注与粉丝");
 						$("#userComment").remove();
 						$("#userCollection").remove();
@@ -149,7 +149,7 @@
 					|| consule == undefined) {
 				$("#userMain").parent().addClass("active");
 				$("iframe").attr("src", "userInfo/userMain?id=" + id);
-			} else if (consule == "我的文章" || consule == "他的文章") {
+			} else if (consule == "我的博客" || consule == "他的博客") {
 				$("#userArtical").parent().addClass("active");
 				$("iframe").attr("src", "userInfo/userArtical?id=" + id);
 			} else if (consule == "关注与粉丝" || consule == "他的关注与粉丝") {
@@ -161,7 +161,7 @@
 			} else if (consule == "我的收藏") {
 				$("#userCollection").parent().addClass("active");
 				$("iframe").attr("src", "userInfo/userCollection?id=" + id);
-			} else if (consule == "我的消息") {
+			} else if (consule.substring(0,consule.length-3) == "我的消息") {
 				$("#userMessage").parent().addClass("active");
 				$("iframe").attr("src", "userInfo/userMessage?id=" + id);
 			} else if (consule == "修改信息") {
@@ -169,6 +169,45 @@
 				$("iframe").attr("src", "userInfo/userChange?id=" + id);
 			}
 
+		});
+		
+		
+		/*我的消息数量提示*/
+		$(function(){
+			$.ajax({
+				type : "get",
+				url : "getMessageCount",
+				data : {
+				},
+				async : true,
+				success : function(data) {
+					console.log(data);
+					if(data != -1){
+						$("#msgNum").text("("+data+")");
+					}
+				},
+				error : function() {
+					alert("数据获取失败");
+				}
+			});
+			b = setInterval(function() {
+				$.ajax({
+					type : "get",
+					url : "getMessageCount",
+					data : {
+					},
+					async : true,
+					success : function(data) {
+						console.log(data);
+						if(data != -1){
+							$("#msgNum").text("("+data+")");
+						}
+					},
+					error : function() {
+						alert("数据获取失败");
+					}
+				});
+			}, 7000)
 		});
 	</script>
 </body>

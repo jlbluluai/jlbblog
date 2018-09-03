@@ -9,6 +9,8 @@ public class PagesFeedback implements Serializable {
 
 	private Integer totalPages;
 
+	private String msg;
+
 	public List<Object> getoList() {
 		return oList;
 	}
@@ -23,6 +25,14 @@ public class PagesFeedback implements Serializable {
 
 	public void setTotalPages(Integer totalPages) {
 		this.totalPages = totalPages;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 
 }

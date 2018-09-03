@@ -10,6 +10,8 @@
 <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
 <!-- 第三方 -->
 <script type="text/javascript" src="../js/jquery.tmpl.js"></script>
+<link rel="stylesheet" href="../css/popup/popup.css" />
+<script type="text/javascript" src="../js/popup/popup.js"></script>
 <!--自定义-->
 <link rel="stylesheet" href="../css/userinfo/userMain.css" />
 <script type="text/javascript" src="../js/pages.js"></script>
@@ -141,7 +143,7 @@
 				{{if isBlog == 1}}
 				<div class="dynamic_content">
 					<div class="content_body">
-						<a href="">${user.nickname}</a><span>发表博客：</span> <a href="">dddd</a><span></span><span></span><span></span></span>
+						<a href="">${user.nickname}</a><span>发表博客：</span> <a href="#" onclick="$goRead(${aid})">${artical.title}</a><span></span><span></span><span></span></span>
 						<a href="#" class="delete" onclick="$deleteDynamic(${id})">删除</a><span>${dateFormat(createTime.time)}</span>
 					</div>
 					<div class="underline"></div>
@@ -264,10 +266,13 @@
 					console.log(data.dynamics);
 					if (data.total != 0) {
 						$("#t2").tmpl(data.dynamics).appendTo("#dynamics");
+						if(data.isMaster == 0){
+							$(".delete").remove();
+						}
 					} else {
 						$("#dynamics").append(
 								'<div class="dynamic_content">' 
-								+ '该同学并未有动态'
+								+ '该用户并未有动态'
 								+ '</div>');
 					}
 					totalPage = data.total;
@@ -280,30 +285,36 @@
 		}
 		
 		var $deleteDynamic = function(id){
-			if(confirm("是否确认删除该条动态？")){
-				$.ajax({
-					type : "get",
-					url : "../cutOneDynamic",
-					dataType : "json",
-					contentType : "application/json",
-					data : {
-						id : id
-					},
-					async : true,
-					success : function(data) {
-						if(data == true){
-							window.location.reload();
-						}else{
-							alert("删除失败");
+			jqalert({
+				title: '确认弹窗',
+				cont: '您是否确认删除该条动态？',
+				yestext: '确定',
+				notext: '取消',
+				yesfn: function() {
+					$.ajax({
+						type : "get",
+						url : "../cutOneDynamic",
+						dataType : "json",
+						contentType : "application/json",
+						data : {
+							id : id
+						},
+						async : true,
+						success : function(data) {
+							if(data == true){
+								window.location.reload();
+							}else{
+								alert("删除失败");
+							}
+						},
+						error : function() {
+							alert("数据获取失败");
 						}
-					},
-					error : function() {
-						alert("数据获取失败");
-					}
-				});
-			}else{
-				
-			}
+					});
+				},
+				nofn: function() {
+				}
+			});
 		}
 
 		/*写动态逻辑*/
@@ -361,6 +372,11 @@
 					alert("数据获取失败");
 				}
 			});
+		}
+		
+		//跳转
+		var $goRead = function(aid){
+			window.parent.location.href = "../blogRead?aid=" + aid;
 		}
 
 		/*自定义分页的逻辑*/

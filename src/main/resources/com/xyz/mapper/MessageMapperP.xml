@@ -67,4 +67,15 @@
 				#{id}
 			</foreach>		
 	</delete>
+	
+	<select id="selectCount1" resultType="int">
+		select
+			count(*)
+		from
+			t_message
+		where
+			status = 0
+		and
+			rid = #{rid}
+	</select>
 </mapper>

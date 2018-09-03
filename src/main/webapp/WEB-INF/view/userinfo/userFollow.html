@@ -118,7 +118,15 @@
 				success : function(data) {
 					console.log(data);
 					$("#body_main_ul").empty();
-					$("#t1").tmpl(data).appendTo("#body_main_ul");
+					if(data.length == 0){
+						if(module == 1){
+							$("#body_main_ul").html("该用户未有关注对象");
+						} else if(module == 2){
+							$("#body_main_ul").html("该用户未有粉丝");							
+						}
+					} else {
+						$("#t1").tmpl(data).appendTo("#body_main_ul");
+					}
 				},
 				error : function() {
 					alert("数据获取失败");
